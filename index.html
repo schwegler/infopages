@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My InfoPages</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Google Fonts: Orbitron for headings, Exo 2 for body text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Define custom CSS variables for consistent colors */
+        :root {
+            --primary-bg: #0F172A; /* Dark Slate Blue */
+            --secondary-bg: #1E293B; /* Slightly lighter Slate Blue for cards */
+            --text-color: #E2E8F0; /* Light Slate for general text */
+            --header-color: #66CCFF; /* Vibrant Blue for headers */
+            --border-color: #334155; /* Medium Slate for borders */
+            --link-button-bg: #66CCFF; /* Vibrant Blue for buttons */
+            --link-button-hover: #3399FF; /* Lighter Blue on hover */
+        }
+
+        /* Apply base styles to the body */
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            display: flex; /* Use flexbox for centering content */
+            flex-direction: column;
+            justify-content: center; /* Center content vertically */
+            align-items: center; /* Center content horizontally */
+            padding: 2rem; /* Add some padding around the content */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        /* Style for main headings */
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1.5px;
+            color: var(--header-color);
+            text-shadow: 0 0 10px rgba(102, 204, 255, 0.5);
+        }
+
+        /* Styles for individual content cards */
+        .card {
+            background-color: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease; /* Smooth transition for hover effects */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+        }
+
+        /* Hover effects for cards */
+        .card:hover {
+            border-color: var(--link-button-bg);
+            transform: translateY(-5px); /* Lift card slightly */
+            box-shadow: 0 10px 20px rgba(102, 204, 255, 0.2); /* More prominent shadow on hover */
+        }
+
+        /* Styles for link buttons */
+        .link-button {
+            display: inline-block;
+            background-color: var(--link-button-bg);
+            color: var(--primary-bg); /* Dark text on light button */
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            text-decoration: none; /* Remove underline from links */
+            transition: background-color 0.3s ease; /* Smooth transition for hover */
+        }
+
+        /* Hover effect for link buttons */
+        .link-button:hover {
+            background-color: var(--link-button-hover);
+        }
+    </style>
+</head>
+<body>
+    <!-- A small, bright test element to ensure anything loads -->
+    <p style="color: yellow; font-size: 0.8rem; position: absolute; top: 10px; left: 10px;">TEST: Page Loaded</p>
+
+    <div class="container mx-auto max-w-4xl p-4 md:p-8 rounded-lg shadow-2xl">
+        <header class="text-center mb-12">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4">Welcome to My InfoPages</h1>
+            <p class="text-lg text-slate-400">A collection of my static web documents.</p>
+        </header>
+
+        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Card for Starfleet Guide -->
+            <div class="card p-6 rounded-lg flex flex-col items-center text-center">
+                <h2 class="text-2xl font-bold mb-4 text-orange-400">Starfleet Guide to Secure API Calls</h2>
+                <p class="text-slate-300 mb-6 flex-grow">Learn about secure API calls with C# and SQL, framed as a Starfleet mission log.</p>
+                <a href="schwegler/infopages/infopages-8f2aa4d3c2189914af93901c65ae35e4deadf1f7/sqlhttp.html" class="link-button">View Guide</a>
+            </div>
+
+            <!-- Card for Slayer's Guide -->
+            <div class="card p-6 rounded-lg flex flex-col items-center text-center">
+                <h2 class="text-2xl font-bold mb-4 text-rose-500">The Slayer's Guide to SQL Server Migration</h2>
+                <p class="text-slate-300 mb-6 flex-grow">A Buffy the Vampire Slayer-themed guide to migrating SQL Server databases.</p>
+                <a href="schwegler/infopages/infopages-8f2aa4d3c2189914af93901c65ae35e4deadf1f7/sqlmovebuffy.html" class="link-button">Explore Guide</a>
+            </div>
+
+            <!-- Card for Hollyoaks History -->
+            <div class="card p-6 rounded-lg flex flex-col items-center text-center">
+                <h2 class="text-2xl font-bold mb-4 text-fuchsia-500">Hollyoaks: The First 20 Years</h2>
+                <p class="text-slate-300 mb-6 flex-grow">An interactive exploration of the popular UK soap opera, Hollyoaks, covering its first two decades.</p>
+                <a href="schwegler/infopages/infopages-8f2aa4d3c2189914af93901c65ae35e4deadf1f7/hollyoaks_history.html" class="link-button">Discover History</a>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
