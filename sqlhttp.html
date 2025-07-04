@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# & SQL: A Starfleet Guide to Secure API Calls</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --lcars-blue: #6699FF;
+            --lcars-orange: #FF9900;
+            --lcars-purple: #CC99FF;
+            --lcars-red: #FF6666;
+            --lcars-gold: #FFCC00;
+            --lcars-bg: #000000;
+            --lcars-border: #99CCFF;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background-color: var(--lcars-bg);
+            color: #E5E7EB;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4, h5 {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1.5px;
+            color: var(--lcars-orange);
+            text-shadow: 0 0 8px var(--lcars-orange);
+        }
+        .lcars-panel {
+            background-color: var(--lcars-bg);
+            border: 2px solid var(--lcars-border);
+            position: relative;
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .lcars-panel.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .lcars-swoop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: var(--lcars-purple);
+            clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
+        }
+        .lcars-header {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+        .lcars-header .chevron { transition: transform 0.3s ease-in-out; }
+        .lcars-header.open .chevron { transform: rotate(90deg); }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1), padding 0.7s ease, margin-top 0.7s ease;
+            padding: 0 1.5rem;
+            margin-top: 0;
+        }
+        .collapsible-content.expanded {
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .phase-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            color: var(--lcars-blue);
+            text-shadow: 0 0 10px var(--lcars-blue);
+        }
+        #starfield-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        #starfield {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        }
+        .code-block {
+            background-color: rgba(2, 6, 23, 0.7);
+            color: #E5E7EB;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            border: 1px solid var(--lcars-border);
+            position: relative;
+            overflow: hidden;
+        }
+        .scanline {
+            position: absolute;
+            top: -10px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--lcars-gold);
+            box-shadow: 0 0 10px var(--lcars-gold);
+            animation: scan 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+        @keyframes scan {
+            0% { transform: translateY(0); opacity: 0.8; }
+            90% { transform: translateY(var(--scan-height)); opacity: 0.8; }
+            100% { transform: translateY(var(--scan-height)); opacity: 0; }
+        }
+        .animated-svg { opacity: 0; transform: scale(0.9); transition: opacity 1s ease-out, transform 1s ease-out; }
+        .animated-svg.visible { opacity: 1; transform: scale(1); }
+        .animated-svg path.beam { stroke-dasharray: 100; stroke-dashoffset: 100; animation: beam-in 2s forwards; animation-delay: 0.5s; }
+        @keyframes beam-in { to { stroke-dashoffset: 0; } }
+         .section-divider {
+            height: 50px;
+            width: 100%;
+            margin: 2rem 0;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        .section-divider.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .section-divider svg path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+        }
+        .section-divider.visible svg path {
+            animation: draw-line 2s ease-out forwards;
+        }
+        @keyframes draw-line {
+            to { stroke-dashoffset: 0; }
+        }
+    </style>
+</head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# & SQL: A Starfleet Guide to Secure API Calls</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --lcars-blue: #6699FF;
+            --lcars-orange: #FF9900;
+            --lcars-purple: #CC99FF;
+            --lcars-red: #FF6666;
+            --lcars-gold: #FFCC00;
+            --lcars-bg: #000000;
+            --lcars-border: #99CCFF;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background-color: var(--lcars-bg);
+            color: #E5E7EB;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4, h5 {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1.5px;
+            color: var(--lcars-orange);
+            text-shadow: 0 0 8px var(--lcars-orange);
+        }
+        .lcars-frame {
+            border: 2px solid var(--lcars-border);
+            border-radius: 1rem;
+            padding: 1rem;
+            background: linear-gradient(145deg, rgba(0,0,0,0.5), rgba(20, 30, 60, 0.5));
+            box-shadow: 0 0 15px rgba(102, 153, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        @media (min-width: 768px) {
+            .lcars-frame {
+                padding: 1.5rem;
+            }
+        }
+        .lcars-button {
+            background-color: var(--lcars-purple);
+            color: var(--lcars-bg);
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            text-align: center;
+            clip-path: polygon(10% 0, 100% 0, 100% 100%, 10% 100%, 0 50%);
+            padding: 0.5rem 1rem 0.5rem 2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .lcars-button:hover:not(.active) {
+            background-color: var(--lcars-orange);
+        }
+        .lcars-button.active {
+            background-color: var(--lcars-blue);
+        }
+        .code-block {
+            background-color: rgba(2, 6, 23, 0.7);
+            color: #E5E7EB;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            border: 1px solid var(--lcars-border);
+            position: relative;
+            overflow: hidden;
+        }
+        .scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--lcars-gold);
+            box-shadow: 0 0 10px var(--lcars-gold);
+            animation: scan 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        @keyframes scan {
+            0% { transform: translateY(0); opacity: 0.8; }
+            90% { transform: translateY(100%); opacity: 0.8; }
+            100% { transform: translateY(100%); opacity: 0; }
+        }
+        .phase-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            color: var(--lcars-blue);
+            text-shadow: 0 0 10px var(--lcars-blue);
+        }
+        #starfield-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        #starfield {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        }
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0;
+            transition: opacity 2s ease-in-out, transform 20s linear;
+        }
+        .nebula.visible {
+            opacity: 0.15;
+        }
+        #nebula1 {
+            width: 50vw; height: 50vw; top: 10vh; left: -10vw;
+            background: radial-gradient(circle, var(--lcars-purple), transparent 60%);
+        }
+        #nebula2 {
+            width: 40vw; height: 40vw; bottom: 5vh; right: -5vw;
+            background: radial-gradient(circle, var(--lcars-blue), transparent 60%);
+        }
+        .interactive-console {
+            background: #000;
+            border: 2px solid var(--lcars-blue);
+            border-radius: 0.5rem;
+            min-height: 150px;
+        }
+        #ship-diagram path { transition: fill 0.5s ease; }
+        .ship-section-off { fill: #374151; }
+        .ship-section-safe { fill: var(--lcars-blue); animation: pulse 2s infinite; }
+        .ship-section-external { fill: var(--lcars-purple); animation: pulse 1.5s infinite; }
+        .ship-section-unsafe { fill: var(--lcars-red); animation: pulse 0.8s infinite; }
+        @keyframes pulse { 50% { opacity: 0.6; } }
+
+        /* Collapsible Section Styles */
+        .collapsible-header {
+            cursor: pointer;
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .collapsible-header .chevron {
+            transition: transform 0.3s ease-in-out;
+        }
+        .collapsible-header.open .chevron {
+            transform: rotate(90deg);
+        }
+        .section-divider {
+            height: 50px;
+            width: 100%;
+            margin: 2rem 0;
+        }
+        .section-divider svg path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            transition: stroke-dashoffset 2s ease-in-out;
+        }
+        .section-divider.visible svg path {
+            stroke-dashoffset: 0;
+        }
+    </style>
+</head>
+<body class="text-gray-200">
+    <div id="starfield-container">
+        <canvas id="starfield"></canvas>
+        <div id="nebula1" class="nebula"></div>
+        <div id="nebula2" class="nebula"></div>
+    </div>
+    
+    <div class="container mx-auto p-4 md:p-8 max-w-6xl">
+
+        <!-- Header -->
+        <header class="text-center min-h-[60vh] md:min-h-[80vh] flex flex-col justify-center items-center mb-16">
+            <h1 class="text-6xl md:text-8xl">ENGAGE!</h1>
+            <h2 class="text-3xl md:text-4xl text-blue-300">A Starfleet Guide to Secure API Calls</h2>
+            <p class="text-lg mt-8 max-w-4xl mx-auto leading-relaxed">
+                Captain's Log, Stardate 99981.3. Our mission: to transmit a document schematic (an HTML string) from the U.S.S. Enterprise's database to a networked fabrication station. This station will generate a Digital Document, place it in a subspace relay buffer, where Starfleet Support Unit's Archival Team will retrieve and log it. This complex, multi-stage operation requires the utmost precision.
+            </p>
+        </header>
+
+        <!-- The Away Team -->
+        <div class="lcars-panel-container">
+            <div class="lcars-end-cap" style="background-color: var(--lcars-orange)"></div>
+            <div class="lcars-top-bar" style="background-color: var(--lcars-purple)"></div>
+            <div class="lcars-content-area">
+                <div class="lcars-header collapsible-header open">
+                    <div class="phase-number opacity-50">00</div>
+                    <h3 class="text-3xl md:text-5xl ml-6">The Away Team</h3>
+                    <svg class="chevron h-8 w-8 text-lcars-border ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                </div>
+                <div class="collapsible-content">
+                    <div>
+                        <p class="mb-8">Every successful mission depends on its crew. This operation requires a coordinated effort between several key personnel and systems, each with a specific role.</p>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6 text-center">
+                            <div class="flex flex-col items-center"><svg viewBox="0 0 40 50" class="h-24"><path d="M10 15 L 10 48 L 30 48 L 30 15 C 30 5 10 5 10 15 Z" fill="#212121"/><path d="M10 18 L10 48 L30 48 L30 18 L 26 18 L 20 24 L 14 18 Z" fill="var(--lcars-gold)"/><path d="M14 18 L10 18 L10 15 C 10 5 30 5 30 15 L30 18 L26 18 L20 24 L14 18 Z" fill="black"/><circle cx="13" cy="15.5" r="1.5" fill="var(--lcars-gold)"/><circle cx="17" cy="15.5" r="1.5" fill="var(--lcars-gold)"/><circle cx="23" cy="15.5" r="1.5" fill="var(--lcars-gold)"/><circle cx="27" cy="15.5" r="1.5" fill="var(--lcars-gold)"/><path d="M5 40 L2.5 36 L12.5 36 L10 40 Z" fill="var(--lcars-gold)" transform="translate(2, -5)"/></svg><h5 class="font-bold mt-2 text-lg">Captain</h5><p class="text-sm text-gray-400">Issues the high-level command (You, the user).</p></div>
+                            <div class="flex flex-col items-center"><svg viewBox="0 0 40 50" class="h-24"><path d="M10 15 L 10 48 L 30 48 L 30 15 C 30 5 10 5 10 15 Z" fill="#212121"/><path d="M10 18 L10 48 L30 48 L30 18 L 26 18 L 20 24 L 14 18 Z" fill="var(--lcars-red)"/><path d="M14 18 L10 18 L10 15 C 10 5 30 5 30 15 L30 18 L26 18 L20 24 L14 18 Z" fill="black"/><circle cx="15" cy="15.5" r="1.5" fill="var(--lcars-red)"/><circle cx="20" cy="15.5" r="1.5" fill="var(--lcars-red)"/><circle cx="25" cy="15.5" r="1.5" fill="var(--lcars-red)"/><path d="M5 40 L2.5 36 L12.5 36 L10 40 Z" fill="var(--lcars-gold)" transform="translate(2, -5)"/></svg><h5 class="font-bold mt-2 text-lg">Commander</h5><p class="text-sm text-gray-400">Translates orders into specifics (The Stored Procedure).</p></div>
+                            <div class="flex flex-col items-center"><svg viewBox="0 0 40 50" class="h-24"><path d="M10 15 L 10 48 L 30 48 L 30 15 C 30 5 10 5 10 15 Z" fill="#212121"/><path d="M10 18 L10 48 L30 48 L30 18 L 26 18 L 20 24 L 14 18 Z" fill="var(--lcars-gold)"/><path d="M14 18 L10 18 L10 15 C 10 5 30 5 30 15 L30 18 L26 18 L20 24 L14 18 Z" fill="black"/><circle cx="17.5" cy="15.5" r="1.5" fill="var(--lcars-gold)"/><circle cx="22.5" cy="15.5" r="1.5" fill="var(--lcars-gold)"/><path d="M5 40 L2.5 36 L12.5 36 L10 40 Z" fill="var(--lcars-gold)" transform="translate(2, -5)"/></svg><h5 class="font-bold mt-2 text-lg">Lt. Commander</h5><p class="text-sm text-gray-400">The specialist who performs the action (C# CLR Assembly).</p></div>
+                            <div class="flex flex-col items-center"><svg viewBox="0 0 40 50" class="h-24"><path d="M10 15 L 10 48 L 30 48 L 30 15 C 30 5 10 5 10 15 Z" fill="#212121"/><path d="M10 18 L10 48 L30 48 L30 18 L 26 18 L 20 24 L 14 18 Z" fill="var(--lcars-blue)"/><path d="M14 18 L10 18 L10 15 C 10 5 30 5 30 15 L30 18 L26 18 L20 24 L14 18 Z" fill="black"/><circle cx="20" cy="15.5" r="1.5" fill="var(--lcars-blue)"/><path d="M5 40 L2.5 36 L12.5 36 L10 40 Z" fill="var(--lcars-gold)" transform="translate(2, -5)"/></svg><h5 class="font-bold mt-2 text-lg">Ensign</h5><p class="text-sm text-gray-400">Operates the remote station (The API Endpoint).</p></div>
+                            <div class="flex flex-col items-center col-span-2 md:col-span-1"><svg viewBox="0 0 40 50" class="h-24"><path d="M10 15 L 10 48 L 30 48 L 30 15 C 30 5 10 5 10 15 Z" fill="#212121"/><path d="M10 18 L10 48 L30 48 L30 18 L 26 18 L 20 24 L 14 18 Z" fill="var(--lcars-red)"/><path d="M14 18 L10 18 L10 15 C 10 5 30 5 30 15 L30 18 L26 18 L20 24 L14 18 Z" fill="black"/><path d="M5 40 L2.5 36 L12.5 36 L10 40 Z" fill="var(--lcars-gold)" transform="translate(2, -5)"/></svg><h5 class="font-bold mt-2 text-lg">Archival Cadet</h5><p class="text-sm text-gray-400">Monitors the buffer and files the report (SSU FTP Process).</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider">
+            <svg viewBox="0 0 100 10" preserveAspectRatio="none" class="h-full w-full"><path d="M0 5 L 20 5 L 25 2 L 75 2 L 80 5 L 100 5" stroke="var(--lcars-border)" stroke-width="2" fill="none"/></svg>
+        </div>
+
+        <!-- Phase 1: Transporter Room -->
+        <section class="mb-12 lcars-frame">
+            <div class="flex items-center gap-4 md:gap-6 mb-6 collapsible-header">
+                    <div class="phase-number">01</div>
+                <h3 class="text-3xl md:text-5xl">Transporter Room Operations</h3>
+                    <svg class="chevron h-8 w-8 text-lcars-border ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                </div>
+                <div class="collapsible-content">
+                <div class="pt-6">
+                        <p class="mb-8">The Chief Engineer has re-calibrated the transporter. The C# code handles the `HTTP POST` request. Its sole responsibility is to transmit the schematic and confirm the fabricator has received it and created the Digital Document.</p>
+                    <div class="p-2 md:p-4 bg-black/50 rounded-lg">
+                        <div class="scanline"></div>
+                        <h4 class="text-xl md:text-2xl mb-2 ml-2">PADD: DocumentFabricationProtocol.cs</h4>
+                        <div class="code-block rounded-lg p-2 md:p-4 text-xs md:text-sm">
+                            <div class="scanline"></div>
+<pre class="text-gray-400">
+<span class="text-purple-400">using</span> System;
+<span class="text-purple-400">using</span> System.Data.SqlTypes;
+<span class="text-purple-400">using</span> Microsoft.SqlServer.Server;
+<span class="text-purple-400">using</span> System.Net.Http;
+<span class="text-purple-400">using</span> System.Text;
+<span class="text-purple-400">using</span> System.Threading.Tasks;
+
+<span class="text-purple-400">public partial class</span> <span class="text-teal-300">DocumentFabricationProtocol</span>
+{
+    <span class="text-gray-500">// A single, static HttpClient is mission-critical for performance.</span>
+    <span class="text-purple-400">private static readonly</span> <span class="text-teal-300">HttpClient</span> client = <span class="text-purple-400">new</span> HttpClient();
+
+    [<span class="text-teal-300">SqlFunction</span>(DataAccess = DataAccessKind.None, SystemDataAccess = SystemDataAccessKind.None)]
+    <span class="text-purple-400">public static</span> <span class="text-teal-300">SqlString</span> CreateDocument(<span class="text-teal-300">SqlString</span> apiUrl, <span class="text-teal-300">SqlString</span> htmlPayload)
+    {
+        <span class="text-gray-500">// Protocol 1.1: Verify fabrication station coordinates.</span>
+        <span class="text-purple-400">if</span> (apiUrl.IsNull || !<span class="text-teal-300">Uri</span>.TryCreate(apiUrl.Value, UriKind.Absolute, <span class="text-purple-400">out</span> <span class="text-teal-300">Uri</span> uri))
+            <span class="text-purple-400">return new</span> <span class="text-teal-300">SqlString</span>(<span class="text-yellow-300">"Error: Invalid API coordinates."</span>);
+
+        <span class="text-gray-500">// Protocol 2.4: Secure channels only.</span>
+        <span class="text-purple-400">if</span> (uri.Scheme != Uri.UriSchemeHttps)
+            <span class="text-purple-400">return new</span> <span class="text-teal-300">SqlString</span>(<span class="text-yellow-300">"Error: Unsecure channel."</span>);
+
+        <span class="text-purple-400">try</span>
+        {
+            <span class="text-gray-500">// Prepare the schematic (HTML) for transport.</span>
+            <span class="text-purple-400">var</span> content = <span class="text-purple-400">new</span> <span class="text-teal-300">StringContent</span>(htmlPayload.Value, Encoding.UTF8, <span class="text-yellow-300">"application/json"</span>);
+            
+            <span class="text-gray-500">// Transmit data via POST and await response.</span>
+            <span class="text-teal-300">Task</span>&lt;<span class="text-teal-300">HttpResponseMessage</span>&gt; responseTask = client.PostAsync(uri, content);
+            <span class="text-teal-300">HttpResponseMessage</span> response = responseTask.GetAwaiter().GetResult();
+            
+            response.EnsureSuccessStatusCode();
+            
+            <span class="text-gray-500">// Confirmation that API placed file in buffer. Archival is handled by SSU.</span>
+            <span class="text-purple-400">return new</span> <span class="text-teal-300">SqlString</span>(<span class="text-yellow-300">"Success: Schematic received by fabricator."</span>);
+        }
+        <span class="text-purple-400">catch</span> (Exception ex) {
+            <span class="text-purple-400">return new</span> <span class="text-teal-300">SqlString</span>($<span class="text-yellow-300">"Fabrication Error: {ex.Message}"</span>);
+        }
+    }
+}
+</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider">
+            <svg viewBox="0 0 100 10" preserveAspectRatio="none" class="h-full w-full"><path d="M0 5 L 20 5 L 25 8 L 75 8 L 80 5 L 100 5" stroke="var(--lcars-border)" stroke-width="2" fill="none"/></svg>
+        </div>
+        
+        <!-- Stored Procedure Code -->
+        <section class="mb-24 lcars-frame">
+            <div class="flex items-center gap-4 md:gap-6 mb-6 collapsible-header">
+                 <div class="phase-number opacity-50">1.5</div>
+                <h3 class="text-3xl md:text-5xl">From the Bridge: The T-SQL Command</h3>
+                <svg class="chevron h-8 w-8 text-lcars-border ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            </div>
+            <div class="collapsible-content">
+                <div class="pt-6">
+                    <p class="mb-8">The CLR function is the away team, but this stored procedure is the Captain's command that gives them their orders. This is how you execute the C# code from within SQL Server, passing the necessary mission parameters.</p>
+                     <div class="p-2 md:p-4 bg-black/50 rounded-lg">
+                        <div class="scanline"></div>
+                        <h4 class="text-xl md:text-2xl mb-2 ml-2">PADD: usp_GenerateArchivedDocument.sql</h4>
+                        <div class="code-block rounded-lg p-2 md:p-4 text-xs md:text-sm">
+<pre class="text-gray-400">
+<span class="text-purple-400">CREATE PROCEDURE</span> <span class="text-teal-300">dbo.usp_GenerateArchivedDocument</span>
+    <span class="text-blue-400">@HtmlContent</span> <span class="text-purple-400">NVARCHAR</span>(MAX)
+<span class="text-purple-400">AS</span>
+<span class="text-purple-400">BEGIN</span>
+    <span class="text-purple-400">SET NOCOUNT ON</span>;
+    <span class="text-gray-500">-- Set target fabrication station coordinates. Store this in a config table, not here!</span>
+    <span class="text-purple-400">DECLARE</span> <span class="text-blue-400">@ApiEndpoint</span> <span class="text-purple-400">NVARCHAR</span>(2048) = N'https://fabricator.starfleet.local/api/createpdf';
+    <span class="text-purple-400">DECLARE</span> <span class="text-blue-400">@Status</span> <span class="text-purple-400">NVARCHAR</span>(MAX);
+
+    <span class="text-gray-500">-- Log the attempt.</span>
+    <span class="text-purple-400">PRINT</span> <span class="text-yellow-300">'Authorizing transmission to '</span> + <span class="text-blue-400">@ApiEndpoint</span>;
+
+    <span class="text-purple-400">BEGIN TRY</span>
+        <span class="text-gray-500">-- Execute the CLR function, passing the coordinates and the schematic.</span>
+        <span class="text-purple-400">SELECT</span> <span class="text-blue-400">@Status</span> = <span class="text-teal-300">dbo.CreateDocument</span>(<span class="text-blue-400">@ApiEndpoint</span>, <span class="text-blue-400">@HtmlContent</span>);
+
+        <span class="text-gray-500">-- Verify mission success.</span>
+        <span class="text-purple-400">IF</span> (<span class="text-blue-400">@Status</span> <span class="text-purple-400">LIKE</span> <span class="text-yellow-300">'Success:%'</span>)
+        <span class="text-purple-400">BEGIN</span>
+            <span class="text-purple-400">PRINT</span> <span class="text-yellow-300">'Confirmation received. Document fabrication initiated.'</span>;
+        <span class="text-purple-400">END</span>
+        <span class="text-purple-400">ELSE</span>
+        <span class="text-purple-400">BEGIN</span>
+            <span class="text-gray-500">-- Report failure to the bridge.</span>
+            <span class="text-purple-400">THROW</span> 50001, <span class="text-blue-400">@Status</span>, 1;
+        <span class="text-purple-400">END</span>
+    <span class="text-purple-400">END TRY</span>
+    <span class="text-purple-400">BEGIN CATCH</span>
+        <span class="text-purple-400">PRINT</span> <span class="text-yellow-300">'RED ALERT: Mission failed. An unknown anomaly occurred during transmission.'</span>;
+        <span class="text-purple-400">THROW</span>;
+    <span class="text-purple-400">END CATCH</span>
+<span class="text-purple-400">END</span>
+</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider">
+            <svg viewBox="0 0 100 10" preserveAspectRatio="none" class="h-full w-full"><path d="M0 5 L 20 5 L 25 2 L 75 2 L 80 5 L 100 5" stroke="var(--lcars-border)" stroke-width="2" fill="none"/></svg>
+        </div>
+
+        <!-- Phase 2: Deployment -->
+        <section class="mb-24 lcars-frame">
+             <div class="flex items-center gap-4 md:gap-6 mb-6 collapsible-header">
+                <div class="phase-number">02</div>
+                <h3 class="text-3xl md:text-5xl">Authorizing the Away Team</h3>
+                <svg class="chevron h-8 w-8 text-lcars-border ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            </div>
+            <div class="collapsible-content">
+                <div class="pt-6">
+                    <p class="mb-8">Before the Stored Procedure can issue commands, the CLR assembly must be beamed into the ship's computer and registered. These commands load the compiled C# code and create the SQL Function that links to it.</p>
+                    <div class="p-2 md:p-4 bg-black/50 rounded-lg">
+                        <div class="scanline"></div>
+                        <h4 class="text-xl md:text-2xl mb-2 ml-2">PADD: DeploymentDirectives.sql</h4>
+                         <div class="code-block rounded-lg p-2 md:p-4 text-xs md:text-sm">
+<pre class="text-gray-400">
+<span class="text-gray-500">-- Load the compiled .dll file into SQL Server.
+-- The DLL must be on a path accessible by the SQL Server service account.</span>
+<span class="text-purple-400">CREATE ASSEMBLY</span> DocumentFabricationAssembly
+<span class="text-purple-400">FROM</span> <span class="text-yellow-300">'C:\Starfleet\CLR\DocumentFabricationProtocol.dll'</span>
+<span class="text-purple-400">WITH PERMISSION_SET</span> = <span class="text-teal-300">EXTERNAL_ACCESS</span>;
+<span class="text-purple-400">GO</span>
+
+<span class="text-gray-500">-- Create the SQL function that maps to the C# method.
+-- Note the parameter types match the C# SqlString types.</span>
+<span class="text-purple-400">CREATE FUNCTION</span> <span class="text-teal-300">dbo.CreateDocument</span>(
+    <span class="text-blue-400">@apiUrl</span> <span class="text-purple-400">NVARCHAR</span>(2048), 
+    <span class="text-blue-400">@htmlPayload</span> <span class="text-purple-400">NVARCHAR</span>(MAX)
+)
+<span class="text-purple-400">RETURNS</span> <span class="text-purple-400">NVARCHAR</span>(MAX)
+<span class="text-purple-400">AS EXTERNAL NAME</span> DocumentFabricationAssembly.[DocumentFabricationProtocol].CreateDocument;
+<span class="text-purple-400">GO</span>
+</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider">
+            <svg viewBox="0 0 100 10" preserveAspectRatio="none" class="h-full w-full"><path d="M0 5 L 20 5 L 25 8 L 75 8 L 80 5 L 100 5" stroke="var(--lcars-border)" stroke-width="2" fill="none"/></svg>
+        </div>
+        
+        <!-- Phase 3: Bridge Ops Console -->
+        <section class="mb-24 lcars-frame">
+             <div class="flex items-center gap-4 md:gap-6 mb-6 collapsible-header">
+                <div class="phase-number opacity-50">2.5</div>
+                <h3 class="text-3xl md:text-5xl">Bridge Operations Console</h3>
+                <svg class="chevron h-8 w-8 text-lcars-border ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            </div>
+            <div class="collapsible-content">
+                <div class="pt-6">
+                    <p class="mb-8">These are the preliminary system checks required before deploying any CLR assembly. Execute them to ensure the ship's computer is ready to accept our new protocols.</p>
+                    <div class="flex flex-col md:flex-row gap-8 items-start">
+                        <div class="space-y-4 w-full md:w-auto">
+                            <div id="btn-clr" class="lcars-button">1. Enable CLR Subsystem</div>
+                            <div id="btn-trust" class="lcars-button">2. Set Database Trustworthy</div>
+                            <div id="btn-deploy" class="lcars-button active">3. Assembly Ready for Deployment</div>
+                        </div>
+                        <div class="interactive-console p-4 flex-grow w-full">
+                            <pre id="console-output" class="text-green-400 font-mono text-sm"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider">
+            <svg viewBox="0 0 100 10" preserveAspectRatio="none" class="h-full w-full"><path d="M0 5 L 20 5 L 25 2 L 75 2 L 80 5 L 100 5" stroke="var(--lcars-border)" stroke-width="2" fill="none"/></svg>
+        </div>
+
+        <!-- Phase 4: Shields Up! -->
+        <section class="mb-24 lcars-frame">
+            <div class="flex items-center gap-4 md:gap-6 mb-6">
+                <div class="phase-number">03</div>
+                <h3 class="text-3xl md:text-5xl">Shield Harmonics</h3>
+            </div>
+            <p class="mb-8">The `PERMISSION_SET` is like setting our shield strength. Even with a complex mission, we must use the correct clearance. `EXTERNAL_ACCESS` is required for any network communication. Select a level to see the corresponding power allocation on the ship's schematic.</p>
+            <div class="flex flex-col md:grid md:grid-cols-3 gap-8">
+                <div class="md:col-span-2 order-2 md:order-1">
+                    <svg id="ship-diagram" viewBox="0 0 300 130" class="w-full h-full">
+                        <g id="hull"><path id="saucer" class="ship-section-off" d="m150 55q-52 0-82-30-2-29 33-25 41 4 49 4 8 0 49-4 35-4 33 25-30 30-82 30z"/><path id="stardrive" class="ship-section-off" d="m150 57-12 18q-3 6-3 10v20h30v-20q0-4-3-10z"/></g>
+                        <g id="warp"><path id="nacelle_port" class="ship-section-off" d="M10 90q-5 0-5 5v10q0 5 5 5h100q5 0 5-5v-10q0-5-5-5z"/><path id="nacelle_starboard" class="ship-section-off" d="M190 90q-5 0-5 5v10q0 5 5 5h100q5 0 5-5v-10q0-5-5-5z"/></g>
+                        <g id="systems"><circle id="bridge" class="ship-section-off" cx="150" cy="22" r="6"/><path id="deflector" class="ship-section-off" d="m150 65 10 20h-20z"/></g>
+                    </svg>
+                </div>
+                 <div class="space-y-4 flex flex-col order-1 md:order-2">
+                    <button class="permission-btn lcars-button" data-level="safe">SAFE</button>
+                    <button class="permission-btn lcars-button active" data-level="external">EXTERNAL_ACCESS</button>
+                    <button class="permission-btn lcars-button" data-level="unsafe">UNSAFE</button>
+                    <div id="permission-desc" class="mt-4 p-4 bg-black/30 rounded-lg flex-grow"></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider">
+            <svg viewBox="0 0 100 10" preserveAspectRatio="none" class="h-full w-full"><path d="M0 5 L 20 5 L 25 8 L 75 8 L 80 5 L 100 5" stroke="var(--lcars-border)" stroke-width="2" fill="none"/></svg>
+        </div>
+
+        <!-- Phase 5: First Contact -->
+        <section class="mb-16 lcars-frame">
+            <div class="flex items-center gap-4 md:gap-6 mb-6">
+                <div class="phase-number">04</div>
+                <h3 class="text-3xl md:text-5xl">Execute Fabrication</h3>
+            </div>
+            <p class="mb-8">The moment of truth. Enter the document schematic below and authorize the transmission. The mission display will show the status of the entire operation, from fabrication to archival.</p>
+            <div class="flex flex-col md:grid md:grid-cols-5 gap-6">
+                <div class="md:col-span-2 space-y-4">
+                    <label for="html-input" class="font-bold text-lg">Document Schematic (HTML):</label>
+                    <textarea id="html-input" class="w-full h-40 bg-black border-2 border-lcars-border p-2 rounded-md font-mono">&lt;h1&gt;Captain's Log&lt;/h1&gt;&lt;p&gt;Stardate 99981.3: Mission successful.&lt;/p&gt;</textarea>
+                    <button id="initiate-btn" class="w-full text-center lcars-button active text-xl p-4">Initiate</button>
+                </div>
+                <div class="md:col-span-3 relative h-64 bg-black rounded-lg overflow-hidden">
+                    <canvas id="mission-canvas"></canvas>
+                    <div id="mission-status" class="absolute bottom-2 left-2 p-2 bg-black/50 rounded text-lg">STATUS: AWAITING ORDERS</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+    // Observer for scroll-in animations
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.lcars-panel-container, .section-divider, .nebula').forEach(el => observer.observe(el));
+    
+    // Collapsible Section Logic
+    document.querySelectorAll('.collapsible-header').forEach(header => {
+        const content = header.nextElementSibling;
+        if (!content) return;
+        
+        if (header.classList.contains('open')) {
+            content.classList.add('expanded');
+            content.style.maxHeight = content.scrollHeight + "px";
+        } else {
+            content.style.maxHeight = '0px';
+        }
+
+        header.addEventListener('click', () => {
+            header.classList.toggle('open');
+            const scanline = content.querySelector('.scanline');
+            if (scanline) {
+                // Get the parent of the *original* scanline
+                const parentContainer = scanline.parentNode;
+                if (parentContainer) {
+                    const newScanline = scanline.cloneNode(true);
+                    // Find the PADD within that same parent container
+                    const padd = parentContainer.querySelector('.code-block');
+                    if (padd) {
+                        newScanline.style.setProperty('--scan-height', padd.offsetHeight + 'px');
+                    }
+                    // Now perform the replacement
+                    parentContainer.replaceChild(newScanline, scanline);
+                }
+            }
+
+            if (content.style.maxHeight !== '0px') {
+                content.style.maxHeight = '0px';
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            } 
+        });
+    });
+
+    // --- Starfield Animation ---
+    const starfield = document.getElementById('starfield');
+    const ctx = starfield.getContext('2d');
+    const numStars = 800;
+    const warpThreshold = 0.9;
+    let stars = [];
+    let speed = 0;
+    let warp = 0;
+
+    function setupStarfield() {
+        if (!starfield) return;
+        starfield.width = window.innerWidth;
+        starfield.height = window.innerHeight;
+        stars = [];
+        for (let i = 0; i < numStars; i++) {
+            stars.push({
+                x: (Math.random() - 0.5) * starfield.width,
+                y: (Math.random() - 0.5) * starfield.height,
+                z: Math.random() * starfield.width
+            });
+        }
+    }
+
+    function drawStars() {
+        if (!ctx) return;
+        const centerX = starfield.width / 2;
+        const centerY = starfield.height / 2;
+        
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0,0,starfield.width, starfield.height);
+        
+        ctx.fillStyle = 'white';
+
+        for(let i=0; i<numStars; i++) {
+            const s = stars[i];
+            s.z -= speed;
+            if(s.z <= 0) {
+                s.x = (Math.random() - 0.5) * starfield.width;
+                s.y = (Math.random() - 0.5) * starfield.height;
+                s.z = starfield.width;
+            }
+            
+            const k = 128.0 / s.z;
+            const px = s.x * k + centerX;
+            const py = s.y * k + centerY;
+            
+            if(px >= 0 && px < starfield.width && py >= 0 && py < starfield.height) {
+                let size = (1 - s.z / starfield.width) * 5;
+                let shade = parseInt((1 - s.z / starfield.width) * 255);
+                ctx.fillStyle = `rgb(${shade},${shade},${shade})`;
+                
+                if (warp > 0) {
+                    ctx.strokeStyle = `rgba(255,255,255,${warp})`;
+                    ctx.lineWidth = size;
+                    ctx.beginPath();
+                    ctx.moveTo(px, py);
+                    ctx.lineTo(px + (s.x / s.z) * speed * 2, py + (s.y / s.z) * speed * 2);
+                    ctx.stroke();
+                } else {
+                    ctx.fillRect(px,py,size,size);
+                }
+            }
+        }
+    }
+    
+    window.addEventListener('scroll', () => {
+        const scrollPercent = window.scrollY / (document.body.offsetHeight - window.innerHeight);
+        speed = scrollPercent * 20;
+        warp = Math.max(0, (scrollPercent - warpThreshold) / (1 - warpThreshold));
+        
+        const nebula1 = document.getElementById('nebula1');
+        const nebula2 = document.getElementById('nebula2');
+        if(nebula1) nebula1.style.transform = `translateY(${-scrollPercent * 30}vh)`;
+        if(nebula2) nebula2.style.transform = `translateY(${-scrollPercent * 15}vh)`;
+
+    });
+    
+    let starfieldAnimationId;
+    function tick() {
+        drawStars();
+        starfieldAnimationId = requestAnimationFrame(tick);
+    }
+    
+    setupStarfield();
+    tick();
+    window.addEventListener('resize', setupStarfield);
+
+    // --- Console Logic ---
+    const consoleOutput = document.getElementById('console-output');
+    const commands = {
+        clr: { btn: 'btn-clr', text: "> sp_configure 'clr enabled', 1;\n> RECONFIGURE;", delay: 500 },
+        trust: { btn: 'btn-trust', text: "> ALTER DATABASE CurrentDB SET TRUSTWORTHY ON;", delay: 800 },
+        deploy: { btn: 'btn-deploy', text: "> Assembly and Function Ready", delay: 100 },
+    };
+    
+    function typeCommand(command) {
+        let i = 0;
+        const btn = document.getElementById(command.btn);
+        if (btn) btn.classList.add('active');
+        const interval = setInterval(() => {
+            if (consoleOutput) {
+                consoleOutput.textContent += command.text[i];
+            }
+            i++;
+            if (i > command.text.length - 1) {
+                if(consoleOutput) consoleOutput.textContent += '\n';
+                clearInterval(interval);
+            }
+        }, 30);
+    }
+
+    Object.values(commands).forEach(cmd => {
+        const btnEl = document.getElementById(cmd.btn);
+        if (btnEl) {
+            btnEl.addEventListener('click', () => {
+                document.querySelectorAll('.lcars-button').forEach(b => b.classList.remove('active'));
+                if(consoleOutput) consoleOutput.textContent = '';
+                typeCommand(cmd)
+            });
+        }
+    });
+
+    // --- Shield Visualization ---
+    const permissionDesc = document.getElementById('permission-desc');
+    const shipParts = {
+        saucer: document.getElementById('saucer'),
+        stardrive: document.getElementById('stardrive'),
+        nacelle_port: document.getElementById('nacelle_port'),
+        nacelle_starboard: document.getElementById('nacelle_starboard'),
+        bridge: document.getElementById('bridge'),
+        deflector: document.getElementById('deflector'),
+    };
+    const partMapping = {
+        safe: ['bridge'],
+        external: ['bridge', 'deflector'],
+        unsafe: Object.keys(shipParts)
+    };
+    const descMapping = {
+        safe: "<strong>SAFE:</strong> The Prime Directive. Code can only perform calculations. Access is restricted to the ship's computer core (the Bridge).",
+        external: "<strong>EXTERNAL ACCESS:</strong> Standard Mission Protocol. Code can access external resources via the main deflector dish. Shields remain up.",
+        unsafe: "<strong>UNSAFE:</strong> Red Alert! All systems are accessible, including warp drive and internal systems. Highly dangerous and rarely authorized."
+    };
+
+    document.querySelectorAll('.permission-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.permission-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const level = btn.dataset.level;
+            
+            Object.values(shipParts).forEach(part => {
+                if(part) part.className.baseVal = 'ship-section-off'
+            });
+            partMapping[level].forEach(partKey => {
+                if(shipParts[partKey]) shipParts[partKey].className.baseVal = `ship-section-${level}`;
+            });
+            if(permissionDesc) permissionDesc.innerHTML = descMapping[level];
+        });
+    });
+    const initialPermissionBtn = document.querySelector('.permission-btn[data-level="external"]');
+    if(initialPermissionBtn) initialPermissionBtn.click();
+    
+    // --- Mission Control ---
+    const initiateBtn = document.getElementById('initiate-btn');
+    const missionStatus = document.getElementById('mission-status');
+    const missionCanvas = document.getElementById('mission-canvas');
+    const mCtx = missionCanvas ? missionCanvas.getContext('2d') : null;
+    
+    const lcarsColors = {
+        blue: '#6699FF', green: '#4ade80', yellow: '#facc15', red: '#f87171', white: '#ffffff', purple: '#CC99FF', orange: '#FF9900', gray: '#6B7280'
+    };
+    
+    let missionState = { stage: 'idle', progress: 0 };
+    const pos = {
+        enterprise: { x: 50, y: 0, color: lcarsColors.gray },
+        apiStation: { x: 0, y: 0, color: lcarsColors.gray },
+        archive: { x: 50, y: 0, color: lcarsColors.gray }
+    };
+    const icons = {
+        enterprise: 'M2,10 L18,2 L18,18 Z',
+        api: 'M4 4h16v16H4z M8 8h8v8H8z',
+        archive: 'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z',
+        html: 'M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z',
+        pdf: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
+    };
+
+    function setupMissionCanvas() {
+        if (!missionCanvas) return;
+        missionCanvas.width = missionCanvas.offsetWidth;
+        missionCanvas.height = missionCanvas.offsetHeight;
+        pos.enterprise.y = missionCanvas.height / 2;
+        pos.apiStation.x = missionCanvas.width / 2;
+        pos.apiStation.y = missionCanvas.height / 2;
+        pos.archive.y = missionCanvas.height / 2;
+        pos.archive.x = missionCanvas.width - 50;
+    }
+    setupMissionCanvas();
+    window.addEventListener('resize', setupMissionCanvas);
+
+    function drawIcon(ctx, iconPath, x, y, color) {
+        const path = new Path2D(iconPath);
+        ctx.fillStyle = color;
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.fill(path);
+        ctx.restore();
+    }
+    
+    function drawDashedLine(ctx, x1, y1, x2, y2, color) {
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 10]);
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+    }
+
+    let missionAnimationFrameId;
+    function drawMission() {
+        if(!mCtx) return;
+        mCtx.clearRect(0, 0, missionCanvas.width, missionCanvas.height);
+        
+        drawDashedLine(mCtx, pos.enterprise.x, pos.enterprise.y, pos.apiStation.x, pos.apiStation.y, lcarsColors.gray);
+        drawDashedLine(mCtx, pos.apiStation.x, pos.apiStation.y, pos.archive.x, pos.archive.y, lcarsColors.gray);
+
+        drawIcon(mCtx, icons.enterprise, pos.enterprise.x - 10, pos.enterprise.y - 10, pos.enterprise.color);
+        drawIcon(mCtx, icons.api, pos.apiStation.x - 12, pos.apiStation.y - 12, pos.apiStation.color);
+        drawIcon(mCtx, icons.archive, pos.archive.x - 12, pos.archive.y - 12, pos.archive.color);
+
+        if (missionState.stage === 'transmitting_html') {
+            const start = pos.enterprise;
+            const end = pos.apiStation;
+            const packetX = start.x + (end.x - start.x) * missionState.progress;
+            const packetY = start.y + (end.y - start.y) * missionState.progress;
+            drawIcon(mCtx, icons.html, packetX - 12, packetY - 12, lcarsColors.yellow);
+        } else if (missionState.stage === 'processing') {
+            mCtx.strokeStyle = lcarsColors.yellow;
+            mCtx.lineWidth = 2;
+            mCtx.beginPath();
+            mCtx.arc(pos.apiStation.x, pos.apiStation.y, 25, -Math.PI/2, (-Math.PI/2) + (Math.PI * 2) * missionState.progress);
+            mCtx.stroke();
+        } else if (missionState.stage === 'archiving_pdf') {
+            const start = pos.apiStation;
+            const end = pos.archive;
+            const packetX = start.x + (end.x - start.x) * missionState.progress;
+            const packetY = start.y + (end.y - start.y) * missionState.progress;
+            drawIcon(mCtx, icons.pdf, packetX - 12, packetY - 12, lcarsColors.green);
+        }
+
+        missionAnimationFrameId = requestAnimationFrame(drawMission);
+    }
+
+    function runAnimationStep(config) {
+        return new Promise(resolve => {
+            missionState.stage = config.stage;
+            missionState.progress = 0;
+            if(missionStatus) missionStatus.textContent = `STATUS: ${config.statusText}`;
+            
+            if (config.startColor) config.startColor();
+
+            const startTime = Date.now();
+            const step = () => {
+                const elapsed = Date.now() - startTime;
+                missionState.progress = Math.min(elapsed / config.duration, 1);
+                if (missionState.progress < 1) {
+                    missionAnimationFrameId = requestAnimationFrame(step);
+                } else {
+                    if (config.endColor) config.endColor();
+                    resolve();
+                }
+            };
+            missionAnimationFrameId = requestAnimationFrame(step);
+        });
+    }
+    
+    if(initiateBtn) {
+        initiateBtn.addEventListener('click', async () => {
+            if (missionState.stage !== 'idle') return;
+            
+            cancelAnimationFrame(missionAnimationFrameId);
+
+            pos.enterprise.color = lcarsColors.gray;
+            pos.apiStation.color = lcarsColors.gray;
+            pos.archive.color = lcarsColors.gray;
+
+            await runAnimationStep({ 
+                stage: 'transmitting_html', duration: 2000, statusText: 'TRANSMITTING HTML SCHEMATIC...',
+                startColor: () => { pos.enterprise.color = lcarsColors.blue; }
+            });
+            
+            await runAnimationStep({ 
+                stage: 'processing', duration: 1500, statusText: 'API FABRICATING DIGITAL DOCUMENT...',
+                startColor: () => { pos.enterprise.color = lcarsColors.green; pos.apiStation.color = lcarsColors.purple; }
+            });
+
+            await runAnimationStep({ 
+                stage: 'archiving_pdf', duration: 2000, statusText: 'SSU ARCHIVING DOCUMENT VIA FTP...',
+                startColor: () => { pos.apiStation.color = lcarsColors.green; }
+            });
+            
+            pos.archive.color = lcarsColors.green;
+            missionStatus.textContent = 'STATUS: MISSION COMPLETE!';
+            missionStatus.style.color = lcarsColors.green;
+            
+            setTimeout(() => {
+                missionState.stage = 'idle';
+                cancelAnimationFrame(missionAnimationFrameId);
+                missionStatus.textContent = 'STATUS: AWAITING ORDERS';
+                missionStatus.style.color = lcarsColors.white;
+                pos.enterprise.color = lcarsColors.gray;
+                pos.apiStation.color = lcarsColors.gray;
+                pos.archive.color = lcarsColors.gray;
+                requestAnimationFrame(drawMission);
+            }, 4000);
+        });
+    }
+
+    requestAnimationFrame(drawMission);
+});
+</script>
+</body>
+</html>
