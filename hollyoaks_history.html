@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hollyoaks: The First 20 Years (Modern Interactive)</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.17" integrity="sha384-igm5BeiBt36UU4gqwWS7imYmelpTsZlQ45FZf+XBn9MuJbn4nQr7yx1yFydocC/K" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -177,7 +177,6 @@
             characters: {
                 // Cunninghams
                 'gordon_c': { name: 'Gordon Cunningham', family: 'cunningham', summary: 'Family patriarch. Died in a car crash in 2004 which also killed his second wife, Helen. Appeared in a dream sequence in 2008.'},
-                'angela_c': { name: 'Angela Cunningham', family: 'cunningham', summary: 'Gordon\'s ex-wife and mother to Dawn, Jude, Cindy, and Max. Made her last appearance in 2008.' },
                 'dawn_c': { name: 'Dawn Cunningham', family: 'cunningham', summary: 'Died of leukemia on Christmas Day 1997. Had an affair with Jack Osborne, resulting in daughter Bethany.' },
                 'jude_c': { name: 'Jude Cunningham', family: 'cunningham', summary: 'Appeared 1996-1998, with a brief return in 2016. Known for brushes with the law.' },
                 'cindy_c': { name: 'Cindy Cunningham', family: 'cunningham', summary: 'Long-running character with a history of scheming and dramatic relationships. Mother to Holly. Married Tony Hutchinson.' },
@@ -290,6 +289,20 @@
             const closeModalBtn = document.getElementById('close-modal');
             const modalContent = document.getElementById('modal-content');
 
+            // Event delegation for family tree clicks - Optimization: Single listener instead of N listeners
+            document.getElementById('all-family-trees').addEventListener('click', (e) => {
+                const node = e.target.closest('.character-node');
+                // Ensure the click is on a character node and inside the container
+                if (node && document.getElementById('all-family-trees').contains(node)) {
+                    // Optimization: Find only the currently selected node instead of iterating all
+                    const previous = document.querySelector('.character-node.selected');
+                    if (previous) previous.classList.remove('selected');
+
+                    node.classList.add('selected');
+                    showCharacterModal(node.dataset.id);
+                }
+            });
+
             // Intersection Observer for section reveal animations
             const sectionObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -347,13 +360,6 @@
                     sectionObserver.observe(familySection); // Observe for animation
                 }
 
-                document.querySelectorAll('.character-node').forEach(node => {
-                    node.addEventListener('click', (e) => {
-                        document.querySelectorAll('.character-node').forEach(n => n.classList.remove('selected'));
-                        e.currentTarget.classList.add('selected');
-                        showCharacterModal(e.currentTarget.dataset.id);
-                    });
-                });
             }
 
             function showCharacterModal(charId) {
@@ -385,16 +391,6 @@
                 `;
                 characterModal.classList.add('is-visible');
 
-                modalContent.querySelectorAll('.event-link').forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const year = e.target.dataset.year;
-                        hideCharacterModal();
-                        yearSelect.value = year;
-                        displayTimeline(year);
-                        document.getElementById('timeline-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    });
-                });
             }
 
             function hideCharacterModal() {
@@ -406,6 +402,18 @@
             characterModal.addEventListener('click', (e) => {
                 if (e.target === characterModal) {
                     hideCharacterModal();
+                }
+            });
+
+            modalContent.addEventListener('click', (e) => {
+                const link = e.target.closest('.event-link');
+                if (link) {
+                    e.preventDefault();
+                    const year = link.dataset.year;
+                    hideCharacterModal();
+                    yearSelect.value = year;
+                    displayTimeline(year);
+                    document.getElementById('timeline-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
 
@@ -443,12 +451,13 @@
                 }, {});
 
                 const sortedYears = Object.keys(eventsByYear).sort((a, b) => a - b);
+                const fragment = document.createDocumentFragment();
 
                 sortedYears.forEach(year => {
                     const yearHeader = document.createElement('h3');
                     yearHeader.className = 'text-3xl font-extrabold text-fuchsia-700 mt-10 mb-6 border-b-2 border-fuchsia-300 pb-2 text-center section-reveal';
                     yearHeader.textContent = year;
-                    timelineContent.appendChild(yearHeader);
+                    fragment.appendChild(yearHeader);
                     sectionObserver.observe(yearHeader);
 
                     eventsByYear[year].forEach(event => {
@@ -466,10 +475,11 @@
                             <h4 class="text-xl font-semibold text-gray-800 mb-1">${event.title}</h4>
                             <p class="text-gray-600 text-sm">${event.description}</p>
                         `;
-                        timelineContent.appendChild(eventCard);
+                        fragment.appendChild(eventCard);
                         timelineEventObserver.observe(eventCard);
                     });
                 });
+                timelineContent.appendChild(fragment);
             }
             
             yearSelect.addEventListener('change', () => displayTimeline(yearSelect.value));
@@ -528,6 +538,20 @@
                     }
                 });
             }
+
+            // Event Delegation for Character Nodes - Performance Optimization
+            document.getElementById('all-family-trees').addEventListener('click', (e) => {
+                const node = e.target.closest('.character-node');
+                // Ensure the click was on a node and inside our container
+                if (node && e.currentTarget.contains(node)) {
+                    // Optimized: Only query for the single previously selected element instead of iterating all
+                    const previous = document.querySelector('.character-node.selected');
+                    if (previous) previous.classList.remove('selected');
+
+                    node.classList.add('selected');
+                    showCharacterModal(node.dataset.id);
+                }
+            });
 
             // Initial setup
             createThematicChart();
