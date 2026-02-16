@@ -289,6 +289,20 @@
             const closeModalBtn = document.getElementById('close-modal');
             const modalContent = document.getElementById('modal-content');
 
+            // Event delegation for family tree clicks - Optimization: Single listener instead of N listeners
+            document.getElementById('all-family-trees').addEventListener('click', (e) => {
+                const node = e.target.closest('.character-node');
+                // Ensure the click is on a character node and inside the container
+                if (node && document.getElementById('all-family-trees').contains(node)) {
+                    // Optimization: Find only the currently selected node instead of iterating all
+                    const previous = document.querySelector('.character-node.selected');
+                    if (previous) previous.classList.remove('selected');
+
+                    node.classList.add('selected');
+                    showCharacterModal(node.dataset.id);
+                }
+            });
+
             // Intersection Observer for section reveal animations
             const sectionObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -437,12 +451,13 @@
                 }, {});
 
                 const sortedYears = Object.keys(eventsByYear).sort((a, b) => a - b);
+                const fragment = document.createDocumentFragment();
 
                 sortedYears.forEach(year => {
                     const yearHeader = document.createElement('h3');
                     yearHeader.className = 'text-3xl font-extrabold text-fuchsia-700 mt-10 mb-6 border-b-2 border-fuchsia-300 pb-2 text-center section-reveal';
                     yearHeader.textContent = year;
-                    timelineContent.appendChild(yearHeader);
+                    fragment.appendChild(yearHeader);
                     sectionObserver.observe(yearHeader);
 
                     eventsByYear[year].forEach(event => {
@@ -460,10 +475,11 @@
                             <h4 class="text-xl font-semibold text-gray-800 mb-1">${event.title}</h4>
                             <p class="text-gray-600 text-sm">${event.description}</p>
                         `;
-                        timelineContent.appendChild(eventCard);
+                        fragment.appendChild(eventCard);
                         timelineEventObserver.observe(eventCard);
                     });
                 });
+                timelineContent.appendChild(fragment);
             }
             
             yearSelect.addEventListener('change', () => displayTimeline(yearSelect.value));
