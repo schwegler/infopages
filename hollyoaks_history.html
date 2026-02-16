@@ -289,6 +289,20 @@
             const closeModalBtn = document.getElementById('close-modal');
             const modalContent = document.getElementById('modal-content');
 
+            // Event delegation for family tree clicks - Optimization: Single listener instead of N listeners
+            document.getElementById('all-family-trees').addEventListener('click', (e) => {
+                const node = e.target.closest('.character-node');
+                // Ensure the click is on a character node and inside the container
+                if (node && document.getElementById('all-family-trees').contains(node)) {
+                    // Optimization: Find only the currently selected node instead of iterating all
+                    const previous = document.querySelector('.character-node.selected');
+                    if (previous) previous.classList.remove('selected');
+
+                    node.classList.add('selected');
+                    showCharacterModal(node.dataset.id);
+                }
+            });
+
             // Intersection Observer for section reveal animations
             const sectionObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
