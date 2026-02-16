@@ -14,6 +14,8 @@
             --slayer-red: #B91C1C;
             --watcher-blue: #3B82F6;
             --magic-purple: #9333EA;
+            --magic-green: #10B981;
+            --magic-yellow: #F59E0B;
             --scroll: 0;
         }
         html {
@@ -482,7 +484,47 @@
     });
 
     // --- Giles AI Logic ---
-    // ... as before, but prompts would be updated for new details
+    const gilesToggleBtn = document.getElementById('giles-toggle-btn');
+    const gilesChatWindow = document.getElementById('giles-chat-window');
+    const gilesCloseBtn = document.getElementById('giles-close-btn');
+    const gilesAskBtn = document.getElementById('giles-ask-btn');
+    const gilesChatLog = document.getElementById('giles-chat-log');
+
+    function toggleGiles() {
+        gilesChatWindow.classList.toggle('hidden');
+    }
+
+    if (gilesToggleBtn) gilesToggleBtn.addEventListener('click', toggleGiles);
+    if (gilesCloseBtn) gilesCloseBtn.addEventListener('click', toggleGiles);
+
+    function addMessage(text, isUser = false) {
+        const msg = document.createElement('div');
+        msg.className = isUser ? 'text-right mb-2' : 'text-left mb-2';
+        msg.innerHTML = `<span class="inline-block p-2 rounded-lg ${isUser ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-200'}">${text}</span>`;
+        gilesChatLog.appendChild(msg);
+        gilesChatLog.scrollTop = gilesChatLog.scrollHeight;
+    }
+
+    if (gilesAskBtn) {
+        gilesAskBtn.addEventListener('click', () => {
+            addMessage("What should I do next, Giles?", true);
+            gilesAskBtn.disabled = true;
+
+            setTimeout(() => {
+                const responses = [
+                    "The texts are ambiguous, but caution is always wise.",
+                    "Have you checked the transaction logs? They can be... illuminating.",
+                    "I believe a backup is in order before proceeding further.",
+                    "This server mouth is particularly volatile. Tread carefully.",
+                    "Standard procedure dictates a rollback plan. You do have one?",
+                    "Oh dear. I'd consult the manual if I were you."
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addMessage(randomResponse);
+                gilesAskBtn.disabled = false;
+            }, 1000);
+        });
+    }
 </script>
 </body>
 </html>
