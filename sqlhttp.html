@@ -658,6 +658,13 @@ window.addEventListener('DOMContentLoaded', () => {
     const starfield = document.getElementById('starfield');
     const ctx = starfield.getContext('2d');
     const numStars = 800;
+    // Optimization: Batch drawing buffers
+    const numBins = 11;
+    const bigBuffer = new Float32Array(numStars * 4);
+    const binCounts = new Int32Array(numBins);
+    const binOffsets = new Int32Array(numBins);
+    const currentOffsets = new Int32Array(numBins);
+
     const warpThreshold = 0.9;
     let stars = [];
     let speed = 0;
@@ -685,6 +692,10 @@ window.addEventListener('DOMContentLoaded', () => {
         ctx.fillStyle = 'black';
         ctx.fillRect(0,0,starfield.width, starfield.height);
         
+        if (warp > 0) {
+            binCounts.fill(0);
+        }
+
         ctx.fillStyle = 'white';
 
         for(let i=0; i<numStars; i++) {
@@ -702,19 +713,67 @@ window.addEventListener('DOMContentLoaded', () => {
             
             if(px >= 0 && px < starfield.width && py >= 0 && py < starfield.height) {
                 let size = (1 - s.z / starfield.width) * 5;
-                let shade = parseInt((1 - s.z / starfield.width) * 255);
-                ctx.fillStyle = `rgb(${shade},${shade},${shade})`;
                 
                 if (warp > 0) {
-                    ctx.strokeStyle = `rgba(255,255,255,${warp})`;
-                    ctx.lineWidth = size;
-                    ctx.beginPath();
-                    ctx.moveTo(px, py);
-                    ctx.lineTo(px + (s.x / s.z) * speed * 2, py + (s.y / s.z) * speed * 2);
-                    ctx.stroke();
+                     let bin = (size * 2) | 0;
+                     if (bin < 0) bin = 0;
+                     if (bin >= numBins) bin = numBins - 1;
+                     binCounts[bin]++;
                 } else {
+                    let shade = parseInt((1 - s.z / starfield.width) * 255);
+                    ctx.fillStyle = `rgb(${shade},${shade},${shade})`;
                     ctx.fillRect(px,py,size,size);
                 }
+            }
+        }
+
+        if (warp > 0) {
+            // Calculate Offsets
+            let offset = 0;
+            for(let i=0; i<numBins; i++) {
+                binOffsets[i] = offset;
+                offset += binCounts[i] * 4;
+            }
+            currentOffsets.set(binOffsets);
+
+            // Pass 2: Fill Buffer
+            for(let i=0; i<numStars; i++) {
+                const s = stars[i];
+                // Reuse calculations from pass 1 conceptually, but recompute for simplicity
+                const k = 128.0 / s.z;
+                const px = s.x * k + centerX;
+                const py = s.y * k + centerY;
+
+                if(px >= 0 && px < starfield.width && py >= 0 && py < starfield.height) {
+                     let size = (1 - s.z / starfield.width) * 5;
+                     let bin = (size * 2) | 0;
+                     if (bin < 0) bin = 0;
+                     if (bin >= numBins) bin = numBins - 1;
+
+                     const off = currentOffsets[bin];
+                     bigBuffer[off] = px;
+                     bigBuffer[off+1] = py;
+                     bigBuffer[off+2] = px + (s.x / s.z) * speed * 2;
+                     bigBuffer[off+3] = py + (s.y / s.z) * speed * 2;
+                     currentOffsets[bin] += 4;
+                }
+            }
+
+            ctx.strokeStyle = `rgba(255,255,255,${warp})`;
+            for(let i=0; i<numBins; i++) {
+                const count = binCounts[i];
+                if (count === 0) continue;
+
+                ctx.lineWidth = (i + 0.5) / 2;
+                const start = binOffsets[i];
+                const end = start + count * 4;
+
+                ctx.beginPath();
+                for(let j=start; j<end; j+=4) {
+                    ctx.moveTo(bigBuffer[j], bigBuffer[j+1]);
+                    ctx.lineTo(bigBuffer[j+2], bigBuffer[j+3]);
+                }
+                ctx.stroke();
             }
         }
     }
