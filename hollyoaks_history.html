@@ -173,116 +173,7 @@
     </div>
 
     <script>
-        const appData = {
-            characters: {
-                // Cunninghams
-                'gordon_c': { name: 'Gordon Cunningham', family: 'cunningham', summary: 'Family patriarch. Died in a car crash in 2004 which also killed his second wife, Helen. Appeared in a dream sequence in 2008.'},
-                'angela_c': { name: 'Angela Cunningham', family: 'cunningham', summary: 'Gordon\'s ex-wife and mother to Dawn, Jude, Cindy, and Max. Made her last appearance in 2008.' },
-                'dawn_c': { name: 'Dawn Cunningham', family: 'cunningham', summary: 'Died of leukemia on Christmas Day 1997. Had an affair with Jack Osborne, resulting in daughter Bethany.' },
-                'jude_c': { name: 'Jude Cunningham', family: 'cunningham', summary: 'Appeared 1996-1998, with a brief return in 2016. Known for brushes with the law.' },
-                'cindy_c': { name: 'Cindy Cunningham', family: 'cunningham', summary: 'Long-running character with a history of scheming and dramatic relationships. Mother to Holly. Married Tony Hutchinson.' },
-                'max_c': { name: 'Max Cunningham', family: 'cunningham', summary: 'Tragically killed in 2008 by Niall Rafferty, moments after marrying Steph Dean.' },
-                'helen_c': { name: 'Helen Richardson', family: 'cunningham', summary: 'Gordon\'s second wife and mother to Tom. Had an affair with Tony Hutchinson. Died in the 2004 car crash with Gordon.' },
-                'tom_c': { name: 'Tom Cunningham', family: 'cunningham', summary: 'Long-running character who grew up on screen. Became a father to Steph Cunningham-Lomax with Peri Lomax in an underage sex storyline.' },
-                'bethany_j': { name: 'Bethany Johnson', family: 'cunningham', summary: 'Daughter of Dawn Cunningham and Jack Osborne, given up for adoption.' },
-                'holly_c': { name: 'Holly Cunningham', family: 'cunningham', summary: 'Daughter of Cindy Cunningham and Lee Stanley.' },
-                
-                // Osbornes
-                'jack_o': { name: 'Jack Osborne', family: 'osborne', summary: 'Family patriarch and long-term owner of The Dog in the Pond. Had numerous marriages and affairs, including one with Dawn Cunningham. Involved in a fake death scam and confessed to a past murder.' },
-                'celia_o': { name: 'Celia Osborne', family: 'osborne', summary: 'Jack\'s first wife. Divorced him in 1997 after discovering his affair with Dawn and left the village.' },
-                'ruth_o': { name: 'Ruth Osborne', family: 'osborne', summary: 'Daughter of Jack and Celia. Married Kurt Benson. Made several brief returns to the village over the years.' },
-                'darren_o': { name: 'Darren Osborne', family: 'osborne', summary: 'Evolved from a troubled youth to a complex character dealing with gambling addiction, fatherhood, and prison. Father to JJ, Frankie, Oscar, and Morgan.' },
-                'jill_p': { name: 'Jill Patrick', family: 'osborne', summary: 'Jack\'s second wife. Died from a brain tumor in 2000.' },
-                'frankie_o': { name: 'Frankie Dean', family: 'osborne', summary: 'Jack\'s third wife. Fostered Barry Newton with Jack.' },
-                'oscar_o': { name: 'Oscar Osborne', family: 'osborne', summary: 'Son of Darren and Nancy. A central storyline focused on his deafness and subsequent cochlear implant surgery.' },
-                
-                // McQueens
-                'myra_m': { name: 'Myra McQueen', family: 'mcqueen', summary: 'The chaotic and loving matriarch of the sprawling McQueen clan. Mother to numerous children, including Niall, Jacqui, Mercedes, Tina, Carmel, and John Paul.' },
-                'jacqui_m': { name: 'Jacqui McQueen', family: 'mcqueen', summary: 'A tough and resilient McQueen known for dramatic relationships. Was raped by Gilly, struggled with infertility, and fled the country in 2012 to escape gangster Trevor Royale.' },
-                'mercedes_m': { name: 'Mercedes McQueen', family: 'mcqueen', summary: 'One of the show\'s most iconic and dramatic characters. Known for numerous affairs, being kidnapped by Silas, faking her own death, and murdering Dr. Browning in self-defense.' },
-                'tina_r': { name: 'Tina Reilly', family: 'mcqueen', summary: 'Daughter of Myra. Tragically killed in the church explosion set by her vengeful brother Niall Rafferty in 2008.' },
-                'carmel_m': { name: 'Carmel McQueen', family: 'mcqueen', summary: 'Daughter of Myra. Died heroically in the 2014 party train crash while saving Theresa from Sonny Valentine.' },
-                'johnpaul_m': { name: 'John Paul McQueen', family: 'mcqueen', summary: 'Central to a groundbreaking coming-out storyline with Craig Dean. Later involved in a male rape storyline with Finn O\'Connor. Left for Singapore in 2016.' },
-                'theresa_m': { name: 'Theresa McQueen', family: 'mcqueen', summary: 'Shot and killed Calvin Valentine in 2010. Had children with Calvin and Dodger Savage. Left the village in 2015.' },
-                'niall_r': { name: 'Niall Rafferty', family: 'mcqueen', summary: 'Myra\'s secret, vengeful son. His storyline culminated in the 2008 church explosion that killed Tina Reilly and Max Cunningham.' },
-                'celine_m': { name: 'Celine McQueen', family: 'mcqueen', summary: 'Daughter of Reenie. Murdered by serial killer Cameron Campbell in 2016.' },
-                'cleo_m': { name: 'Cleo McQueen', family: 'mcqueen', summary: 'Daughter of Reenie. Was at the center of a historical sexual abuse storyline involving Pete Buchanan.' },
-                'porsche_m': { name: 'Porsche McQueen', family: 'mcqueen', summary: 'Daughter of Reenie. Revealed the historical sexual abuse she and Cleo suffered at the hands of Pete Buchanan.' },
-                'goldie_m': { name: 'Goldie McQueen', family: 'mcqueen', summary: 'Daughter of Breda McQueen, introduced in 2016. Mother of twins Prince and Hunter.' }
-            },
-            familyStructures: {
-                cunningham: {
-                    name: "The Cunninghams",
-                    tree: [
-                        { id: 'gordon_c', children: [
-                            { id: 'dawn_c', children: [{ id: 'bethany_j' }] },
-                            { id: 'jude_c' },
-                            { id: 'cindy_c', children: [{ id: 'holly_c' }] },
-                            { id: 'max_c' },
-                        ]},
-                        { id: 'helen_c', note: '(Gordon\'s 2nd wife)', children: [{ id: 'tom_c' }] },
-                    ]
-                },
-                osborne: {
-                    name: "The Osbornes",
-                    tree: [
-                        { id: 'jack_o', children: [
-                            { id: 'ruth_o' },
-                            { id: 'darren_o', children: [{ id: 'oscar_o', note: '(with Nancy)'}, { name: 'JJ & Frankie', note: '(with Suzanne)'}] },
-                            { id: 'bethany_j', note: '(with Dawn Cunningham)' }
-                        ]},
-                        { id: 'frankie_o', note: '(Jack\'s 3rd wife)' },
-                    ]
-                },
-                mcqueen: {
-                    name: "The McQueens",
-                    tree: [
-                        { name: 'Marlena "Nana" McQueen', children: [
-                            { id: 'myra_m', children: [
-                                { id: 'niall_r' },
-                                { id: 'jacqui_m' },
-                                { id: 'mercedes_m' },
-                                { id: 'tina_r' },
-                                { id: 'carmel_m' },
-                                { id: 'johnpaul_m' }
-                            ]},
-                            { name: 'Kathleen McQueen', children: [{ id: 'theresa_m' }] },
-                            { name: 'Reenie McQueen', children: [{id: 'porsche_m'}, {id: 'celine_m'}, {id: 'cleo_m'}]}
-                        ]},
-                        { name: 'Marguerite McQueen', children: [
-                            { name: 'Breda McQueen', children: [{id: 'goldie_m'}]}
-                        ]}
-                    ]
-                }
-            },
-            timelineEvents: [
-                { year: 1996, family: 'cunningham', title: 'Dawn\'s Affair with Jack Osborne', description: 'Dawn Cunningham has an affair with the much older Jack Osborne, leading to the birth of their daughter, Bethany, who is given up for adoption.' },
-                { year: 1997, family: 'cunningham', title: 'Death of Dawn Cunningham', description: 'In a tragic Christmas storyline, original character Dawn Cunningham dies of leukemia.' },
-                { year: 2002, family: 'cunningham', title: 'Cindy\'s Return & Scam', description: 'Cindy Cunningham returns to the village and scams her brother Max and his friend OB out of money.' },
-                { year: 2004, family: 'cunningham', title: 'Gordon & Helen\'s Fatal Crash', description: 'Family patriarch Gordon Cunningham suffers a heart attack while driving, causing a car crash that kills both him and his wife Helen.' },
-                { year: 2006, family: 'mcqueen', title: 'The McQueens Arrive', description: 'The chaotic, female-led McQueen family arrives in Hollyoaks, quickly establishing themselves as a major force in the village.' },
-                { year: 2006, family: 'mcqueen', title: 'John Paul & Craig ("McDean")', description: 'John Paul McQueen begins a groundbreaking affair with his best friend Craig Dean, a storyline that becomes hugely popular with fans.' },
-                { year: 2008, family: 'cunningham', title: 'Death of Max Cunningham', description: 'Moments after marrying Steph Dean, Max Cunningham is run over and killed by Niall Rafferty, devastating the Cunningham family.' },
-                { year: 2008, family: 'mcqueen', title: 'Niall\'s Revenge & Church Explosion', description: 'Myra\'s secret son, Niall Rafferty, enacts his revenge, culminating in a church explosion that kills his sister Tina Reilly.' },
-                { year: 2009, family: 'osborne', title: 'Jack & Darren\'s Fake Death Scam', description: 'Facing financial ruin, Darren convinces Jack to fake his own death for insurance money, a plan that goes disastrously wrong.' },
-                { year: 2010, family: 'mcqueen', title: 'Theresa Murders Calvin Valentine', description: 'In a shocking whodunnit, Theresa McQueen is revealed to have shot Calvin Valentine dead on his wedding day to her cousin Carmel.' },
-                { year: 2011, family: 'mcqueen', title: 'Jacqui McQueen\'s Rape', description: 'In a powerful and sensitive storyline, Jacqui McQueen is raped by Gilly Roach, her husband\'s best friend.' },
-                { year: 2011, family: 'mcqueen', title: 'Silas Kidnaps Mercedes', description: 'Serial killer Silas Blissett holds a pregnant Mercedes McQueen hostage in a terrifying storyline that grips the village.' },
-                { year: 2012, family: 'mcqueen', title: 'Jacqui Flees Hollyoaks', description: 'After her husband Rhys dies in a bus crash, Jacqui gets into trouble with gangster Trevor Royale and is forced to flee the country.' },
-                { year: 2012, family: 'osborne', title: 'Birth of Oscar Osborne', description: 'Darren and Nancy\'s son, Oscar, is born prematurely. He is later diagnosed with deafness, leading to a storyline about the family learning to cope.' },
-                { year: 2013, family: 'mcqueen', title: 'Murder of Dr. Browning', description: 'Mercedes, Cindy, and Lindsey kill Mercedes\' abusive husband Dr. Browning in self-defense and cover up the murder.' },
-                { year: 2014, family: 'osborne', title: 'Oscar\'s Cochlear Implant', description: 'After much family debate and fundraising, Oscar Osborne successfully undergoes cochlear implant surgery.' },
-                { year: 2014, family: 'mcqueen', title: 'John Paul\'s Rape Storyline', description: 'In a groundbreaking and critically acclaimed plot, John Paul McQueen is raped by his student, Finn O\'Connor.' },
-                { year: 2014, family: 'mcqueen', title: 'Train Crash & Death of Carmel', description: 'A party train for Porsche\'s wedding derails in a spectacular crash. Carmel McQueen dies heroically while saving Theresa from Sonny Valentine.' },
-                { year: 2014, family: 'mcqueen', title: 'Mercedes Fakes Her Death', description: 'Following the train crash, Mercedes McQueen is apparently murdered, only to be revealed alive months later, having faked her death.' },
-                { year: 2015, family: 'cunningham', title: 'Tom Becomes a Father', description: 'Tom Cunningham and Peri Lomax are at the center of an underage pregnancy storyline, resulting in the birth of their daughter, Steph.' },
-                { year: 2015, family: 'mcqueen', title: 'Pete\'s Historical Abuse Revealed', description: 'Porsche McQueen reveals that her mother\'s boyfriend, Pete Buchanan, sexually abused her and her sister Cleo as children.' },
-                { year: 2015, family: 'osborne', title: 'The Osbornes Lose The Dog', description: 'After nearly 20 years, the Osborne family permanently loses ownership of The Dog in the Pond, their iconic family business and home.' },
-                { year: 2016, family: 'mcqueen', title: 'Death of Celine McQueen', description: 'Celine McQueen becomes a victim of her ex-boyfriend, serial killer Cameron Campbell, after she discovers his secrets.' },
-                { year: 2016, family: 'mcqueen', title: 'John Paul Leaves for Singapore', description: 'Long-running character John Paul McQueen leaves the village for a new life and teaching job in Singapore, where he reunites with Craig Dean.' },
-                { year: 2016, family: 'osborne', title: 'Jack\'s Murder Confession', description: 'Jack Osborne confesses a dark secret from his past to Darren: he was involved in a murder with his half-brother years ago.' },
-            ]
-        };
+        let appData;
 
         document.addEventListener('DOMContentLoaded', () => {
             const yearSelect = document.getElementById('year-select');
@@ -530,10 +421,25 @@
             }
 
             // Initial setup
-            createThematicChart();
-            displayAllFamilies();
-            populateYearSelect();
-            displayTimeline('all');
+
+            fetch('hollyoaks_data.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    appData = data;
+                    createThematicChart();
+                    displayAllFamilies();
+                    populateYearSelect();
+                    displayTimeline('all');
+                })
+                .catch(error => {
+                    console.error('Error loading data:', error);
+                    document.getElementById('all-family-trees').innerHTML = `<p class="text-red-600">Error loading data. Please try again later.</p>`;
+                });
         });
     </script>
     <style>
