@@ -347,13 +347,6 @@
                     sectionObserver.observe(familySection); // Observe for animation
                 }
 
-                document.querySelectorAll('.character-node').forEach(node => {
-                    node.addEventListener('click', (e) => {
-                        document.querySelectorAll('.character-node').forEach(n => n.classList.remove('selected'));
-                        e.currentTarget.classList.add('selected');
-                        showCharacterModal(e.currentTarget.dataset.id);
-                    });
-                });
             }
 
             function showCharacterModal(charId) {
@@ -528,6 +521,20 @@
                     }
                 });
             }
+
+            // Event Delegation for Character Nodes - Performance Optimization
+            document.getElementById('all-family-trees').addEventListener('click', (e) => {
+                const node = e.target.closest('.character-node');
+                // Ensure the click was on a node and inside our container
+                if (node && e.currentTarget.contains(node)) {
+                    // Optimized: Only query for the single previously selected element instead of iterating all
+                    const previous = document.querySelector('.character-node.selected');
+                    if (previous) previous.classList.remove('selected');
+
+                    node.classList.add('selected');
+                    showCharacterModal(node.dataset.id);
+                }
+            });
 
             // Initial setup
             createThematicChart();
