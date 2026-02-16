@@ -1,111 +1,227 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My InfoPages</title>
-    <!-- Load Tailwind CSS -->
+    <title>Andrew's Digital Garden</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Google Fonts: Orbitron for headings, Exo 2 for body text -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Define custom CSS variables for consistent colors */
         :root {
-            --primary-bg: #0F172A; /* Dark Slate Blue */
-            --secondary-bg: #1E293B; /* Slightly lighter Slate Blue for cards */
-            --text-color: #E2E8F0; /* Light Slate for general text */
-            --header-color: #66CCFF; /* Vibrant Blue for headers */
-            --border-color: #334155; /* Medium Slate for borders */
-            --link-button-bg: #66CCFF; /* Vibrant Blue for buttons */
-            --link-button-hover: #3399FF; /* Lighter Blue on hover */
+            --primary-bg: #0F172A;
+            --secondary-bg: #1E293B;
+            --text-color: #E2E8F0;
+            --accent-color: #66CCFF;
         }
-
-        /* Apply base styles to the body */
         body {
             font-family: 'Exo 2', sans-serif;
             background-color: var(--primary-bg);
             color: var(--text-color);
-            min-height: 100vh; /* Ensure body takes full viewport height */
-            display: flex; /* Use flexbox for centering content */
-            flex-direction: column;
-            justify-content: center; /* Center content vertically */
-            align-items: center; /* Center content horizontally */
-            padding: 2rem; /* Add some padding around the content */
-            box-sizing: border-box; /* Include padding in element's total width and height */
         }
-
-        /* Style for main headings */
-        h1 {
+        h1, h2, h3 {
             font-family: 'Orbitron', sans-serif;
-            letter-spacing: 1.5px;
-            color: var(--header-color);
-            text-shadow: 0 0 10px rgba(102, 204, 255, 0.5);
         }
 
-        /* Styles for individual content cards */
-        .card {
-            background-color: var(--secondary-bg);
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease; /* Smooth transition for hover effects */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+        /* Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        /* Hover effects for cards */
-        .card:hover {
-            border-color: var(--link-button-bg);
-            transform: translateY(-5px); /* Lift card slightly */
-            box-shadow: 0 10px 20px rgba(102, 204, 255, 0.2); /* More prominent shadow on hover */
-        }
+        .stagger-delay-1 { transition-delay: 100ms; }
+        .stagger-delay-2 { transition-delay: 200ms; }
+        .stagger-delay-3 { transition-delay: 300ms; }
+        .stagger-delay-4 { transition-delay: 400ms; }
 
-        /* Styles for link buttons */
-        .link-button {
-            display: inline-block;
-            background-color: var(--link-button-bg);
-            color: var(--primary-bg); /* Dark text on light button */
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: bold;
-            text-decoration: none; /* Remove underline from links */
-            transition: background-color 0.3s ease; /* Smooth transition for hover */
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
-        /* Hover effect for link buttons */
-        .link-button:hover {
-            background-color: var(--link-button-hover);
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(102, 204, 255, 0.3);
         }
     </style>
 </head>
-<body>
-    <div class="container mx-auto max-w-4xl p-4 md:p-8 rounded-lg shadow-2xl">
-        <header class="text-center mb-12">
-            <h1 class="text-5xl md:text-6xl font-bold mb-4">Welcome to My InfoPages</h1>
-            <p class="text-lg text-slate-400">A collection of my static web documents.</p>
-        </header>
+<body class="antialiased overflow-x-hidden">
 
-        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Card for Starfleet Guide -->
-            <div class="card p-6 rounded-lg flex flex-col items-center text-center">
-                <h2 class="text-2xl font-bold mb-4 text-orange-400">Starfleet Guide to Secure API Calls</h2>
-                <p class="text-slate-300 mb-6 flex-grow">Learn about secure API calls with C# and SQL, framed as a Starfleet mission log.</p>
-                <a href="sqlhttp.html" class="link-button">View Guide</a>
+    <!-- Hero Section -->
+    <section class="min-h-screen flex flex-col justify-center items-center p-6 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 animate-pulse"></div>
+        <div class="z-10 max-w-3xl reveal active">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300 drop-shadow-[0_0_15px_rgba(102,204,255,0.5)]">
+                Hello, I’m Andrew. 👋
+            </h1>
+            <p class="text-xl md:text-2xl text-slate-300 leading-relaxed mb-8 reveal stagger-delay-1">
+                I’m a Software Engineer based in Montgomery, AL, with over a decade of experience building things for the web. While I spend my workdays navigating the worlds of Ruby on Rails, Python, and T-SQL, I’ve always had a soft spot for the simplicity of static sites.
+            </p>
+            <p class="text-lg text-slate-400 italic reveal stagger-delay-2">
+                This space is a digital garden for my hobbies—a collection of infopages dedicated to the things that keep life interesting.
+            </p>
+            <div class="mt-12 reveal stagger-delay-3">
+                <a href="#essentials" class="inline-block px-8 py-3 rounded-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-colors shadow-[0_0_20px_rgba(6,182,212,0.5)] hover:shadow-[0_0_30px_rgba(6,182,212,0.7)]">
+                    Explore
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Essentials -->
+    <section id="essentials" class="py-20 px-6 bg-slate-900/50">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold mb-16 text-center text-cyan-400 reveal">The Essentials</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Tech Stack -->
+                <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 reveal stagger-delay-1 card-hover">
+                    <h3 class="text-2xl font-bold mb-4 text-emerald-400">Tech Stack</h3>
+                    <p class="text-slate-300">
+                        I’m a fan of the fundamentals—HTML5, CSS, and JavaScript—but I’m happiest when I’m solving problems with <span class="text-white font-semibold">Ruby</span> or <span class="text-white font-semibold">Python</span>.
+                    </p>
+                </div>
+                <!-- The Roommates -->
+                <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 reveal stagger-delay-2 card-hover">
+                    <h3 class="text-2xl font-bold mb-4 text-rose-400">The Roommates</h3>
+                    <p class="text-slate-300">
+                        I share my home with two cats: <span class="text-white font-semibold">Rose</span> (a silver Tabby born in 2012) and <span class="text-white font-semibold">Violet</span> (a black cat born in 2017).
+                    </p>
+                </div>
+                <!-- Roots -->
+                <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 reveal stagger-delay-3 card-hover">
+                    <h3 class="text-2xl font-bold mb-4 text-amber-400">Roots</h3>
+                    <p class="text-slate-300">
+                        Born in Albany, GA, and a proud alumnus of the <span class="text-white font-semibold">University of Georgia</span>. Go Dawgs!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What I’m Into -->
+    <section class="py-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold mb-16 text-center text-fuchsia-400 reveal">What I’m Into</h2>
+            <p class="text-xl text-center text-slate-400 mb-12 reveal">When I’m not staring at a terminal, you can usually find me deep in one of these rabbit holes:</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Comics -->
+                <div class="bg-slate-800/50 p-8 rounded-xl border-l-4 border-yellow-400 reveal stagger-delay-1 hover:bg-slate-800 transition-colors">
+                    <h3 class="text-2xl font-bold mb-2 text-yellow-400">Comics</h3>
+                    <p class="text-slate-300">Big fan of anything written by Kieron Gillen and drawn by Jamie McKelvie.</p>
+                </div>
+                <!-- Pro Wrestling -->
+                <div class="bg-slate-800/50 p-8 rounded-xl border-l-4 border-red-500 reveal stagger-delay-2 hover:bg-slate-800 transition-colors">
+                    <h3 class="text-2xl font-bold mb-2 text-red-500">Pro Wrestling</h3>
+                    <p class="text-slate-300">I’ve been hooked since the 90s NWO/Attitude Era. These days, I’m pulling for Rhea Ripley, CM Punk, and Bron Breakker.</p>
+                </div>
+                <!-- Reality TV & Soaps -->
+                <div class="bg-slate-800/50 p-8 rounded-xl border-l-4 border-purple-500 reveal stagger-delay-1 hover:bg-slate-800 transition-colors">
+                    <h3 class="text-2xl font-bold mb-2 text-purple-500">Reality TV & Soaps</h3>
+                    <p class="text-slate-300">From Big Brother to the UK soap trifecta (Emmerdale, Hollyoaks, and EastEnders), I appreciate a good long-running narrative.</p>
+                </div>
+                <!-- Live Music & Culture -->
+                <div class="bg-slate-800/50 p-8 rounded-xl border-l-4 border-blue-500 reveal stagger-delay-2 hover:bg-slate-800 transition-colors">
+                    <h3 class="text-2xl font-bold mb-2 text-blue-500">Live Music & Culture</h3>
+                    <p class="text-slate-300">I’m often traveling to Birmingham or Atlanta for concerts, drag shows, or a good museum exhibit.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About These Pages & Collection -->
+    <section class="py-20 px-6 bg-slate-900/80">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-cyan-400">About These Pages</h2>
+                <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+                    These pages are built for fun—a way to practice new frontend techniques or just document a specific interest. They are fast, lightweight, and probably a little bit nerdy.
+                </p>
             </div>
 
-            <!-- Card for Slayer's Guide -->
-            <div class="card p-6 rounded-lg flex flex-col items-center text-center">
-                <h2 class="text-2xl font-bold mb-4 text-rose-500">The Slayer's Guide to SQL Server Migration</h2>
-                <p class="text-slate-300 mb-6 flex-grow">A Buffy the Vampire Slayer-themed guide to migrating SQL Server databases.</p>
-                <a href="sqlmovebuffy.html" class="link-button">Explore Guide</a>
-            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Starfleet Guide -->
+                <a href="sqlhttp.html" class="group block bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-orange-400 transition-all duration-300 reveal stagger-delay-1 transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(251,146,60,0.2)]">
+                    <div class="p-8 h-full flex flex-col">
+                        <h3 class="text-2xl font-bold mb-4 text-orange-400 group-hover:text-orange-300">Starfleet Guide to Secure API Calls</h3>
+                        <p class="text-slate-400 group-hover:text-slate-200 transition-colors flex-grow">
+                            Learn about secure API calls with C# and SQL, framed as a Starfleet mission log.
+                        </p>
+                        <div class="mt-6 text-orange-400 font-bold flex items-center">
+                            Read Mission Log
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </div>
+                    </div>
+                </a>
 
-            <!-- Card for Hollyoaks History -->
-            <div class="card p-6 rounded-lg flex flex-col items-center text-center">
-                <h2 class="text-2xl font-bold mb-4 text-fuchsia-500">Hollyoaks: The First 20 Years</h2>
-                <p class="text-slate-300 mb-6 flex-grow">An interactive exploration of the popular UK soap opera, Hollyoaks, covering its first two decades.</p>
-                <a href="hollyoaks_history.html" class="link-button">Discover History</a>
+                <!-- Slayer's Guide -->
+                <a href="sqlmovebuffy.html" class="group block bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-rose-500 transition-all duration-300 reveal stagger-delay-2 transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(244,63,94,0.2)]">
+                    <div class="p-8 h-full flex flex-col">
+                        <h3 class="text-2xl font-bold mb-4 text-rose-500 group-hover:text-rose-400">The Slayer's Guide to SQL Server Migration</h3>
+                        <p class="text-slate-400 group-hover:text-slate-200 transition-colors flex-grow">
+                            A Buffy the Vampire Slayer-themed guide to migrating SQL Server databases.
+                        </p>
+                        <div class="mt-6 text-rose-500 font-bold flex items-center">
+                            Start Patrol
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Hollyoaks History -->
+                <a href="hollyoaks_history.html" class="group block bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-fuchsia-500 transition-all duration-300 reveal stagger-delay-3 transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(217,70,239,0.2)]">
+                    <div class="p-8 h-full flex flex-col">
+                        <h3 class="text-2xl font-bold mb-4 text-fuchsia-500 group-hover:text-fuchsia-400">Hollyoaks: The First 20 Years</h3>
+                        <p class="text-slate-400 group-hover:text-slate-200 transition-colors flex-grow">
+                            An interactive exploration of the popular UK soap opera, Hollyoaks, covering its first two decades.
+                        </p>
+                        <div class="mt-6 text-fuchsia-500 font-bold flex items-center">
+                            Explore History
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </div>
+                    </div>
+                </a>
             </div>
-        </main>
-    </div>
+        </div>
+    </section>
+
+    <footer class="py-8 text-center text-slate-500 bg-slate-950">
+        <p>&copy; <span id="year"></span> Andrew. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Intersection Observer for scroll animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // Only animate once
+                    }
+                });
+            }, observerOptions);
+
+            const revealElements = document.querySelectorAll('.reveal');
+            revealElements.forEach(el => observer.observe(el));
+        });
+    </script>
 </body>
 </html>
