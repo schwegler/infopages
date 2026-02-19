@@ -23,8 +23,8 @@ def setup_page(page):
     # Mock Chart.js to prevent ReferenceError when CDN is blocked
     page.add_init_script("window.Chart = class { constructor() { this.options = {}; } };")
 
-def test_default_display(page):
-    print("Running test_default_display...")
+def verify_default_display(page):
+    print("Running verify_default_display...")
     page.goto(f"http://localhost:{PORT}/hollyoaks_history.html")
     # Wait for the data to be fetched and rendered
     # We increase timeout slightly just in case
@@ -33,10 +33,10 @@ def test_default_display(page):
     count = events.count()
     print(f"Found {count} events.")
     assert count == 25, f"Expected 25 events, but found {count}"
-    print("test_default_display passed!")
+    print("verify_default_display passed!")
 
-def test_year_filtering(page):
-    print("Running test_year_filtering...")
+def verify_year_filtering(page):
+    print("Running verify_year_filtering...")
     # Page is already at the right URL from previous test if we reuse it,
     # but let's be safe or just continue.
     # Actually, run_all creates a new page, so we should ensure it's loaded.
@@ -57,10 +57,10 @@ def test_year_filtering(page):
     year_header = page.locator("h3.text-fuchsia-700", has_text="2008")
     expect(year_header).to_be_visible()
 
-    print("test_year_filtering passed!")
+    print("verify_year_filtering passed!")
 
-def test_empty_state(page):
-    print("Running test_empty_state...")
+def verify_empty_state(page):
+    print("Running verify_empty_state...")
     if page.url == "about:blank":
         page.goto(f"http://localhost:{PORT}/hollyoaks_history.html")
 
@@ -83,7 +83,7 @@ def test_empty_state(page):
     events = page.locator(".timeline-event-card")
     assert events.count() == 0, f"Expected 0 events for year 9999, but found {events.count()}"
 
-    print("test_empty_state passed!")
+    print("verify_empty_state passed!")
 
 def run_all():
     server_thread = threading.Thread(target=start_server, daemon=True)
@@ -97,9 +97,9 @@ def run_all():
         setup_page(page)
 
         try:
-            test_default_display(page)
-            test_year_filtering(page)
-            test_empty_state(page)
+            verify_default_display(page)
+            verify_year_filtering(page)
+            verify_empty_state(page)
         except Exception as e:
             print(f"Test failed: {e}")
             sys.exit(1)

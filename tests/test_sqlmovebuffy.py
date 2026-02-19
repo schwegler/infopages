@@ -78,17 +78,22 @@ def test_sqlmovebuffy(page: Page, server):
 
     web_server.hover()
     # Check if any line turns purple (rgb(147, 51, 234))
-    page.wait_for_timeout(500) # Wait for hover effect
-
-    # Check if any line turns purple (rgb(147, 51, 234))
-    color_found = page.evaluate("""() => {
-        const lines = document.querySelectorAll('.dependency-line');
-        for (let line of lines) {
-            if (getComputedStyle(line).stroke === 'rgb(147, 51, 234)') return true;
-        }
-        return false;
-    }""")
-    assert color_found
+    # Wait for the color change using wait_for_function which polls
+    try:
+        page.wait_for_function("""() => {
+            const lines = document.querySelectorAll('.dependency-line');
+            for (let line of lines) {
+                if (getComputedStyle(line).stroke === 'rgb(147, 51, 234)') return true;
+            }
+            return false;
+        }""", timeout=2000)
+    except Exception:
+        # If it fails, dump some debug info
+        print("Timeout waiting for purple line. Current strokes:")
+        print(page.evaluate("""() => {
+            return Array.from(document.querySelectorAll('.dependency-line')).map(l => getComputedStyle(l).stroke)
+        }"""))
+        raise
 
     # 6. Security Armory
     tde_btn = page.locator(".security-btn[data-weapon='tde']")
