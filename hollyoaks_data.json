@@ -442,5 +442,33 @@
             "title": "Jack's Murder Confession",
             "description": "Jack Osborne confesses a dark secret from his past to Darren: he was involved in a murder with his half-brother years ago."
         }
-    ]
+    ],
+    "thematicChart": {
+        "labels": [
+            "1996-2000",
+            "2001-2005",
+            "2006-2010",
+            "2011-2016"
+        ],
+        "datasets": [
+            {
+                "label": "Teen/Family Drama",
+                "data": [5, 4, 0, 0],
+                "backgroundColor": "#F472B6",
+                "borderRadius": 4
+            },
+            {
+                "label": "Crime/Revenge",
+                "data": [0, 2, 11, 10],
+                "backgroundColor": "#14B8A6",
+                "borderRadius": 4
+            },
+            {
+                "label": "Social Issue/Tragedy",
+                "data": [5, 5, 8, 9],
+                "backgroundColor": "#6366F1",
+                "borderRadius": 4
+            }
+        ]
+    }
 }
