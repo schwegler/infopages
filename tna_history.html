@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Total Nonstop Action: The Cross The Line Era (2007-2009)</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17" integrity="sha384-igm5BeiBt36UU4gqwWS7imYmelpTsZlQ45FZf+XBn9MuJbn4nQr7yx1yFydocC/K" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --tna-red: #990000;
+            --tna-gold: #FFD700;
+            --tna-black: #000000;
+            --tna-dark-grey: #1a1a1a;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--tna-dark-grey);
+            color: #FFFFFF;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4, h5 {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+        }
+        .text-tna-red { color: var(--tna-red); }
+        .text-tna-gold { color: var(--tna-gold); }
+        .bg-tna-red { background-color: var(--tna-red); }
+        .bg-tna-gold { background-color: var(--tna-gold); }
+        .border-tna-red { border-color: var(--tna-red); }
+        .border-tna-gold { border-color: var(--tna-gold); }
+
+        /* Hexagon Shape for Sections */
+        .hexagon {
+            position: relative;
+            background-color: #333;
+            margin: 20px 0;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        /* Flip Card Effect */
+        .flip-card {
+            background-color: transparent;
+            perspective: 1000px;
+            height: 300px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        }
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        .flip-card-front {
+            background-color: #262626;
+            color: white;
+            border: 2px solid var(--tna-red);
+        }
+        .flip-card-back {
+            background-color: var(--tna-red);
+            color: white;
+            transform: rotateY(180deg);
+            border: 2px solid var(--tna-gold);
+        }
+
+        /* Canvas Animation Container */
+        #ring-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* Scroll Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--tna-red);
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #cc0000;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Canvas Background -->
+    <div id="ring-container">
+        <canvas id="six-sided-ring"></canvas>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex flex-col justify-center items-center p-6 text-center relative">
+        <div class="z-10 max-w-4xl reveal active">
+            <h1 class="text-6xl md:text-9xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-b from-red-600 to-red-900 drop-shadow-[0_0_15px_rgba(255,0,0,0.8)] tracking-tighter">
+                CROSS THE LINE
+            </h1>
+            <h2 class="text-2xl md:text-4xl text-yellow-500 tracking-widest mb-8 border-b-2 border-yellow-500 inline-block pb-2">
+                TNA WRESTLING: 2007 - 2009
+            </h2>
+            <p class="text-xl md:text-2xl text-gray-300 leading-relaxed mb-12 max-w-3xl mx-auto font-light">
+                The period between 2007 and 2009 was a transformative, high-octane, and often controversial era for Total Nonstop Action (TNA) Wrestling. During these years, the promotion transitioned from a hungry alternative to a star-studded roster featuring some of the biggest names in the history of the business.
+            </p>
+            <a href="#timeline" class="inline-block px-8 py-3 bg-red-700 hover:bg-red-600 text-white font-bold text-lg uppercase tracking-wider transition-colors border border-red-500 shadow-[0_0_20px_rgba(220,38,38,0.5)]">
+                Enter the Impact Zone
+            </a>
+        </div>
+    </section>
+
+    <!-- Timeline Navigation -->
+    <div id="timeline" class="container mx-auto px-4 py-12">
+
+        <!-- 2007 Section -->
+        <section id="year-2007" class="mb-24 reveal">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="text-6xl md:text-8xl font-bold text-red-600 opacity-80">2007</div>
+                <div class="h-1 bg-gradient-to-r from-red-600 to-transparent flex-grow"></div>
+            </div>
+            <h3 class="text-4xl md:text-5xl font-bold mb-6 text-white">The Move to Two Hours</h3>
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <div class="bg-gray-900/80 p-6 rounded-lg border-l-4 border-yellow-500 shadow-lg backdrop-blur-sm">
+                    <p class="text-lg text-gray-300 mb-4">
+                        The biggest shift in 2007 was <em>Impact!</em> moving to a <strong class="text-white">two-hour time slot</strong> on Spike TV. This allowed for more character development but also signaled the beginning of a heavy reliance on established legends.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="text-yellow-500 mr-2 text-xl">★</span>
+                            <div>
+                                <strong class="text-white text-xl block mb-1">The Angle Era</strong>
+                                <span class="text-gray-400">Kurt Angle dominated the year, at one point holding every active championship in the company simultaneously (the TNA World, X-Division, and Tag Team titles).</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-yellow-500 mr-2 text-xl">★</span>
+                            <div>
+                                <strong class="text-white text-xl block mb-1">The Knockouts Revolution</strong>
+                                <span class="text-gray-400">In October 2007, TNA officially established the Knockouts Championship. This was a turning point for women’s wrestling, as Gail Kim, Awesome Kong, and others were given serious TV time and main-evented several shows.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-yellow-500 mr-2 text-xl">★</span>
+                            <div>
+                                <strong class="text-white text-xl block mb-1">Tag Team Excellence</strong>
+                                <span class="text-gray-400">The feud between <strong class="text-white">The Latin American Xchange (LAX)</strong> and <strong class="text-white">America’s Most Wanted</strong> (and later AJ Styles & Christopher Daniels) kept the tag division world-class.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Interactive Chart Placeholder for 2007 -->
+                <div class="bg-black/50 p-6 rounded-lg border border-gray-700 h-full flex flex-col justify-center items-center">
+                    <h4 class="text-2xl text-yellow-500 mb-4">Championship Dominance (2007)</h4>
+                    <div class="w-full h-64 relative">
+                        <canvas id="chart-2007"></canvas>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2 italic">Percentage of Main Event appearances by established stars vs originals.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2008 Section -->
+        <section id="year-2008" class="mb-24 reveal">
+            <div class="flex items-center gap-4 mb-8 flex-row-reverse">
+                <div class="text-6xl md:text-8xl font-bold text-yellow-600 opacity-80">2008</div>
+                <div class="h-1 bg-gradient-to-l from-yellow-600 to-transparent flex-grow"></div>
+            </div>
+            <h3 class="text-4xl md:text-5xl font-bold mb-6 text-right text-white">The Main Event Mafia vs. The Frontline</h3>
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                 <!-- Interactive Chart Placeholder for 2008 -->
+                 <div class="bg-black/50 p-6 rounded-lg border border-gray-700 h-full flex flex-col justify-center items-center order-2 md:order-1">
+                    <h4 class="text-2xl text-red-500 mb-4">Faction Power Struggle (2008)</h4>
+                    <div class="w-full h-64 relative">
+                        <canvas id="chart-2008"></canvas>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2 italic">Win/Loss ratio of MEM vs Frontline in PPV Main Events.</p>
+                </div>
+
+                <div class="bg-gray-900/80 p-6 rounded-lg border-r-4 border-red-500 shadow-lg backdrop-blur-sm order-1 md:order-2 text-right">
+                    <p class="text-lg text-gray-300 mb-4">
+                        2008 saw the birth of one of the most famous storylines in the company’s history. The narrative focused on the "respect" (or lack thereof) between the established legends and the young "TNA Originals."
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start flex-row-reverse">
+                            <span class="text-red-500 ml-2 text-xl">♦</span>
+                            <div>
+                                <strong class="text-white text-xl block mb-1">The Main Event Mafia (MEM)</strong>
+                                <span class="text-gray-400">Formed in late 2008, this faction consisted of Kurt Angle, Sting, Kevin Nash, Booker T, and Scott Steiner. Their goal was to "teach respect" to the younger roster.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start flex-row-reverse">
+                            <span class="text-red-500 ml-2 text-xl">♦</span>
+                            <div>
+                                <strong class="text-white text-xl block mb-1">The TNA Frontline</strong>
+                                <span class="text-gray-400">AJ Styles and Samoa Joe led the resistance against the veterans. While the matches were high-quality, critics often pointed out that the veterans frequently went over the younger stars.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start flex-row-reverse">
+                            <span class="text-red-500 ml-2 text-xl">♦</span>
+                            <div>
+                                <strong class="text-white text-xl block mb-1">Samoa Joe’s Title Reign</strong>
+                                <span class="text-gray-400">Joe finally won the TNA World Heavyweight Championship at <em>Lockdown 2008</em> in a classic Steel Cage match against Kurt Angle.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2009 Section -->
+        <section id="year-2009" class="mb-24 reveal">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="text-6xl md:text-8xl font-bold text-gray-400 opacity-80">2009</div>
+                <div class="h-1 bg-gradient-to-r from-gray-400 to-transparent flex-grow"></div>
+            </div>
+            <h3 class="text-4xl md:text-5xl font-bold mb-6 text-white">Evolution and the Arrival of Hogan</h3>
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <div class="bg-gray-900/80 p-6 rounded-lg border-l-4 border-blue-500 shadow-lg backdrop-blur-sm">
+                    <p class="text-lg text-gray-300 mb-4">
+                        The tension between the MEM and the Frontline culminated in 2009, leading to significant roster shifts and the eventual announcement that would change the company forever.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-2 text-xl">■</span>
+                            <div>
+                                <strong class="text-white text-xl block mb-1">AJ Styles Reaches the Top</strong>
+                                <span class="text-gray-400">At <em>No Surrender 2009</em>, AJ Styles won the World Heavyweight Title in a five-way match. His subsequent reign—and his mentorship under Ric Flair shortly after—solidified him as the "Face of TNA."</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-2 text-xl">■</span>
+                            <div>
+                                <strong class="text-white text-xl block mb-1">The X-Division Pulse</strong>
+                                <span class="text-gray-400">Despite the heavy focus on the main event, the X-Division remained a highlight with the emergence of <strong class="text-white">Suicide</strong> and the continued excellence of stars like <strong class="text-white">Jay Lethal</strong> (and his "Black Machismo" gimmick) and <strong class="text-white">Alex Shelley</strong>.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-2 text-xl">■</span>
+                            <div>
+                                <strong class="text-white text-xl block mb-1">The October 27th Announcement</strong>
+                                <span class="text-gray-400">On this date, TNA announced that <strong class="text-white">Hulk Hogan and Eric Bischoff</strong> had signed with the company. This news sent shockwaves through the industry, marking the end of the "Spike Era" and the beginning of the "Hogan Era" (which officially kicked off on Jan 4, 2010).</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Interactive Chart Placeholder for 2009 -->
+                <div class="bg-black/50 p-6 rounded-lg border border-gray-700 h-full flex flex-col justify-center items-center">
+                    <h4 class="text-2xl text-blue-400 mb-4">Roster Evolution (2009)</h4>
+                    <div class="w-full h-64 relative">
+                        <canvas id="chart-2009"></canvas>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2 italic">X-Division match time vs Heavyweight match time.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Figures Interactive Section -->
+        <section class="mb-24 reveal">
+            <h3 class="text-4xl md:text-5xl font-bold mb-12 text-center text-white uppercase tracking-widest border-b border-gray-700 pb-4">Key Figures of the Era</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+                <!-- Card 1: Top Stars -->
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-yellow-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                            </svg>
+                            <h4 class="text-3xl font-bold uppercase">Top Stars</h4>
+                            <p class="text-gray-400 mt-2">The Main Event Picture</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <h4 class="text-2xl font-bold mb-4 border-b border-white pb-2">Heavyweights</h4>
+                            <ul class="text-lg space-y-2">
+                                <li>Kurt Angle</li>
+                                <li>Sting</li>
+                                <li>AJ Styles</li>
+                                <li>Samoa Joe</li>
+                                <li>Jeff Jarrett</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Knockouts -->
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front" style="border-color: #ec4899;">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-pink-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                            <h4 class="text-3xl font-bold uppercase text-pink-500">Knockouts</h4>
+                            <p class="text-gray-400 mt-2">Revolutionizing Women's Wrestling</p>
+                        </div>
+                        <div class="flip-card-back" style="background-color: #be185d; border-color: #fce7f3;">
+                            <h4 class="text-2xl font-bold mb-4 border-b border-white pb-2">The Division</h4>
+                            <ul class="text-lg space-y-2">
+                                <li>Gail Kim</li>
+                                <li>Awesome Kong</li>
+                                <li>Taylor Wilde</li>
+                                <li>The Beautiful People</li>
+                                <li>ODB</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Tag Teams -->
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front" style="border-color: #3b82f6;">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-blue-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            <h4 class="text-3xl font-bold uppercase text-blue-500">Tag Teams</h4>
+                            <p class="text-gray-400 mt-2">World Class Division</p>
+                        </div>
+                        <div class="flip-card-back" style="background-color: #1d4ed8; border-color: #bfdbfe;">
+                            <h4 class="text-2xl font-bold mb-4 border-b border-white pb-2">Top Teams</h4>
+                            <ul class="text-lg space-y-2">
+                                <li>Beer Money, Inc.</li>
+                                <li>Motor City Machine Guns</li>
+                                <li>Team 3D</li>
+                                <li>LAX</li>
+                                <li>Styles & Daniels</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center py-12 border-t border-gray-800 text-gray-500">
+            <p>&copy; 2024 Andrew's Digital Garden. All TNA references used for educational/historical purposes.</p>
+            <a href="index.html" class="inline-block mt-4 text-red-500 hover:text-red-400 transition-colors">Back to Home</a>
+        </footer>
+
+    </div>
+
+    <script>
+        // --- Canvas Animation: Six Sided Zone ---
+        const canvas = document.getElementById('six-sided-ring');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const hexagons = [];
+        const maxHexagons = 15;
+
+        class Hexagon {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 50 + 20; // Size
+                this.opacity = 0;
+                this.fadeState = 'in'; // in, hold, out
+                this.fadeSpeed = Math.random() * 0.01 + 0.005;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+                this.color = Math.random() > 0.5 ? '#990000' : '#FFD700'; // Red or Gold
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.beginPath();
+                for (let i = 0; i < 6; i++) {
+                    ctx.lineTo(this.size * Math.cos(i * Math.PI / 3), this.size * Math.sin(i * Math.PI / 3));
+                }
+                ctx.closePath();
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 2;
+                ctx.globalAlpha = this.opacity * 0.5;
+                ctx.stroke();
+
+                // Draw internal lines (ropes)
+                ctx.beginPath();
+                for (let i = 0; i < 6; i++) {
+                     ctx.moveTo(this.size * 0.8 * Math.cos(i * Math.PI / 3), this.size * 0.8 * Math.sin(i * Math.PI / 3));
+                     ctx.lineTo(this.size * 0.8 * Math.cos((i+1) * Math.PI / 3), this.size * 0.8 * Math.sin((i+1) * Math.PI / 3));
+                }
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            update() {
+                this.rotation += this.rotationSpeed;
+
+                if (this.fadeState === 'in') {
+                    this.opacity += this.fadeSpeed;
+                    if (this.opacity >= 1) {
+                        this.fadeState = 'hold';
+                        this.holdTime = Math.random() * 100 + 50;
+                    }
+                } else if (this.fadeState === 'hold') {
+                    this.holdTime--;
+                    if (this.holdTime <= 0) this.fadeState = 'out';
+                } else {
+                    this.opacity -= this.fadeSpeed;
+                    if (this.opacity <= 0) {
+                        this.init();
+                    }
+                }
+            }
+        }
+
+        for (let i = 0; i < maxHexagons; i++) {
+            hexagons.push(new Hexagon());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            hexagons.forEach(hex => {
+                hex.update();
+                hex.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // --- Chart.js Implementations ---
+
+        // 2007: Established vs Originals
+        // Using Chart.js logic directly inside the script
+
+        // Note: Chart.js initialization should wait for the library to load,
+        // but since it's in the head, it should be available.
+        // However, it's safer to wrap in DOMContentLoaded or window.onload if strictly necessary,
+        // but inline script at end of body is standard.
+
+        // 2007: Established vs Originals
+        const ctx2007 = document.getElementById('chart-2007').getContext('2d');
+        // Define data locally since we don't have an external JSON
+        const chart2007 = new Chart(ctx2007, {
+            type: 'doughnut',
+            data: {
+                labels: ['Established Legends', 'TNA Originals', 'Tag Teams (Mixed)'],
+                datasets: [{
+                    data: [60, 25, 15],
+                    backgroundColor: ['#990000', '#FFD700', '#333333'],
+                    borderColor: '#1a1a1a',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#ffffff' } }
+                }
+            }
+        });
+
+        // 2008: MEM vs Frontline (Win/Loss)
+        const ctx2008 = document.getElementById('chart-2008').getContext('2d');
+        const chart2008 = new Chart(ctx2008, {
+            type: 'bar',
+            data: {
+                labels: ['Wins', 'Losses', 'No Contests'],
+                datasets: [
+                    {
+                        label: 'Main Event Mafia',
+                        data: [12, 4, 2],
+                        backgroundColor: '#000000',
+                        borderColor: '#FFD700',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'TNA Frontline',
+                        data: [5, 11, 2],
+                        backgroundColor: '#FFD700',
+                        borderColor: '#990000',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, ticks: { color: '#ffffff' }, grid: { color: '#444' } },
+                    x: { ticks: { color: '#ffffff' }, grid: { display: false } }
+                },
+                plugins: {
+                    legend: { labels: { color: '#ffffff' } }
+                }
+            }
+        });
+
+        // 2009: Roster Focus
+        const ctx2009 = document.getElementById('chart-2009').getContext('2d');
+        const chart2009 = new Chart(ctx2009, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Mar', 'Jun', 'Sep', 'Dec'],
+                datasets: [
+                    {
+                        label: 'Main Event Focus',
+                        data: [80, 75, 70, 85, 90],
+                        borderColor: '#990000',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'X-Division Focus',
+                        data: [40, 45, 50, 30, 20],
+                        borderColor: '#3b82f6',
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, ticks: { color: '#ffffff' }, grid: { color: '#444' } },
+                    x: { ticks: { color: '#ffffff' }, grid: { color: '#444' } }
+                },
+                plugins: {
+                    legend: { labels: { color: '#ffffff' } }
+                }
+            }
+        });
+
+        // --- Intersection Observer for Scroll Reveals ---
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    </script>
+</body>
+</html>
