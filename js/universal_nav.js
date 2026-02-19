@@ -62,6 +62,10 @@
         { name: 'Terms', url: 'tos.html' }
     ];
 
+    // Check if we are in the 'pages' directory
+    // We assume if the pathname includes '/pages/', we are in the subdirectory.
+    const isPagesDir = window.location.pathname.includes('/pages/');
+
     const nav = document.createElement('nav');
     nav.id = 'universal-nav';
 
@@ -70,7 +74,25 @@
     navLinks.forEach(link => {
         const li = document.createElement('li');
         const a = document.createElement('a');
-        a.href = link.url;
+
+        let href = link.url;
+        if (isPagesDir) {
+            // We are in pages/, so links to other pages are siblings
+            // But link to Home (index.html) must go up one level
+            if (link.url === 'index.html') {
+                href = '../index.html';
+            } else {
+                href = link.url; // Sibling
+            }
+        } else {
+            // We are in root (index.html)
+            // Links to pages should be prefixed with pages/
+            if (link.url !== 'index.html') {
+                href = 'pages/' + link.url;
+            }
+        }
+
+        a.href = href;
         a.textContent = link.name;
 
         // Highlight current page

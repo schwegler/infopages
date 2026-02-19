@@ -1,4 +1,4 @@
-import { dmaFindings, servers, positions, weaponData, cutoverSteps } from './sqlmovebuffy_data.js';
+import { dmaFindings, servers, positions, weaponData, cutoverSteps } from '../data/sqlmovebuffy_data.js';
 
 // --- Scroll Animations ---
 const headerBg = document.getElementById('header-bg');

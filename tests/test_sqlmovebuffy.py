@@ -32,7 +32,7 @@ def test_sqlmovebuffy(page: Page, server):
     """)
 
     # Navigate to the page
-    page.goto(f"http://localhost:{PORT}/sqlmovebuffy.html")
+    page.goto(f"http://localhost:{PORT}/pages/sqlmovebuffy.html")
 
     # 1. Page Load
     expect(page).to_have_title("The Slayer's Guide to SQL Server Migration")
