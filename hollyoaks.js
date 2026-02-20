@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const characterModal = document.getElementById('character-modal');
     const closeModalBtn = document.getElementById('close-modal');
     const modalContent = document.getElementById('modal-content');
+    let lastFocusedElement;
 
     // Intersection Observer for section reveal animations
     const sectionObserver = new IntersectionObserver((entries) => {
@@ -74,10 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showCharacterModal(charId) {
+        lastFocusedElement = document.activeElement;
         const char = appData.characters[charId];
         if (!char) {
             modalContent.innerHTML = `<p class="text-red-600">Details not available for this character.</p>`;
             characterModal.classList.add('is-visible');
+            setTimeout(() => closeModalBtn.focus(), 50);
             return;
         }
 
@@ -101,6 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
             ${eventsHtml}
         `;
         characterModal.classList.add('is-visible');
+        // Small delay to ensure modal is visible/focusable before moving focus
+        setTimeout(() => closeModalBtn.focus(), 50);
 
         modalContent.querySelectorAll('.event-link').forEach(link => {
             link.addEventListener('click', (e) => {
@@ -117,11 +122,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function hideCharacterModal() {
         characterModal.classList.remove('is-visible');
         document.querySelectorAll('.character-node').forEach(n => n.classList.remove('selected'));
+        if (lastFocusedElement) {
+            lastFocusedElement.focus();
+        }
     }
 
     closeModalBtn.addEventListener('click', hideCharacterModal);
     characterModal.addEventListener('click', (e) => {
         if (e.target === characterModal) {
+            hideCharacterModal();
+        }
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && characterModal.classList.contains('is-visible')) {
             hideCharacterModal();
         }
     });
