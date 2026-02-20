@@ -272,6 +272,10 @@
         <span class="text-purple-400">if</span> (uri.Scheme != Uri.UriSchemeHttps)
             <span class="text-purple-400">return new</span> <span class="text-teal-300">SqlString</span>(<span class="text-yellow-300">"Error: Unsecure channel."</span>);
 
+        <span class="text-gray-500">// Protocol 2.5: Verify destination is a trusted Starfleet fabricator.</span>
+        <span class="text-purple-400">if</span> (!uri.Host.EndsWith(<span class="text-yellow-300">".starfleet.local"</span>, StringComparison.OrdinalIgnoreCase))
+            <span class="text-purple-400">return new</span> <span class="text-teal-300">SqlString</span>(<span class="text-yellow-300">"Error: Untrusted destination."</span>);
+
         <span class="text-purple-400">try</span>
         {
             <span class="text-gray-500">// Prepare the schematic (HTML) for transport.</span>
