@@ -1,0 +1,28 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "Welcome to My InfoPages, a collection of static web documents and guides. This repository contains various informational pages served as a static site.",
+  "type": "module",
+  "main": "hollyoaks.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css": "tailwindcss -i ./src/input.css -o ./css/style.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/schwegler/infopages.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/schwegler/infopages/issues"
+  },
+  "homepage": "https://github.com/schwegler/infopages#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}
