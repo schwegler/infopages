@@ -84,39 +84,58 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        let eventsHtml = '';
         // Filter timeline events relevant to this character and sort by year
         const relevantEvents = appData.timelineEvents.filter(event =>
             event.title.includes(char.name) || (event.description && event.description.includes(char.name))
         ).sort((a,b) => a.year - b.year);
 
+        modalContent.innerHTML = '';
+
+        const charName = document.createElement('h3');
+        charName.className = 'text-3xl font-bold text-fuchsia-800 mb-2';
+        charName.textContent = char.name;
+        modalContent.appendChild(charName);
+
+        const charSummary = document.createElement('p');
+        charSummary.className = 'leading-relaxed text-gray-700';
+        charSummary.textContent = char.summary || 'No summary available.';
+        modalContent.appendChild(charSummary);
+
         if (relevantEvents.length > 0) {
-            eventsHtml = '<h4 class="font-semibold mt-4 mb-2 text-fuchsia-700">Key Storylines:</h4><ul class="list-disc list-inside space-y-1 text-gray-700">';
+            const storylinesHeader = document.createElement('h4');
+            storylinesHeader.className = 'font-semibold mt-4 mb-2 text-fuchsia-700';
+            storylinesHeader.textContent = 'Key Storylines:';
+            modalContent.appendChild(storylinesHeader);
+
+            const storylinesList = document.createElement('ul');
+            storylinesList.className = 'list-disc list-inside space-y-1 text-gray-700';
+
             relevantEvents.forEach(event => {
-                eventsHtml += `<li><a href="#" data-year="${event.year}" class="event-link hover:underline text-blue-600">${event.title} (${event.year})</a></li>`;
+                const li = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = '#';
+                link.dataset.year = event.year;
+                link.className = 'event-link hover:underline text-blue-600';
+                link.textContent = `${event.title} (${event.year})`;
+
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const year = e.target.dataset.year;
+                    hideCharacterModal();
+                    yearSelect.value = year;
+                    displayTimeline(year);
+                    document.getElementById('timeline-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+
+                li.appendChild(link);
+                storylinesList.appendChild(li);
             });
-            eventsHtml += '</ul>';
+            modalContent.appendChild(storylinesList);
         }
 
-        modalContent.innerHTML = `
-            <h3 class="text-3xl font-bold text-fuchsia-800 mb-2">${char.name}</h3>
-            <p class="leading-relaxed text-gray-700">${char.summary || 'No summary available.'}</p>
-            ${eventsHtml}
-        `;
         characterModal.classList.add('is-visible');
         // Small delay to ensure modal is visible/focusable before moving focus
         setTimeout(() => closeModalBtn.focus(), 50);
-
-        modalContent.querySelectorAll('.event-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const year = e.target.dataset.year;
-                hideCharacterModal();
-                yearSelect.value = year;
-                displayTimeline(year);
-                document.getElementById('timeline-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-        });
     }
 
     function hideCharacterModal() {
