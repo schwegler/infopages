@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Dynastic Crucible: Henry VIII's Wives</title>
+    <link href="css/style.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@300;400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --royal-gold: #C5A059;
+            --blood-red: #8A0303;
+            --velvet-black: #050505;
+            --holo-blue: #00F0FF;
+            --glass-bg: rgba(20, 20, 20, 0.7);
+        }
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--velvet-black);
+            color: #E2E8F0;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Cinzel', serif;
+            text-transform: uppercase;
+        }
+        .tech-font {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--velvet-black);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--royal-gold);
+            border-radius: 4px;
+        }
+
+        /* Glassmorphism Card */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+        .glass-panel:hover {
+            border-color: var(--royal-gold);
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.2);
+        }
+
+        /* Holo-Effect for active elements */
+        .holo-active {
+            box-shadow: 0 0 10px var(--holo-blue), inset 0 0 10px var(--holo-blue);
+            border-color: var(--holo-blue);
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 0.8s ease-in forwards;
+            opacity: 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Portrait Container */
+        .portrait-frame {
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--royal-gold);
+        }
+        .portrait-frame::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, transparent 50%, rgba(197, 160, 89, 0.1) 100%);
+            pointer-events: none;
+        }
+
+        /* Background Canvas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+    </style>
+    <script src="universal_nav.js" defer></script>
+    <script src="tudor_dynasty.js" defer></script>
+</head>
+<body class="antialiased selection:bg-red-900 selection:text-white">
+
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Hero Section -->
+    <section id="hero" class="min-h-screen flex flex-col justify-center items-center text-center p-6 relative">
+        <div class="z-10 fade-in" style="animation-delay: 0.2s;">
+            <div class="tech-font text-xs tracking-[0.5em] text-[var(--holo-blue)] mb-4">EXHIBIT: 1509-1547</div>
+            <h1 class="text-5xl md:text-8xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-b from-[var(--royal-gold)] to-yellow-800 drop-shadow-lg">
+                The Dynastic<br>Crucible
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed mb-12">
+                A Comprehensive Analysis of the Marital History and Modern Implications of Henry VIII’s Wives
+            </p>
+            <a href="#context" class="inline-block px-8 py-3 border border-[var(--royal-gold)] text-[var(--royal-gold)] hover:bg-[var(--royal-gold)] hover:text-black transition-colors duration-300 tech-font uppercase tracking-widest text-sm">
+                Enter Exhibition
+            </a>
+        </div>
+
+        <div class="absolute bottom-10 left-0 w-full text-center animate-bounce text-[var(--royal-gold)] opacity-50">
+            ↓
+        </div>
+    </section>
+
+    <!-- Context Section -->
+    <section id="context" class="py-24 px-6 relative border-t border-gray-900">
+        <div class="max-w-4xl mx-auto glass-panel p-8 md:p-12 rounded-sm fade-in">
+            <h2 class="text-3xl md:text-4xl text-[var(--royal-gold)] mb-6">The Tudor Accession</h2>
+            <div id="intro-text" class="prose prose-invert prose-lg max-w-none text-gray-300 font-light">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- The Wives Dashboard (Interactive Hub) -->
+    <section id="wives-dashboard" class="py-24 px-6 min-h-screen flex flex-col items-center">
+        <div class="w-full max-w-7xl">
+            <h2 class="text-4xl md:text-5xl text-center text-white mb-16 tech-font tracking-wider">
+                <span class="text-[var(--royal-gold)]">///</span> CONSORT_DATABASE
+            </h2>
+
+            <!-- Navigation / Selector -->
+            <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-12" id="wife-selector">
+                <!-- Generated by JS -->
+            </div>
+
+            <!-- Detail View -->
+            <div id="detail-view" class="glass-panel p-8 md:p-12 rounded-lg relative overflow-hidden min-h-[600px] flex flex-col md:flex-row gap-12 transition-all duration-500 opacity-0 transform translate-y-4">
+                <!-- Left: Portrait/Visual -->
+                <div class="w-full md:w-1/3 flex flex-col items-center justify-start">
+                    <div class="w-full aspect-[3/4] bg-black border-2 border-[var(--royal-gold)] relative mb-6 group portrait-frame">
+                        <div id="wife-portrait-placeholder" class="absolute inset-0 flex items-center justify-center text-[var(--royal-gold)] opacity-30 tech-font text-6xl font-bold">
+                            <!-- Initials or Icon -->
+                        </div>
+                        <!-- Overlay data -->
+                        <div class="absolute bottom-0 left-0 w-full bg-black/80 p-4 border-t border-[var(--royal-gold)]">
+                            <div class="tech-font text-[var(--holo-blue)] text-xs">STATUS:</div>
+                            <div id="wife-fate-short" class="text-white font-bold uppercase"></div>
+                        </div>
+                    </div>
+
+                    <div class="w-full grid grid-cols-2 gap-4 text-center">
+                        <div class="bg-black/50 p-2 border border-gray-800">
+                            <div class="text-xs text-gray-500 uppercase">Tenure</div>
+                            <div id="wife-tenure" class="text-[var(--royal-gold)] font-bold"></div>
+                        </div>
+                        <div class="bg-black/50 p-2 border border-gray-800">
+                            <div class="text-xs text-gray-500 uppercase">Heir</div>
+                            <div id="wife-outcome" class="text-[var(--holo-blue)] font-bold"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Bio & Data -->
+                <div class="w-full md:w-2/3">
+                    <h3 id="wife-name" class="text-4xl md:text-6xl font-black text-white mb-2 tracking-tight"></h3>
+                    <div id="wife-subtitle" class="text-xl text-[var(--royal-gold)] mb-8 font-serif italic"></div>
+
+                    <div class="space-y-8">
+                        <div>
+                            <h4 class="text-[var(--holo-blue)] tech-font text-sm mb-2 border-b border-gray-800 pb-1">BIOGRAPHICAL_DATA</h4>
+                            <p id="wife-bio" class="text-gray-300 leading-relaxed"></p>
+                        </div>
+
+                        <div id="wife-extra-content" class="hidden">
+                            <!-- Dynamic content for specific wives (Acts, Tables etc) -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Visualization Section -->
+    <section id="data-vis" class="py-24 px-6 bg-black/50 border-t border-gray-900">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl text-[var(--royal-gold)] mb-12 text-center">Dynastic Analytics</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Fate Distribution -->
+                <div class="glass-panel p-6 rounded-lg">
+                    <h3 class="text-center text-gray-400 mb-6 tech-font text-sm">OUTCOME_DISTRIBUTION</h3>
+                    <div class="h-64 relative">
+                        <canvas id="fateChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Tenure Timeline -->
+                <div class="glass-panel p-6 rounded-lg">
+                    <h3 class="text-center text-gray-400 mb-6 tech-font text-sm">MARRIAGE_DURATION (YEARS)</h3>
+                    <div class="h-64 relative">
+                        <canvas id="tenureChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Legal & Cultural Legacy -->
+    <section id="legacy" class="py-24 px-6 relative">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+
+            <!-- Legal -->
+            <div>
+                <h3 class="text-2xl text-[var(--royal-gold)] mb-6 border-b border-[var(--royal-gold)] pb-2">Constitutional Metamorphosis</h3>
+                <div id="legal-text" class="text-gray-400 mb-8 space-y-4"></div>
+
+                <div class="bg-black/40 border border-gray-800 p-6 rounded-sm">
+                    <h4 class="text-white font-bold mb-4">Queen Consort Rights (Feme Sole)</h4>
+                    <ul id="legal-list" class="space-y-3 text-sm text-gray-300">
+                        <!-- Populated by JS -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Cultural (The "Six") -->
+            <div>
+                <h3 class="text-2xl text-[var(--holo-blue)] mb-6 border-b border-[var(--holo-blue)] pb-2">Modern Echoes: The "Six" Phenomenon</h3>
+                <div id="cultural-text" class="text-gray-400 mb-8"></div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-[var(--holo-blue)] text-xs border-b border-gray-700">
+                                <th class="py-2">CHARACTER</th>
+                                <th class="py-2">INSPIRATION</th>
+                                <th class="py-2">THEME</th>
+                            </tr>
+                        </thead>
+                        <tbody id="six-table-body" class="text-sm text-gray-300">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 text-center text-gray-600 border-t border-gray-900 tech-font text-xs">
+        <div class="max-w-4xl mx-auto px-6">
+            <p id="conclusion-text" class="mb-8 text-gray-500 italic font-serif text-base"></p>
+            <p>&copy; <span id="year"></span> SCHWEGLER // MUSEUM_MODE // <a href="https://creativecommons.org/licenses/by/4.0/" class="text-[var(--royal-gold)] hover:underline">CC BY 4.0</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
