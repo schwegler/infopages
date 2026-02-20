@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function populateYearSelect() {
-        const years = [...new Set(appData.timelineEvents.map(event => event.year))].sort();
+        const years = appData.processedTimeline.sortedYears;
         yearSelect.innerHTML = '<option value="all">Show All Years</option>';
         years.forEach(year => {
             const option = document.createElement('option');
@@ -141,34 +141,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const timelineContent = document.getElementById('timeline-content');
         timelineContent.innerHTML = '';
 
-        let filteredEvents = appData.timelineEvents;
-        if (yearFilter !== 'all') {
-            filteredEvents = appData.timelineEvents.filter(event => event.year == yearFilter);
+        let yearsToDisplay = [];
+        let displayEventsByYear = {};
+
+        if (yearFilter === 'all') {
+            yearsToDisplay = appData.processedTimeline.sortedYears;
+            displayEventsByYear = appData.processedTimeline.eventsByYear;
+        } else {
+            if (appData.processedTimeline.eventsByYear[yearFilter]) {
+                yearsToDisplay = [yearFilter];
+                displayEventsByYear = { [yearFilter]: appData.processedTimeline.eventsByYear[yearFilter] };
+            }
         }
 
-        if (filteredEvents.length === 0) {
+        if (yearsToDisplay.length === 0) {
             timelineContent.innerHTML = '<p class="text-gray-600 text-center">No major events recorded for this selection.</p>';
             return;
         }
 
-        const eventsByYear = filteredEvents.reduce((acc, event) => {
-            if (!acc[event.year]) {
-                acc[event.year] = [];
-            }
-            acc[event.year].push(event);
-            return acc;
-        }, {});
-
-        const sortedYears = Object.keys(eventsByYear).sort((a, b) => a - b);
-
-        sortedYears.forEach(year => {
+        yearsToDisplay.forEach(year => {
             const yearHeader = document.createElement('h3');
             yearHeader.className = 'text-3xl font-extrabold text-fuchsia-700 mt-10 mb-6 border-b-2 border-fuchsia-300 pb-2 text-center section-reveal';
             yearHeader.textContent = year;
             timelineContent.appendChild(yearHeader);
             sectionObserver.observe(yearHeader);
 
-            eventsByYear[year].forEach(event => {
+            displayEventsByYear[year].forEach(event => {
                 const familyColors = {
                     cunningham: 'border-l-fuchsia-500 bg-fuchsia-50',
                     osborne: 'border-l-teal-500 bg-teal-50',
@@ -243,6 +241,23 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             appData = data;
             createThematicChart();
+
+            // Pre-process timeline events for O(1) lookup
+            const eventsByYear = appData.timelineEvents.reduce((acc, event) => {
+                if (!acc[event.year]) {
+                    acc[event.year] = [];
+                }
+                acc[event.year].push(event);
+                return acc;
+            }, {});
+
+            const sortedYears = Object.keys(eventsByYear).sort((a, b) => a - b);
+
+            appData.processedTimeline = {
+                eventsByYear,
+                sortedYears
+            };
+
             displayAllFamilies();
             populateYearSelect();
             displayTimeline('all');
