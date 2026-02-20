@@ -240,6 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             appData = data;
+            createThematicChart();
 
             // Pre-process timeline events for O(1) lookup
             const eventsByYear = appData.timelineEvents.reduce((acc, event) => {
