@@ -1,4 +1,6 @@
 
+import { createScrollObserver } from './src/utils.js';
+
 let appData = {};
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,28 +11,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastFocusedElement;
 
     // Intersection Observer for section reveal animations
-    const sectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                sectionObserver.unobserve(entry.target); // Observe once
-            }
-        });
-    }, { threshold: 0.1 }); // Trigger when 10% of the section is visible
-
-    document.querySelectorAll('.section-reveal').forEach(section => {
-        sectionObserver.observe(section);
+    const sectionObserver = createScrollObserver({
+        selector: '.section-reveal',
+        activeClass: 'is-visible',
+        threshold: 0.1,
+        unobserve: true
     });
 
     // Intersection Observer for timeline event card animations
-    const timelineEventObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                timelineEventObserver.unobserve(entry.target); // Observe once
-            }
-        });
-    }, { threshold: 0.2 }); // Trigger when 20% of the card is visible
+    const timelineEventObserver = createScrollObserver({
+        activeClass: 'is-visible',
+        threshold: 0.2,
+        unobserve: true
+    });
 
     function buildFamilyTreeHTML(nodes) {
         if (!nodes || nodes.length === 0) return '';
