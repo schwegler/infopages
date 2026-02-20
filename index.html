@@ -3,32 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schwegler's Digital Garden</title>
+    <title>Schwegler // Digital Garden</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@400;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-bg: #0F172A;
-            --secondary-bg: #1E293B;
+            --primary-bg: #050505;
+            --secondary-bg: #111111;
             --text-color: #E2E8F0;
-            --accent-color: #66CCFF;
+            --neon-green: #39ff14;
+            --neon-pink: #ff00ff;
+            --neon-cyan: #00ffff;
+            --neon-orange: #ff4500;
         }
         body {
             font-family: 'Exo 2', sans-serif;
             background-color: var(--primary-bg);
             color: var(--text-color);
+            background-image:
+                linear-gradient(rgba(57, 255, 20, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(57, 255, 20, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
         }
         h1, h2, h3 {
             font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+        }
+        .mono {
+            font-family: 'Courier Prime', monospace;
         }
 
         /* Animation Classes */
         .reveal {
             opacity: 0;
             transform: translateY(30px);
-            transition: all 0.8s ease-out;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
         .reveal.active {
             opacity: 1;
@@ -40,63 +51,162 @@
         .stagger-delay-3 { transition-delay: 300ms; }
         .stagger-delay-4 { transition-delay: 400ms; }
 
-        .card-hover {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        /* Wired 2005 Aesthetics */
+        .wired-card {
+            background-color: rgba(10, 10, 10, 0.8);
+            border: 1px solid #333;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
         }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px -5px rgba(102, 204, 255, 0.3);
+        .wired-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: var(--neon-green);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
         }
+        .wired-card:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
+            transform: translateY(-2px);
+        }
+        .wired-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .wired-card.pink:hover { border-color: var(--neon-pink); box-shadow: 0 0 15px rgba(255, 0, 255, 0.2); }
+        .wired-card.pink::before { background: var(--neon-pink); }
+
+        .wired-card.cyan:hover { border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 255, 255, 0.2); }
+        .wired-card.cyan::before { background: var(--neon-cyan); }
+
+        .wired-card.orange:hover { border-color: var(--neon-orange); box-shadow: 0 0 15px rgba(255, 69, 0, 0.2); }
+        .wired-card.orange::before { background: var(--neon-orange); }
+
+        .tech-marker {
+            position: absolute;
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.6rem;
+            color: var(--neon-green);
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .glitch-hover:hover {
+            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            color: var(--neon-green);
+        }
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+
+        .btn-wired {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: transparent;
+            border: 2px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            transition: all 0.2s;
+            overflow: hidden;
+        }
+        .btn-wired::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--neon-cyan);
+            z-index: -1;
+            transform: translateX(-100%);
+            transition: transform 0.2s;
+        }
+        .btn-wired:hover {
+            color: #000;
+            box-shadow: 0 0 20px var(--neon-cyan);
+        }
+        .btn-wired:hover::after {
+            transform: translateX(0);
+        }
+
     </style>
     <script src="universal_nav.js" defer></script>
 </head>
 <body class="antialiased overflow-x-hidden">
 
     <!-- Hero Section -->
-    <section class="min-h-screen flex flex-col justify-center items-center p-6 text-center relative overflow-hidden">
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 animate-pulse"></div>
-        <div class="z-10 max-w-3xl reveal active">
-            <h1 class="text-5xl md:text-7xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300 drop-shadow-[0_0_15px_rgba(102,204,255,0.5)]">
-                Hello, I’m Schwegler. 👋
+    <section class="min-h-screen flex flex-col justify-center items-center p-6 text-center relative overflow-hidden border-b border-gray-800">
+        <div class="tech-marker top-4 left-4">SYS.STATUS: ONLINE</div>
+        <div class="tech-marker top-4 right-4">VER. 2.5.0</div>
+
+        <div class="z-10 max-w-4xl reveal active">
+            <h1 class="text-6xl md:text-8xl font-black mb-6 text-white pb-4 tracking-tighter" style="text-shadow: 4px 4px 0px #333;">
+                HELLO, I’M <span class="text-[var(--neon-green)] block md:inline">SCHWEGLER.</span> <span class="inline-block hover:animate-spin cursor-default">👋</span>
             </h1>
-            <p class="text-xl md:text-2xl text-slate-300 leading-relaxed mb-8 reveal stagger-delay-1">
-                I’m a Software Engineer based in Montgomery, AL, with over a decade of experience building things for the web. While I spend my workdays navigating the worlds of Ruby on Rails, Python, and T-SQL, I’ve always had a soft spot for the simplicity of static sites.
+            <div class="h-1 w-24 bg-[var(--neon-green)] mx-auto mb-8"></div>
+
+            <p class="text-lg md:text-xl text-gray-400 leading-relaxed mb-8 reveal stagger-delay-1 mono max-w-2xl mx-auto border-l-2 border-[var(--neon-green)] pl-4 text-left">
+                <span class="text-[var(--neon-green)]">></span> SOFTWARE_ENGINEER<br>
+                <span class="text-[var(--neon-green)]">></span> LOC: MONTGOMERY, AL<br>
+                <span class="text-[var(--neon-green)]">></span> EXP: 10+ YEARS<br>
+                <span class="text-[var(--neon-green)]">></span> STACK: RUBY, PYTHON, T-SQL<br>
+                <br>
+                Executing digital gardening protocols...
             </p>
-            <p class="text-lg text-slate-400 italic reveal stagger-delay-2">
-                This space is a digital garden for my hobbies—a collection of infopages dedicated to the things that keep life interesting.
-            </p>
+
             <div class="mt-12 reveal stagger-delay-3">
-                <a href="#essentials" class="inline-block px-8 py-3 rounded-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-colors shadow-[0_0_20px_rgba(6,182,212,0.5)] hover:shadow-[0_0_30px_rgba(6,182,212,0.7)]">
-                    Explore
+                <a href="#essentials" class="btn-wired">
+                    Initialize
                 </a>
             </div>
         </div>
+
+        <div class="tech-marker bottom-4 left-4">SCROLL_DOWN_FOR_DATA</div>
     </section>
 
     <!-- The Essentials -->
-    <section id="essentials" class="py-20 px-6 bg-slate-900/50">
+    <section id="essentials" class="py-20 px-6 bg-black relative border-b border-gray-800">
+        <div class="tech-marker top-4 right-4">SEC: ESSENTIALS</div>
         <div class="max-w-6xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-bold mb-16 text-center text-cyan-400 reveal">The Essentials</h2>
+            <h2 class="text-4xl md:text-5xl font-bold mb-16 text-left border-b-2 border-[var(--neon-cyan)] inline-block pb-2 text-[var(--neon-cyan)] reveal">CORE_MODULES</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Tech Stack -->
-                <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 reveal stagger-delay-1 card-hover">
-                    <h3 class="text-2xl font-bold mb-4 text-emerald-400">Tech Stack</h3>
-                    <p class="text-slate-300">
-                        I’m a fan of the fundamentals—HTML5, CSS, and JavaScript—but I’m happiest when I’m solving problems with <span class="text-white font-semibold">Ruby</span> or <span class="text-white font-semibold">Python</span>.
+                <div class="wired-card p-8 reveal stagger-delay-1 cyan">
+                    <div class="tech-marker top-2 right-2">MOD.01</div>
+                    <h3 class="text-2xl font-bold mb-4 text-[var(--neon-cyan)] uppercase">Tech Stack</h3>
+                    <p class="text-gray-400 mono text-sm">
+                        Prefer raw HTML/CSS/JS. <br>
+                        Solver via <span class="text-white font-bold bg-gray-800 px-1">RUBY</span> & <span class="text-white font-bold bg-gray-800 px-1">PYTHON</span>.
                     </p>
                 </div>
                 <!-- The Roommates -->
-                <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 reveal stagger-delay-2 card-hover">
-                    <h3 class="text-2xl font-bold mb-4 text-rose-400">The Roommates</h3>
-                    <p class="text-slate-300">
-                        I share my home with two cats: <span class="text-white font-semibold">Rose</span> (a silver Tabby born in 2012) and <span class="text-white font-semibold">Violet</span> (a black cat born in 2017).
+                <div class="wired-card pink p-8 reveal stagger-delay-2">
+                    <div class="tech-marker top-2 right-2">MOD.02</div>
+                    <h3 class="text-2xl font-bold mb-4 text-[var(--neon-pink)] uppercase">Unit: Roommates</h3>
+                    <p class="text-gray-400 mono text-sm">
+                        Feline companions identified:<br>
+                        - <span class="text-white">ROSE</span> (Ver. 2012, Silver Tabby)<br>
+                        - <span class="text-white">VIOLET</span> (Ver. 2017, Void Cat)
                     </p>
                 </div>
                 <!-- Roots -->
-                <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 reveal stagger-delay-3 card-hover">
-                    <h3 class="text-2xl font-bold mb-4 text-amber-400">Roots</h3>
-                    <p class="text-slate-300">
-                        Born in Albany, GA, and a proud alumnus of the <span class="text-white font-semibold">University of Georgia</span>. Go Dawgs!
+                <div class="wired-card orange p-8 reveal stagger-delay-3">
+                    <div class="tech-marker top-2 right-2">MOD.03</div>
+                    <h3 class="text-2xl font-bold mb-4 text-[var(--neon-orange)] uppercase">Origin</h3>
+                    <p class="text-gray-400 mono text-sm">
+                        Spawn point: Albany, GA.<br>
+                        Education: <span class="text-white">University of Georgia</span>.<br>
+                        Allegiance: Go Dawgs.
                     </p>
                 </div>
             </div>
@@ -104,107 +214,103 @@
     </section>
 
     <!-- What I’m Into -->
-    <section class="py-20 px-6">
+    <section class="py-20 px-6 relative border-b border-gray-800">
+        <div class="tech-marker top-4 left-4">SEC: INTERESTS</div>
         <div class="max-w-6xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-bold mb-16 text-center text-fuchsia-400 reveal">What I’m Into</h2>
-            <p class="text-xl text-center text-slate-400 mb-12 reveal">When I’m not staring at a terminal, you can usually find me deep in one of these rabbit holes:</p>
+            <h2 class="text-4xl md:text-5xl font-bold mb-16 text-right text-[var(--neon-pink)] reveal">
+                <span class="border-b-2 border-[var(--neon-pink)] pb-2">DATA_INPUTS</span>
+            </h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-0 border border-gray-800">
                 <!-- Comics -->
-                <div class="bg-slate-800/50 p-8 rounded-xl border-l-4 border-yellow-400 reveal stagger-delay-1 hover:bg-slate-800 transition-colors">
-                    <h3 class="text-2xl font-bold mb-2 text-yellow-400">Comics</h3>
-                    <p class="text-slate-300">Big fan of anything written by Kieron Gillen and drawn by Jamie McKelvie.</p>
+                <div class="p-8 border-b md:border-b-0 md:border-r border-gray-800 hover:bg-gray-900 transition-colors reveal stagger-delay-1 group">
+                    <h3 class="text-2xl font-bold mb-2 text-yellow-400 group-hover:text-[var(--neon-green)] transition-colors uppercase">Comics</h3>
+                    <p class="text-gray-400 mono text-sm">Target: Works by Kieron Gillen & Jamie McKelvie.</p>
                 </div>
                 <!-- Pro Wrestling -->
-                <div class="bg-slate-800/50 p-8 rounded-xl border-l-4 border-red-500 reveal stagger-delay-2 hover:bg-slate-800 transition-colors">
-                    <h3 class="text-2xl font-bold mb-2 text-red-500">Pro Wrestling</h3>
-                    <p class="text-slate-300">I’ve been hooked since the 90s NWO/Attitude Era. These days, I’m pulling for Rhea Ripley, CM Punk, and Bron Breakker.</p>
+                <div class="p-8 border-b border-gray-800 md:border-b-0 hover:bg-gray-900 transition-colors reveal stagger-delay-2 group">
+                    <h3 class="text-2xl font-bold mb-2 text-red-500 group-hover:text-[var(--neon-green)] transition-colors uppercase">Pro Wrestling</h3>
+                    <p class="text-gray-400 mono text-sm">Era: 90s NWO/Attitude.<br>Current Favs: Rhea Ripley, CM Punk, Bron Breakker.</p>
                 </div>
                 <!-- Reality TV & Soaps -->
-                <div class="bg-slate-800/50 p-8 rounded-xl border-l-4 border-purple-500 reveal stagger-delay-1 hover:bg-slate-800 transition-colors">
-                    <h3 class="text-2xl font-bold mb-2 text-purple-500">Reality TV & Soaps</h3>
-                    <p class="text-slate-300">From Big Brother to the UK soap trifecta (Emmerdale, Hollyoaks, and EastEnders), I appreciate a good long-running narrative.</p>
+                <div class="p-8 border-b md:border-b-0 md:border-r border-gray-800 hover:bg-gray-900 transition-colors reveal stagger-delay-1 group">
+                    <h3 class="text-2xl font-bold mb-2 text-purple-500 group-hover:text-[var(--neon-green)] transition-colors uppercase">Reality TV & Soaps</h3>
+                    <p class="text-gray-400 mono text-sm">Big Brother, Emmerdale, Hollyoaks, EastEnders.</p>
                 </div>
                 <!-- Live Music & Culture -->
-                <div class="bg-slate-800/50 p-8 rounded-xl border-l-4 border-blue-500 reveal stagger-delay-2 hover:bg-slate-800 transition-colors">
-                    <h3 class="text-2xl font-bold mb-2 text-blue-500">Live Music & Culture</h3>
-                    <p class="text-slate-300">I’m often traveling to Birmingham or Atlanta for concerts, drag shows, or a good museum exhibit.</p>
+                <div class="p-8 hover:bg-gray-900 transition-colors reveal stagger-delay-2 group">
+                    <h3 class="text-2xl font-bold mb-2 text-blue-500 group-hover:text-[var(--neon-green)] transition-colors uppercase">Live Music</h3>
+                    <p class="text-gray-400 mono text-sm">Birmingham/Atlanta circuit. Concerts, drag shows, exhibits.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- About These Pages & Collection -->
-    <section class="py-20 px-6 bg-slate-900/80">
+    <section class="py-20 px-6 bg-black relative">
+        <div class="tech-marker bottom-4 right-4">END_OF_LINE</div>
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-16 reveal">
-                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-cyan-400">About These Pages</h2>
-                <p class="text-xl text-slate-300 max-w-3xl mx-auto">
-                    These pages are built for fun—a way to practice new frontend techniques or just document a specific interest. They are fast, lightweight, and probably a little bit nerdy.
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white uppercase tracking-widest">Directory_Listing</h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto mono text-sm">
+                    /var/www/hobbies/infopages<br>
+                    Status: Optimized / Lightweight / Nerdy
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Starfleet Guide -->
-                <a href="sqlhttp.html" class="group block bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-orange-400 transition-all duration-300 reveal stagger-delay-1 transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(251,146,60,0.2)]">
+                <a href="sqlhttp.html" class="group block wired-card p-0 reveal stagger-delay-1 orange hover:scale-[1.02] transition-transform">
                     <div class="p-8 h-full flex flex-col">
-                        <h3 class="text-2xl font-bold mb-4 text-orange-400 group-hover:text-orange-300">Starfleet Guide to Secure API Calls</h3>
-                        <p class="text-slate-400 group-hover:text-slate-200 transition-colors flex-grow">
-                            Learn about secure API calls with C# and SQL, framed as a Starfleet mission log.
+                        <div class="tech-marker top-2 right-2">FILE.01</div>
+                        <h3 class="text-xl font-bold mb-4 text-[var(--neon-orange)] group-hover:text-white uppercase">Starfleet Guide to Secure API Calls</h3>
+                        <p class="text-gray-400 mono text-xs flex-grow mb-4">
+                            Protocol: Secure API calls with C# and SQL.<br>Theme: LCARS.
                         </p>
-                        <div class="mt-6 text-orange-400 font-bold flex items-center">
-                            Read Mission Log
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
+                        <div class="text-[var(--neon-orange)] font-bold mono text-xs">
+                            [ OPEN_LOG ]
                         </div>
                     </div>
                 </a>
 
                 <!-- Slayer's Guide -->
-                <a href="sqlmovebuffy.html" class="group block bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-rose-500 transition-all duration-300 reveal stagger-delay-2 transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(244,63,94,0.2)]">
+                <a href="sqlmovebuffy.html" class="group block wired-card p-0 reveal stagger-delay-2 pink hover:scale-[1.02] transition-transform">
                     <div class="p-8 h-full flex flex-col">
-                        <h3 class="text-2xl font-bold mb-4 text-rose-500 group-hover:text-rose-400">The Slayer's Guide to SQL Server Migration</h3>
-                        <p class="text-slate-400 group-hover:text-slate-200 transition-colors flex-grow">
-                            A Buffy the Vampire Slayer-themed guide to migrating SQL Server databases.
+                        <div class="tech-marker top-2 right-2">FILE.02</div>
+                        <h3 class="text-xl font-bold mb-4 text-[var(--neon-pink)] group-hover:text-white uppercase">The Slayer's Guide to Migration</h3>
+                        <p class="text-gray-400 mono text-xs flex-grow mb-4">
+                            Protocol: SQL Server Database Migration.<br>Theme: Buffy.
                         </p>
-                        <div class="mt-6 text-rose-500 font-bold flex items-center">
-                            Start Patrol
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
+                        <div class="text-[var(--neon-pink)] font-bold mono text-xs">
+                            [ START_PATROL ]
                         </div>
                     </div>
                 </a>
 
                 <!-- Hollyoaks History -->
-                <a href="hollyoaks_history.html" class="group block bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-fuchsia-500 transition-all duration-300 reveal stagger-delay-3 transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(217,70,239,0.2)]">
+                <a href="hollyoaks_history.html" class="group block wired-card p-0 reveal stagger-delay-3 cyan hover:scale-[1.02] transition-transform">
                     <div class="p-8 h-full flex flex-col">
-                        <h3 class="text-2xl font-bold mb-4 text-fuchsia-500 group-hover:text-fuchsia-400">Hollyoaks: The First 20 Years</h3>
-                        <p class="text-slate-400 group-hover:text-slate-200 transition-colors flex-grow">
-                            An interactive exploration of the popular UK soap opera, Hollyoaks, covering its first two decades.
+                        <div class="tech-marker top-2 right-2">FILE.03</div>
+                        <h3 class="text-xl font-bold mb-4 text-[var(--neon-cyan)] group-hover:text-white uppercase">Hollyoaks: The First 20 Years</h3>
+                        <p class="text-gray-400 mono text-xs flex-grow mb-4">
+                            Protocol: Interactive history exploration.<br>Theme: Soap Opera.
                         </p>
-                        <div class="mt-6 text-fuchsia-500 font-bold flex items-center">
-                            Explore History
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
+                        <div class="text-[var(--neon-cyan)] font-bold mono text-xs">
+                            [ EXPLORE_DATA ]
                         </div>
                     </div>
                 </a>
 
                 <!-- TNA History -->
-                <a href="tna_history.html" class="group block bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 hover:border-red-600 transition-all duration-300 reveal stagger-delay-2 transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(220,38,38,0.2)]">
+                <a href="tna_history.html" class="group block wired-card p-0 reveal stagger-delay-2 hover:scale-[1.02] transition-transform" style="border-color: #ff0000">
                     <div class="p-8 h-full flex flex-col">
-                        <h3 class="text-2xl font-bold mb-4 text-red-600 group-hover:text-red-500">TNA Wrestling: Cross The Line</h3>
-                        <p class="text-slate-400 group-hover:text-slate-200 transition-colors flex-grow">
-                            A retrospective on TNA Wrestling's pivotal years (2007-2009), featuring data viz and a six-sided ring.
+                        <div class="tech-marker top-2 right-2">FILE.04</div>
+                        <h3 class="text-xl font-bold mb-4 text-red-600 group-hover:text-white uppercase">TNA Wrestling: Cross The Line</h3>
+                        <p class="text-gray-400 mono text-xs flex-grow mb-4">
+                            Protocol: Retrospective (2007-2009).<br>Theme: Wrestling Ring.
                         </p>
-                        <div class="mt-6 text-red-600 font-bold flex items-center">
-                            Enter the Impact Zone
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
+                        <div class="text-red-600 font-bold mono text-xs">
+                            [ ENTER_ZONE ]
                         </div>
                     </div>
                 </a>
@@ -212,10 +318,10 @@
         </div>
     </section>
 
-    <footer class="py-8 text-center text-slate-500 bg-slate-950">
-        <p>&copy; <span id="year"></span> Schwegler. All rights reserved.</p>
-        <p class="mt-2 text-sm">
-            <a href="tos.html" class="hover:text-slate-300 transition-colors">Terms of Service</a>
+    <footer class="py-8 text-center text-gray-600 bg-black border-t border-gray-900 mono text-xs">
+        <p>&copy; <span id="year"></span> SCHWEGLER // SYSTEM.ALL_RIGHTS_RESERVED</p>
+        <p class="mt-2">
+            <a href="tos.html" class="hover:text-[var(--neon-green)] transition-colors">[ TERMS_OF_SERVICE ]</a>
         </p>
     </footer>
 
