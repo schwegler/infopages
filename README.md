@@ -128,4 +128,4 @@ These are static HTML files using Tailwind CSS via CDN. You can deploy them to a
 
 ## License
 
-This project is licensed under the CC0 1.0 Universal (Public Domain) License.
+This project is licensed under the Creative Commons Attribution 4.0 International License.
