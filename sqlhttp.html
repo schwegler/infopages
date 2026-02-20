@@ -290,8 +290,8 @@
             <span class="text-gray-500">// Confirmation that API placed file in buffer. Archival is handled by SSU.</span>
             <span class="text-purple-400">return new</span> <span class="text-teal-300">SqlString</span>(<span class="text-yellow-300">"Success: Schematic received by fabricator."</span>);
         }
-        <span class="text-purple-400">catch</span> (Exception ex) {
-            <span class="text-purple-400">return new</span> <span class="text-teal-300">SqlString</span>($<span class="text-yellow-300">"Fabrication Error: {ex.Message}"</span>);
+        <span class="text-purple-400">catch</span> (Exception) {
+            <span class="text-purple-400">return new</span> <span class="text-teal-300">SqlString</span>(<span class="text-yellow-300">"Fabrication Error: Transmission failed."</span>);
         }
     }
 }
