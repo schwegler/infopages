@@ -67,13 +67,13 @@ def run_tests():
 
         # 1. Check if focus moved to close button or inside modal
         # We'll check if the active element is the close button or inside the modal
-        active_element_id = page.evaluate("document.activeElement.id")
-        print(f"Active element ID: {active_element_id}")
-
-        if active_element_id == "close-modal":
-             print("✅ PASS: Focus moved to close button.")
-        else:
-             print(f"❌ FAIL: Focus did not move to close button. Active element: {active_element_id}")
+        # Wait for focus to move (timeout 2000ms) because of the setTimeout(..., 50) in JS
+        try:
+            page.wait_for_function("document.activeElement.id === 'close-modal'", timeout=2000)
+            print("✅ PASS: Focus moved to close button.")
+        except Exception:
+            active_element_id = page.evaluate("document.activeElement.id")
+            raise Exception(f"❌ FAIL: Focus did not move to close button. Active element: {active_element_id}")
 
         # 2. Test Escape key
         print("Pressing Escape...")
@@ -85,7 +85,7 @@ def run_tests():
 
         is_visible = modal.get_attribute("class")
         if "is-visible" in is_visible:
-            print("❌ FAIL: Modal is still visible after pressing Escape.")
+            raise Exception("❌ FAIL: Modal is still visible after pressing Escape.")
         else:
             print("✅ PASS: Modal closed after pressing Escape.")
 
@@ -110,7 +110,7 @@ def run_tests():
         if focused_data_id == clicked_data_id:
              print("✅ PASS: Focus returned to trigger element.")
         else:
-             print("❌ FAIL: Focus did not return to trigger element.")
+             raise Exception("❌ FAIL: Focus did not return to trigger element.")
 
         browser.close()
 
