@@ -380,7 +380,9 @@
 
     </div>
 
-    <script>
+    <script type="module">
+        import { createRevealObserver } from './animations.js';
+
         // --- Canvas Animation: Six Sided Zone ---
         const canvas = document.getElementById('six-sided-ring');
         const ctx = canvas.getContext('2d');
@@ -579,21 +581,7 @@
         });
 
         // --- Intersection Observer for Scroll Reveals ---
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
+        const observer = createRevealObserver({ activeClass: 'active' });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     </script>
