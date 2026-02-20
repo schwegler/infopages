@@ -2,10 +2,15 @@
     const style = document.createElement('style');
     style.textContent = `
         :root {
-            --nav-bg: rgba(15, 23, 42, 0.95);
-            --nav-text: #cbd5e1;
-            --nav-hover: #38bdf8;
+            --nav-bg: #000000;
+            --nav-text: #cccccc;
+            --nav-hover: #39ff14;
             --nav-height: 60px;
+            --nav-font: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            padding-top: var(--nav-height);
         }
 
         #universal-nav {
@@ -14,19 +19,19 @@
             left: 0;
             width: 100%;
             background-color: var(--nav-bg);
-            color: #fff;
+            color: var(--nav-text);
             z-index: 99999;
-            font-family: system-ui, -apple-system, sans-serif;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(8px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            font-family: var(--nav-font);
+            border-bottom: 2px solid var(--nav-hover);
             height: var(--nav-height);
             display: flex;
             align-items: center;
-            justify-content: space-between; /* Changed from center to space-between for brand/hamburger */
+            justify-content: space-between;
             padding: 0 1.5rem;
             transition: transform 0.3s ease-in-out;
             box-sizing: border-box;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         #universal-nav.nav-hidden {
@@ -39,7 +44,9 @@
             color: #fff;
             text-decoration: none;
             font-size: 1.1rem;
-            display: block; /* Always visible */
+            display: block;
+            text-shadow: 0 0 5px rgba(57, 255, 20, 0.5);
+            white-space: nowrap;
         }
 
         /* Desktop Menu */
@@ -55,16 +62,37 @@
         #universal-nav a:not(.brand) {
             color: var(--nav-text);
             text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: color 0.2s, text-shadow 0.2s;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
             padding: 0.5rem;
-            border-radius: 0.375rem;
+            position: relative;
+            white-space: nowrap;
         }
 
         #universal-nav a:not(.brand):hover {
             color: var(--nav-hover);
-            background-color: rgba(255,255,255,0.05);
+            background-color: rgba(57, 255, 20, 0.1);
+            text-shadow: 0 0 8px var(--nav-hover);
+        }
+
+        #universal-nav a:not(.brand)::before {
+            content: '[';
+            margin-right: 5px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            color: var(--nav-hover);
+        }
+        #universal-nav a:not(.brand)::after {
+            content: ']';
+            margin-left: 5px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            color: var(--nav-hover);
+        }
+        #universal-nav a:not(.brand):hover::before,
+        #universal-nav a:not(.brand):hover::after {
+            opacity: 1;
         }
 
         /* Hamburger Button */
@@ -84,11 +112,15 @@
         .hamburger span {
             width: 2rem;
             height: 0.25rem;
-            background: #fff;
-            border-radius: 10px;
+            background: var(--nav-text);
             transition: all 0.3s linear;
             position: relative;
             transform-origin: 1px;
+        }
+
+        .hamburger:hover span {
+            background: var(--nav-hover);
+            box-shadow: 0 0 5px var(--nav-hover);
         }
 
         /* Mobile Styles */
@@ -110,7 +142,8 @@
                 transform: translateX(100%);
                 transition: transform 0.3s ease-in-out;
                 gap: 2rem;
-                padding-top: var(--nav-height); /* Space for header */
+                padding-top: var(--nav-height);
+                border-left: 2px solid var(--nav-hover);
             }
 
             #universal-nav ul.open {
@@ -153,7 +186,7 @@
     // Brand (linked to home)
     const brand = document.createElement('a');
     brand.className = 'brand';
-    brand.textContent = "Schwegler's Digital Garden";
+    brand.textContent = "Schwegler // Digital Garden";
     brand.href = 'index.html';
     nav.appendChild(brand);
 
@@ -168,8 +201,9 @@
         // Highlight current page
         const currentPath = window.location.pathname.split('/').pop() || 'index.html';
         if (currentPath === link.url) {
-            a.style.color = '#38bdf8';
+            a.style.color = 'var(--nav-hover)';
             a.style.fontWeight = '700';
+            a.style.textShadow = '0 0 10px var(--nav-hover)';
         }
 
         // Close menu on link click (mobile)
@@ -208,20 +242,14 @@
     window.addEventListener('scroll', () => {
         const currentScrollTop = window.scrollY;
 
-        // Make sure they scroll more than delta
         if (Math.abs(lastScrollTop - currentScrollTop) <= delta) return;
 
-        // If they scrolled down and are past the navbar, add class .nav-hidden.
-        // If they scrolled up or they are at the top, remove .nav-hidden
         if (currentScrollTop > lastScrollTop && currentScrollTop > 60) {
-            // Scroll Down
             nav.classList.add('nav-hidden');
-            // Close mobile menu if scrolling down
             if (ul.classList.contains('open')) {
                 toggleMenu();
             }
         } else {
-            // Scroll Up
             nav.classList.remove('nav-hidden');
         }
 
