@@ -190,23 +190,15 @@ document.addEventListener('DOMContentLoaded', () => {
     yearSelect.addEventListener('change', () => displayTimeline(yearSelect.value));
 
     function createThematicChart() {
+        if (!appData.thematicChart) return;
         const ctx = document.getElementById('thematicChart').getContext('2d');
-        const themeData = {
-            '1996-2000': { 'Teen Drama': 5, 'Family Conflict': 3, 'Tragedy': 2 },
-            '2001-2005': { 'Family Conflict': 4, 'Crime': 2, 'Tragedy': 3 },
-            '2006-2010': { 'Crime': 6, 'Social Issue': 4, 'High Drama/Revenge': 5, 'Tragedy': 4 },
-            '2011-2016': { 'Social Issue': 7, 'Serial Killer': 4, 'High Drama/Revenge': 6, 'Disaster': 2 }
-        };
+        const chartData = appData.thematicChart;
 
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: Object.keys(themeData),
-                datasets: [
-                    { label: 'Teen/Family Drama', data: [5, 4, 0, 0], backgroundColor: '#F472B6', borderRadius: 4 }, /* Pink 400 */
-                    { label: 'Crime/Revenge', data: [0, 2, 11, 10], backgroundColor: '#14B8A6', borderRadius: 4 }, /* Teal 500 */
-                    { label: 'Social Issue/Tragedy', data: [5, 5, 8, 9], backgroundColor: '#6366F1', borderRadius: 4 }, /* Indigo 500 */
-                ]
+                labels: chartData.labels,
+                datasets: chartData.datasets
             },
             options: {
                 responsive: true,
@@ -243,9 +235,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    // Initial setup
-    createThematicChart();
 
     fetch('hollyoaks_data.json')
         .then(response => response.json())

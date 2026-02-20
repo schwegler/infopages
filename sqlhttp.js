@@ -252,8 +252,21 @@ function initStarfield() {
     let speed = 0;
     let warp = 0;
 
+    let bodyHeight = document.body.offsetHeight;
+    let winHeight = window.innerHeight;
+
+    const updateDimensions = () => {
+        bodyHeight = document.body.offsetHeight;
+        winHeight = window.innerHeight;
+    };
+
+    const observer = new ResizeObserver(updateDimensions);
+    observer.observe(document.body);
+    window.addEventListener('resize', updateDimensions);
+
     function setup() {
         if (!starfield) return;
+        updateDimensions();
         starfield.width = window.innerWidth;
         starfield.height = window.innerHeight;
         stars = [];
@@ -308,8 +321,10 @@ function initStarfield() {
         }
     }
 
-    window.addEventListener('scroll', () => {
-        const scrollPercent = window.scrollY / (document.body.offsetHeight - window.innerHeight);
+    function tick() {
+        const scrollHeight = bodyHeight - winHeight;
+        const scrollPercent = scrollHeight > 0 ? window.scrollY / scrollHeight : 0;
+
         speed = scrollPercent * 20;
         warp = Math.max(0, (scrollPercent - warpThreshold) / (1 - warpThreshold));
 
@@ -318,9 +333,6 @@ function initStarfield() {
         if(nebula1) nebula1.style.transform = `translateY(${-scrollPercent * 30}vh)`;
         if(nebula2) nebula2.style.transform = `translateY(${-scrollPercent * 15}vh)`;
 
-    });
-
-    function tick() {
         draw();
         requestAnimationFrame(tick);
     }
