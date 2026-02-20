@@ -73,7 +73,7 @@ def run_tests():
         if active_element_id == "close-modal":
              print("✅ PASS: Focus moved to close button.")
         else:
-             print(f"❌ FAIL: Focus did not move to close button. Active element: {active_element_id}")
+             raise Exception(f"❌ FAIL: Focus did not move to close button. Active element: {active_element_id}")
 
         # 2. Test Escape key
         print("Pressing Escape...")
@@ -85,7 +85,7 @@ def run_tests():
 
         is_visible = modal.get_attribute("class")
         if "is-visible" in is_visible:
-            print("❌ FAIL: Modal is still visible after pressing Escape.")
+            raise Exception("❌ FAIL: Modal is still visible after pressing Escape.")
         else:
             print("✅ PASS: Modal closed after pressing Escape.")
 
@@ -110,7 +110,7 @@ def run_tests():
         if focused_data_id == clicked_data_id:
              print("✅ PASS: Focus returned to trigger element.")
         else:
-             print("❌ FAIL: Focus did not return to trigger element.")
+             raise Exception("❌ FAIL: Focus did not return to trigger element.")
 
         browser.close()
 
