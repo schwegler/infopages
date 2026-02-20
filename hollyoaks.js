@@ -3,6 +3,22 @@ import { initScrollObserver } from './utils.js';
 
 let appData = {};
 
+export function getCharacterDetails(charId, data) {
+    const char = data.characters[charId];
+    if (!char) return null;
+
+    // Filter timeline events relevant to this character and sort by year
+    const relevantEvents = data.timelineEvents.filter(event =>
+        event.title.includes(char.name) || (event.description && event.description.includes(char.name))
+    ).sort((a, b) => a.year - b.year);
+
+    return {
+        character: char,
+        events: relevantEvents
+    };
+}
+
+if (typeof document !== 'undefined') {
 document.addEventListener('DOMContentLoaded', () => {
     const yearSelect = document.getElementById('year-select');
     const characterModal = document.getElementById('character-modal');
@@ -66,20 +82,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showCharacterModal(charId) {
         lastFocusedElement = document.activeElement;
-        const char = appData.characters[charId];
-        if (!char) {
+
+        const details = getCharacterDetails(charId, appData);
+
+        if (!details) {
             modalContent.innerHTML = `<p class="text-red-600">Details not available for this character.</p>`;
             characterModal.classList.add('is-visible');
             setTimeout(() => closeModalBtn.focus(), 50);
             return;
         }
 
-        let eventsHtml = '';
-        // Filter timeline events relevant to this character and sort by year
-        const relevantEvents = appData.timelineEvents.filter(event =>
-            event.title.includes(char.name) || (event.description && event.description.includes(char.name))
-        ).sort((a,b) => a.year - b.year);
+        const { character: char, events: relevantEvents } = details;
 
+        let eventsHtml = '';
         if (relevantEvents.length > 0) {
             eventsHtml = '<h4 class="font-semibold mt-4 mb-2 text-fuchsia-700">Key Storylines:</h4><ul class="list-disc list-inside space-y-1 text-gray-700">';
             relevantEvents.forEach(event => {
@@ -267,3 +282,4 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(err => console.error('Error loading data:', err));
 });
+}
