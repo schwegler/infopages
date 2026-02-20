@@ -171,13 +171,17 @@
     `;
     document.head.appendChild(style);
 
+    // Determine base path based on current location
+    const isRoot = !window.location.pathname.includes('/pages/');
+    const basePath = isRoot ? '' : '../../';
+
     const navLinks = [
-        { name: 'Home', url: 'index.html' },
-        { name: 'Starfleet SQL', url: 'sqlhttp.html' },
-        { name: 'Buffy Migration', url: 'sqlmovebuffy.html' },
-        { name: 'Hollyoaks History', url: 'hollyoaks_history.html' },
-        { name: 'TNA History', url: 'tna_history.html' },
-        { name: 'Terms', url: 'tos.html' }
+        { name: 'Home', url: basePath + 'index.html', folder: null },
+        { name: 'Starfleet SQL', url: basePath + 'pages/sqlhttp/index.html', folder: 'sqlhttp' },
+        { name: 'Buffy Migration', url: basePath + 'pages/sqlmovebuffy/index.html', folder: 'sqlmovebuffy' },
+        { name: 'Hollyoaks History', url: basePath + 'pages/hollyoaks_history/index.html', folder: 'hollyoaks_history' },
+        { name: 'TNA History', url: basePath + 'pages/tna_history/index.html', folder: 'tna_history' },
+        { name: 'Terms', url: basePath + 'pages/tos/index.html', folder: 'tos' }
     ];
 
     const nav = document.createElement('nav');
@@ -187,7 +191,7 @@
     const brand = document.createElement('a');
     brand.className = 'brand';
     brand.textContent = "Schwegler // Digital Garden";
-    brand.href = 'index.html';
+    brand.href = basePath + 'index.html';
     nav.appendChild(brand);
 
     const ul = document.createElement('ul');
@@ -199,8 +203,15 @@
         a.textContent = link.name;
 
         // Highlight current page
-        const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-        if (currentPath === link.url) {
+        let isActive = false;
+        if (link.folder) {
+             isActive = window.location.pathname.includes('/' + link.folder + '/');
+        } else {
+             // Home: Active if not in a 'pages' subfolder
+             isActive = !window.location.pathname.includes('/pages/');
+        }
+
+        if (isActive) {
             a.style.color = 'var(--nav-hover)';
             a.style.fontWeight = '700';
             a.style.textShadow = '0 0 10px var(--nav-hover)';

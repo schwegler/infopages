@@ -25,7 +25,7 @@ def setup_page(page):
 
 def verify_default_display(page):
     print("Running verify_default_display...")
-    page.goto(f"http://localhost:{PORT}/hollyoaks_history.html")
+    page.goto(f"http://localhost:{PORT}/pages/hollyoaks_history/index.html")
     # Wait for the data to be fetched and rendered
     # We increase timeout slightly just in case
     page.wait_for_selector(".timeline-event-card", timeout=5000)
@@ -41,7 +41,7 @@ def verify_year_filtering(page):
     # but let's be safe or just continue.
     # Actually, run_all creates a new page, so we should ensure it's loaded.
     if page.url == "about:blank":
-        page.goto(f"http://localhost:{PORT}/hollyoaks_history.html")
+        page.goto(f"http://localhost:{PORT}/pages/hollyoaks_history/index.html")
 
     # Select year 2008
     page.select_option("#year-select", "2008")
@@ -62,7 +62,7 @@ def verify_year_filtering(page):
 def verify_empty_state(page):
     print("Running verify_empty_state...")
     if page.url == "about:blank":
-        page.goto(f"http://localhost:{PORT}/hollyoaks_history.html")
+        page.goto(f"http://localhost:{PORT}/pages/hollyoaks_history/index.html")
 
     # Inject a new option "9999" and trigger change
     page.evaluate("""

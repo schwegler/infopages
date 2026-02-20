@@ -4,14 +4,14 @@ Welcome to My InfoPages, a collection of static web documents and guides. This r
 
 ## Available Pages
 
-*   **[C# & SQL: A Starfleet Guide to Secure API Calls](sqlhttp.html)**: Learn about secure API calls with C# and SQL, framed as a Starfleet mission log.
-*   **[The Slayer's Guide to SQL Server Migration](sqlmovebuffy.html)**: A Buffy the Vampire Slayer-themed guide to migrating SQL Server databases.
-*   **[Hollyoaks: The First 20 Years](hollyoaks_history.html)**: An interactive exploration of the popular UK soap opera, Hollyoaks, covering its first two decades.
-*   **[Total Nonstop Action: The Cross The Line Era (2007-2009)](tna_history.html)**: A retrospective on TNA Wrestling's pivotal years (2007-2009), featuring data viz and a six-sided ring.
+*   **[C# & SQL: A Starfleet Guide to Secure API Calls](pages/sqlhttp/index.html)**: Learn about secure API calls with C# and SQL, framed as a Starfleet mission log.
+*   **[The Slayer's Guide to SQL Server Migration](pages/sqlmovebuffy/index.html)**: A Buffy the Vampire Slayer-themed guide to migrating SQL Server databases.
+*   **[Hollyoaks: The First 20 Years](pages/hollyoaks_history/index.html)**: An interactive exploration of the popular UK soap opera, Hollyoaks, covering its first two decades.
+*   **[Total Nonstop Action: The Cross The Line Era (2007-2009)](pages/tna_history/index.html)**: A retrospective on TNA Wrestling's pivotal years (2007-2009), featuring data viz and a six-sided ring.
 
 ## Site Policies
 
-*   **[Terms of Service](tos.html)**: Read the terms and conditions for using this site.
+*   **[Terms of Service](pages/tos/index.html)**: Read the terms and conditions for using this site.
 
 ## Local Development
 

@@ -6,22 +6,27 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://infopages.pages.dev/sqlhttp.html</loc>
+    <loc>https://infopages.pages.dev/pages/sqlhttp/</loc>
     <lastmod>2026-02-19</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://infopages.pages.dev/sqlmovebuffy.html</loc>
+    <loc>https://infopages.pages.dev/pages/sqlmovebuffy/</loc>
     <lastmod>2026-02-19</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://infopages.pages.dev/hollyoaks_history.html</loc>
+    <loc>https://infopages.pages.dev/pages/hollyoaks_history/</loc>
     <lastmod>2026-02-19</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://infopages.pages.dev/tos.html</loc>
+    <loc>https://infopages.pages.dev/pages/tna_history/</loc>
+    <lastmod>2026-02-19</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://infopages.pages.dev/pages/tos/</loc>
     <lastmod>2026-02-19</lastmod>
     <priority>0.5</priority>
   </url>

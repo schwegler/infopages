@@ -41,8 +41,8 @@ def run_tests():
             };
         """)
 
-        print(f"Navigating to http://localhost:{PORT}/hollyoaks_history.html")
-        page.goto(f"http://localhost:{PORT}/hollyoaks_history.html")
+        print(f"Navigating to http://localhost:{PORT}/pages/hollyoaks_history/index.html")
+        page.goto(f"http://localhost:{PORT}/pages/hollyoaks_history/index.html")
 
         # Wait for the JS to load and render content
         # We look for a character node which indicates data loaded and processed

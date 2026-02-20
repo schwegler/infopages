@@ -46,7 +46,7 @@ def test_chart_data():
         page.route("https://cdn.jsdelivr.net/npm/chart.js", lambda route: route.abort())
 
         try:
-            page.goto(f"http://localhost:{PORT}/hollyoaks_history.html")
+            page.goto(f"http://localhost:{PORT}/pages/hollyoaks_history/index.html")
 
             # Wait for chart data to be captured
             # Poll for window.chartConfig

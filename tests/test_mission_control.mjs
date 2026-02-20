@@ -1,6 +1,6 @@
 import { test, describe, beforeEach, afterEach, mock } from 'node:test';
 import assert from 'node:assert';
-import { MissionControl } from '../sqlhttp.js';
+import { MissionControl } from '../js/sqlhttp.js';
 
 // Mock DOM environments
 global.window = {

@@ -236,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    fetch('hollyoaks_data.json')
+    fetch('../../data/hollyoaks_data.json')
         .then(response => response.json())
         .then(data => {
             appData = data;
