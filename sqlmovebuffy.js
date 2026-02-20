@@ -81,44 +81,58 @@ Object.keys(servers).forEach(key => {
     mapContainer.appendChild(serverEl);
 });
 
-const drawDepLine = (startEl, endEl) => {
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    const mapRect = mapContainer.getBoundingClientRect();
-    const startRect = startEl.getBoundingClientRect();
-    const endRect = endEl.getBoundingClientRect();
-    line.setAttribute('x1', (startRect.left + startRect.width / 2) - mapRect.left);
-    line.setAttribute('y1', (startRect.top + startRect.height / 2) - mapRect.top);
-    line.setAttribute('x2', (endRect.left + endRect.width / 2) - mapRect.left);
-    line.setAttribute('y2', (endRect.top + endRect.height / 2) - mapRect.top);
-    line.classList.add('dependency-line');
-    line.style.stroke = "#4B5563";
-    svgMap.appendChild(line);
-    return line;
-};
-
 setTimeout(() => {
     const lines = {};
+    const lineOps = [];
+    const mapRect = mapContainer.getBoundingClientRect();
+
+    // Pass 1: Read Layout
     Object.keys(servers).forEach(startKey => {
         const startNode = document.getElementById(`server-${startKey}`);
         servers[startKey].connections.forEach(endKey => {
-            const endNode = document.getElementById(`server-${endKey}`);
             const lineKey = [startKey, endKey].sort().join('-');
             if (!lines[lineKey]) {
-                lines[lineKey] = drawDepLine(startNode, endNode);
+                const endNode = document.getElementById(`server-${endKey}`);
+                const startRect = startNode.getBoundingClientRect();
+                const endRect = endNode.getBoundingClientRect();
+
+                lineOps.push({
+                    key: lineKey,
+                    x1: (startRect.left + startRect.width / 2) - mapRect.left,
+                    y1: (startRect.top + startRect.height / 2) - mapRect.top,
+                    x2: (endRect.left + endRect.width / 2) - mapRect.left,
+                    y2: (endRect.top + endRect.height / 2) - mapRect.top
+                });
+                lines[lineKey] = true; // Placeholder to avoid duplicates
             }
         });
 
         startNode.addEventListener('mouseenter', () => {
-            Object.values(lines).forEach(l => l.style.stroke = '#374151');
+            // Note: lines object will be populated with elements by the time this runs
+            Object.values(lines).forEach(l => { if(l && l.style) l.style.stroke = '#374151'; });
             servers[startKey].connections.forEach(endKey => {
                 const lineKey = [startKey, endKey].sort().join('-');
-                if (lines[lineKey]) lines[lineKey].style.stroke = 'var(--magic-purple)';
+                if (lines[lineKey] && lines[lineKey].style) lines[lineKey].style.stroke = 'var(--magic-purple)';
             });
         });
         startNode.addEventListener('mouseleave', () => {
-             Object.values(lines).forEach(l => l.style.stroke = '#4B5563');
+             Object.values(lines).forEach(l => { if(l && l.style) l.style.stroke = '#4B5563'; });
         });
     });
+
+    // Pass 2: Write Layout
+    lineOps.forEach(op => {
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', op.x1);
+        line.setAttribute('y1', op.y1);
+        line.setAttribute('x2', op.x2);
+        line.setAttribute('y2', op.y2);
+        line.classList.add('dependency-line');
+        line.style.stroke = "#4B5563";
+        svgMap.appendChild(line);
+        lines[op.key] = line;
+    });
+
 }, 100);
 
 // --- Security Armory ---
