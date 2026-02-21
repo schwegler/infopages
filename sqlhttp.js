@@ -3,6 +3,8 @@
  * Mission Control Logic and Page Initialization
  */
 
+import { createScrollObserver } from './src/utils.js';
+
 export class MissionControl {
     constructor(canvas, statusElement, initiateBtn) {
         this.canvas = canvas;
@@ -196,14 +198,12 @@ export class MissionControl {
 
 // ... helper functions for other page logic ...
 function initObserver() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.lcars-panel-container, .section-divider, .nebula').forEach(el => observer.observe(el));
+    createScrollObserver({
+        selector: '.lcars-panel-container, .section-divider, .nebula',
+        activeClass: 'visible',
+        threshold: 0.1,
+        unobserve: false
+    });
 }
 
 function initCollapsibles() {
@@ -346,7 +346,7 @@ function initConsole() {
     const consoleOutput = document.getElementById('console-output');
     const commands = {
         clr: { btn: 'btn-clr', text: "> sp_configure 'clr enabled', 1;\n> RECONFIGURE;", delay: 500 },
-        trust: { btn: 'btn-trust', text: "> ALTER DATABASE CurrentDB SET TRUSTWORTHY ON;", delay: 800 },
+        security: { btn: 'btn-security', text: "> -- Configuring Security (Certificate method)...\n> CREATE ASYMMETRIC KEY AppKey FROM EXECUTABLE FILE = '...dll';\n> CREATE LOGIN AppLogin FROM ASYMMETRIC KEY AppKey;\n> GRANT EXTERNAL ACCESS ASSEMBLY TO AppLogin;", delay: 800 },
         deploy: { btn: 'btn-deploy', text: "> Assembly and Function Ready", delay: 100 },
     };
 

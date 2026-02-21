@@ -56,8 +56,14 @@
             transform-style: preserve-3d;
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
         }
-        .flip-card:hover .flip-card-inner {
+        .flip-card:hover .flip-card-inner,
+        .flip-card:focus-within .flip-card-inner {
             transform: rotateY(180deg);
+        }
+        .flip-card:focus {
+            outline: 2px solid var(--tna-gold);
+            outline-offset: 4px;
+            border-radius: 0.5rem;
         }
         .flip-card-front, .flip-card-back {
             position: absolute;
@@ -301,7 +307,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
 
                 <!-- Card 1: Top Stars -->
-                <div class="flip-card">
+                <div class="flip-card" tabindex="0">
                     <div class="flip-card-inner">
                         <div class="flip-card-front">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-yellow-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -324,7 +330,7 @@
                 </div>
 
                 <!-- Card 2: Knockouts -->
-                <div class="flip-card">
+                <div class="flip-card" tabindex="0">
                     <div class="flip-card-inner">
                         <div class="flip-card-front" style="border-color: #ec4899;">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-pink-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -347,7 +353,7 @@
                 </div>
 
                 <!-- Card 3: Tag Teams -->
-                <div class="flip-card">
+                <div class="flip-card" tabindex="0">
                     <div class="flip-card-inner">
                         <div class="flip-card-front" style="border-color: #3b82f6;">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-blue-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -380,7 +386,9 @@
 
     </div>
 
-    <script>
+    <script type="module">
+        import { initScrollObserver } from './utils.js';
+
         // --- Canvas Animation: Six Sided Zone ---
         const canvas = document.getElementById('six-sided-ring');
         const ctx = canvas.getContext('2d');
@@ -579,22 +587,10 @@
         });
 
         // --- Intersection Observer for Scroll Reveals ---
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
+        initScrollObserver('.reveal', {
+            activeClass: 'active',
             threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        });
 
     </script>
 </body>

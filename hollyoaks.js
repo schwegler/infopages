@@ -1,4 +1,6 @@
 
+import { createScrollObserver } from './src/utils.js';
+
 let appData = {};
 
 export function buildFamilyTreeHTML(nodes, characters) {
@@ -16,6 +18,22 @@ export function buildFamilyTreeHTML(nodes, characters) {
     return html;
 }
 
+export function getCharacterDetails(charId, data) {
+    const char = data.characters[charId];
+    if (!char) return null;
+
+    // Filter timeline events relevant to this character and sort by year
+    const relevantEvents = data.timelineEvents.filter(event =>
+        event.title.includes(char.name) || (event.description && event.description.includes(char.name))
+    ).sort((a, b) => a.year - b.year);
+
+    return {
+        character: char,
+        events: relevantEvents
+    };
+}
+
+if (typeof document !== 'undefined') {
 document.addEventListener('DOMContentLoaded', () => {
     const yearSelect = document.getElementById('year-select');
     const characterModal = document.getElementById('character-modal');
@@ -24,28 +42,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastFocusedElement;
 
     // Intersection Observer for section reveal animations
-    const sectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                sectionObserver.unobserve(entry.target); // Observe once
-            }
-        });
-    }, { threshold: 0.1 }); // Trigger when 10% of the section is visible
-
-    document.querySelectorAll('.section-reveal').forEach(section => {
-        sectionObserver.observe(section);
+    const sectionObserver = createScrollObserver({
+        selector: '.section-reveal',
+        activeClass: 'is-visible',
+        threshold: 0.1,
+        unobserve: true
     });
 
     // Intersection Observer for timeline event card animations
-    const timelineEventObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                timelineEventObserver.unobserve(entry.target); // Observe once
-            }
-        });
-    }, { threshold: 0.2 }); // Trigger when 20% of the card is visible
+    const timelineEventObserver = createScrollObserver({
+        activeClass: 'is-visible',
+        threshold: 0.2,
+        unobserve: true
+    });
 
     function displayAllFamilies() {
         const allFamilyTreesContainer = document.getElementById('all-family-trees');
@@ -76,20 +85,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showCharacterModal(charId) {
         lastFocusedElement = document.activeElement;
-        const char = appData.characters[charId];
-        if (!char) {
+
+        const details = getCharacterDetails(charId, appData);
+
+        if (!details) {
             modalContent.innerHTML = `<p class="text-red-600">Details not available for this character.</p>`;
             characterModal.classList.add('is-visible');
             setTimeout(() => closeModalBtn.focus(), 50);
             return;
         }
 
-        let eventsHtml = '';
-        // Filter timeline events relevant to this character and sort by year
-        const relevantEvents = appData.timelineEvents.filter(event =>
-            event.title.includes(char.name) || (event.description && event.description.includes(char.name))
-        ).sort((a,b) => a.year - b.year);
+        const { character: char, events: relevantEvents } = details;
 
+        let eventsHtml = '';
         if (relevantEvents.length > 0) {
             eventsHtml = '<h4 class="font-semibold mt-4 mb-2 text-fuchsia-700">Key Storylines:</h4><ul class="list-disc list-inside space-y-1 text-gray-700">';
             relevantEvents.forEach(event => {
@@ -277,3 +285,4 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(err => console.error('Error loading data:', err));
 });
+}
