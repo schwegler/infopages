@@ -3,8 +3,6 @@
  * Mission Control Logic and Page Initialization
  */
 
-import { createRevealObserver } from './animations.js';
-
 export class MissionControl {
     constructor(canvas, statusElement, initiateBtn) {
         this.canvas = canvas;
@@ -198,7 +196,13 @@ export class MissionControl {
 
 // ... helper functions for other page logic ...
 function initObserver() {
-    const observer = createRevealObserver({ activeClass: 'visible', unobserve: true });
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
     document.querySelectorAll('.lcars-panel-container, .section-divider, .nebula').forEach(el => observer.observe(el));
 }
 
@@ -294,7 +298,8 @@ function initStarfield() {
         ctx.fillStyle = 'black';
         ctx.fillRect(0,0,starfield.width, starfield.height);
 
-        // Update positions
+        ctx.fillStyle = 'white';
+
         for(let i=0; i<numStars; i++) {
             const s = stars[i];
             s.z -= speed;
@@ -303,75 +308,27 @@ function initStarfield() {
                 s.y = (Math.random() - 0.5) * starfield.height;
                 s.z = starfield.width;
             }
-        }
 
-        // Sort stars by z (descending) to process furthest first
-        // This makes shade and size monotonic, allowing for batching
-        stars.sort((a, b) => b.z - a.z);
+            const k = 128.0 / s.z;
+            const px = s.x * k + centerX;
+            const py = s.y * k + centerY;
 
-        if (warp > 0) {
-            ctx.strokeStyle = `rgba(255,255,255,${warp})`;
+            if(px >= 0 && px < starfield.width && py >= 0 && py < starfield.height) {
+                let size = (1 - s.z / starfield.width) * 5;
+                let shade = parseInt((1 - s.z / starfield.width) * 255);
+                ctx.fillStyle = `rgb(${shade},${shade},${shade})`;
 
-            let currentSize = -1;
-            let pathEmpty = true;
-
-            for(let i=0; i<numStars; i++) {
-                const s = stars[i];
-                const k = 128.0 / s.z;
-                const px = s.x * k + centerX;
-                const py = s.y * k + centerY;
-
-                if(px >= 0 && px < starfield.width && py >= 0 && py < starfield.height) {
-                    let rawSize = (1 - s.z / starfield.width) * 5;
-                    // Quantize size to reduce batches
-                    let size = Math.round(rawSize * 10) / 10;
-                    if (size < 0.1) size = 0.1;
-
-                    if (size !== currentSize) {
-                        if (!pathEmpty) {
-                            ctx.stroke();
-                        }
-                        currentSize = size;
-                        ctx.lineWidth = size;
-                        ctx.beginPath();
-                        pathEmpty = true;
-                    }
-
+                if (warp > 0) {
+                    ctx.strokeStyle = `rgba(255,255,255,${warp})`;
+                    ctx.lineWidth = size;
+                    ctx.beginPath();
                     ctx.moveTo(px, py);
                     ctx.lineTo(px + (s.x / s.z) * speed * 2, py + (s.y / s.z) * speed * 2);
-                    pathEmpty = false;
+                    ctx.stroke();
+                } else {
+                    ctx.fillRect(px,py,size,size);
                 }
             }
-            if (!pathEmpty) ctx.stroke();
-        } else {
-            let currentShade = -1;
-            let pathEmpty = true;
-
-            for(let i=0; i<numStars; i++) {
-                const s = stars[i];
-                const k = 128.0 / s.z;
-                const px = s.x * k + centerX;
-                const py = s.y * k + centerY;
-
-                if(px >= 0 && px < starfield.width && py >= 0 && py < starfield.height) {
-                    let shade = parseInt((1 - s.z / starfield.width) * 255);
-                    let size = (1 - s.z / starfield.width) * 5;
-
-                    if (shade !== currentShade) {
-                        if (!pathEmpty) {
-                            ctx.fill();
-                        }
-                        currentShade = shade;
-                        ctx.fillStyle = `rgb(${shade},${shade},${shade})`;
-                        ctx.beginPath();
-                        pathEmpty = true;
-                    }
-
-                    ctx.rect(px, py, size, size);
-                    pathEmpty = false;
-                }
-            }
-            if (!pathEmpty) ctx.fill();
         }
     }
 
@@ -400,7 +357,7 @@ function initConsole() {
     const consoleOutput = document.getElementById('console-output');
     const commands = {
         clr: { btn: 'btn-clr', text: "> sp_configure 'clr enabled', 1;\n> RECONFIGURE;", delay: 500 },
-        security: { btn: 'btn-security', text: "> -- Configuring Security (Certificate method)...\n> CREATE ASYMMETRIC KEY AppKey FROM EXECUTABLE FILE = '...dll';\n> CREATE LOGIN AppLogin FROM ASYMMETRIC KEY AppKey;\n> GRANT EXTERNAL ACCESS ASSEMBLY TO AppLogin;", delay: 800 },
+        trust: { btn: 'btn-trust', text: "> ALTER DATABASE CurrentDB SET TRUSTWORTHY ON;", delay: 800 },
         deploy: { btn: 'btn-deploy', text: "> Assembly and Function Ready", delay: 100 },
     };
 

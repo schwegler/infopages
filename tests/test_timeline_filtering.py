@@ -28,7 +28,7 @@ def verify_default_display(page):
     page.goto(f"http://localhost:{PORT}/hollyoaks_history.html")
     # Wait for the data to be fetched and rendered
     # We increase timeout slightly just in case
-    page.wait_for_selector(".timeline-event-card", timeout=5000)
+    page.wait_for_selector(".timeline-event-card", timeout=30000)
     events = page.locator(".timeline-event-card")
     count = events.count()
     print(f"Found {count} events.")

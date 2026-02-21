@@ -1,39 +1,6 @@
 
-import { createRevealObserver } from './animations.js';
-
 let appData = {};
 
-export function buildFamilyTreeHTML(nodes, characters) {
-    if (!nodes || nodes.length === 0) return '';
-    let html = '<ul>';
-    nodes.forEach(node => {
-        const character = characters[node.id] || { name: node.name };
-        html += `<li><button type="button" data-id="${node.id}" class="character-node rounded-md px-3 py-1.5 inline-block text-sm md:text-base text-left">${character.name} ${node.note ? `<em class="text-xs text-gray-500 font-normal">(${node.note})</em>` : ''}</button>`;
-        if (node.children) {
-            html += buildFamilyTreeHTML(node.children, characters);
-        }
-        html += '</li>';
-    });
-    html += '</ul>';
-    return html;
-}
-
-export function getCharacterDetails(charId, data) {
-    const char = data.characters[charId];
-    if (!char) return null;
-
-    // Filter timeline events relevant to this character and sort by year
-    const relevantEvents = data.timelineEvents.filter(event =>
-        event.title.includes(char.name) || (event.description && event.description.includes(char.name))
-    ).sort((a, b) => a.year - b.year);
-
-    return {
-        character: char,
-        events: relevantEvents
-    };
-}
-
-if (typeof document !== 'undefined') {
 document.addEventListener('DOMContentLoaded', () => {
     const yearSelect = document.getElementById('year-select');
     const characterModal = document.getElementById('character-modal');
@@ -42,14 +9,43 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastFocusedElement;
 
     // Intersection Observer for section reveal animations
-    const sectionObserver = createRevealObserver({ threshold: 0.1 });
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                sectionObserver.unobserve(entry.target); // Observe once
+            }
+        });
+    }, { threshold: 0.1 }); // Trigger when 10% of the section is visible
 
     document.querySelectorAll('.section-reveal').forEach(section => {
         sectionObserver.observe(section);
     });
 
     // Intersection Observer for timeline event card animations
-    const timelineEventObserver = createRevealObserver({ threshold: 0.2 });
+    const timelineEventObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                timelineEventObserver.unobserve(entry.target); // Observe once
+            }
+        });
+    }, { threshold: 0.2 }); // Trigger when 20% of the card is visible
+
+    function buildFamilyTreeHTML(nodes) {
+        if (!nodes || nodes.length === 0) return '';
+        let html = '<ul>';
+        nodes.forEach(node => {
+            const character = appData.characters[node.id] || { name: node.name };
+            html += `<li><button type="button" data-id="${node.id}" class="character-node rounded-md px-3 py-1.5 inline-block text-sm md:text-base text-left">${character.name} ${node.note ? `<em class="text-xs text-gray-500 font-normal">(${node.note})</em>` : ''}</button>`;
+            if (node.children) {
+                html += buildFamilyTreeHTML(node.children);
+            }
+            html += '</li>';
+        });
+        html += '</ul>';
+        return html;
+    }
 
     function displayAllFamilies() {
         const allFamilyTreesContainer = document.getElementById('all-family-trees');
@@ -62,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             familySection.innerHTML = `
                 <h3 class="text-2xl font-bold text-blue-800 mb-4">${familyData.name}</h3>
                 <div class="family-tree" id="tree-${familyKey}">
-                    ${buildFamilyTreeHTML(familyData.tree, appData.characters)}
+                    ${buildFamilyTreeHTML(familyData.tree)}
                 </div>
             `;
             allFamilyTreesContainer.appendChild(familySection);
@@ -80,46 +76,66 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showCharacterModal(charId) {
         lastFocusedElement = document.activeElement;
-
-        const details = getCharacterDetails(charId, appData);
-
-        if (!details) {
+        const char = appData.characters[charId];
+        if (!char) {
             modalContent.innerHTML = `<p class="text-red-600">Details not available for this character.</p>`;
             characterModal.classList.add('is-visible');
             setTimeout(() => closeModalBtn.focus(), 50);
             return;
         }
 
-        const { character: char, events: relevantEvents } = details;
+        // Filter timeline events relevant to this character and sort by year
+        const relevantEvents = appData.timelineEvents.filter(event =>
+            event.title.includes(char.name) || (event.description && event.description.includes(char.name))
+        ).sort((a,b) => a.year - b.year);
 
-        let eventsHtml = '';
+        modalContent.innerHTML = '';
+
+        const charName = document.createElement('h3');
+        charName.className = 'text-3xl font-bold text-fuchsia-800 mb-2';
+        charName.textContent = char.name;
+        modalContent.appendChild(charName);
+
+        const charSummary = document.createElement('p');
+        charSummary.className = 'leading-relaxed text-gray-700';
+        charSummary.textContent = char.summary || 'No summary available.';
+        modalContent.appendChild(charSummary);
+
         if (relevantEvents.length > 0) {
-            eventsHtml = '<h4 class="font-semibold mt-4 mb-2 text-fuchsia-700">Key Storylines:</h4><ul class="list-disc list-inside space-y-1 text-gray-700">';
+            const storylinesHeader = document.createElement('h4');
+            storylinesHeader.className = 'font-semibold mt-4 mb-2 text-fuchsia-700';
+            storylinesHeader.textContent = 'Key Storylines:';
+            modalContent.appendChild(storylinesHeader);
+
+            const storylinesList = document.createElement('ul');
+            storylinesList.className = 'list-disc list-inside space-y-1 text-gray-700';
+
             relevantEvents.forEach(event => {
-                eventsHtml += `<li><a href="#" data-year="${event.year}" class="event-link hover:underline text-blue-600">${event.title} (${event.year})</a></li>`;
+                const li = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = '#';
+                link.dataset.year = event.year;
+                link.className = 'event-link hover:underline text-blue-600';
+                link.textContent = `${event.title} (${event.year})`;
+
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const year = e.target.dataset.year;
+                    hideCharacterModal();
+                    yearSelect.value = year;
+                    displayTimeline(year);
+                    document.getElementById('timeline-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+
+                li.appendChild(link);
+                storylinesList.appendChild(li);
             });
-            eventsHtml += '</ul>';
+            modalContent.appendChild(storylinesList);
         }
 
-        modalContent.innerHTML = `
-            <h3 class="text-3xl font-bold text-fuchsia-800 mb-2">${char.name}</h3>
-            <p class="leading-relaxed text-gray-700">${char.summary || 'No summary available.'}</p>
-            ${eventsHtml}
-        `;
         characterModal.classList.add('is-visible');
         // Small delay to ensure modal is visible/focusable before moving focus
         setTimeout(() => closeModalBtn.focus(), 50);
-
-        modalContent.querySelectorAll('.event-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const year = e.target.dataset.year;
-                hideCharacterModal();
-                yearSelect.value = year;
-                displayTimeline(year);
-                document.getElementById('timeline-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-        });
     }
 
     function hideCharacterModal() {
@@ -280,4 +296,3 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(err => console.error('Error loading data:', err));
 });
-}

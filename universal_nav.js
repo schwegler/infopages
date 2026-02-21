@@ -177,7 +177,6 @@
         { name: 'Buffy Migration', url: 'sqlmovebuffy.html' },
         { name: 'Hollyoaks History', url: 'hollyoaks_history.html' },
         { name: 'TNA History', url: 'tna_history.html' },
-        { name: 'Tudor Dynasty', url: 'tudor_dynasty.html' },
         { name: 'Terms', url: 'tos.html' }
     ];
 
