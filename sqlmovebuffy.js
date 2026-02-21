@@ -1,4 +1,4 @@
-import { dmaFindings, servers, positions, weaponData, cutoverSteps } from './sqlmovebuffy_data.js';
+import { dmaFindings, servers, positions, weaponData, cutoverSteps, gilesPrompts } from './sqlmovebuffy_data.js';
 
 // --- Scroll Animations ---
 const headerBg = document.getElementById('header-bg');
@@ -184,4 +184,84 @@ cutoverBtn.addEventListener('click', () => {
 });
 
 // --- Giles AI Logic ---
-// ... as before, but prompts would be updated for new details
+const gilesChatWindow = document.getElementById('giles-chat-window');
+const gilesToggleBtn = document.getElementById('giles-toggle-btn');
+const gilesCloseBtn = document.getElementById('giles-close-btn');
+const gilesChatLog = document.getElementById('giles-chat-log');
+const gilesAskBtn = document.getElementById('giles-ask-btn');
+
+let currentSection = 'intro';
+
+// Intersection Observer to track active section
+const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.5
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            currentSection = entry.target.id;
+            // Optional: Update button text or style based on section
+        }
+    });
+}, observerOptions);
+
+// Observe all sections we care about
+['intro', 'phase-1', 'phase-2', 'phase-3', 'phase-4', 'phase-5'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+});
+
+// Toggle Chat Visibility
+function toggleChat() {
+    if (gilesChatWindow.classList.contains('hidden')) {
+        gilesChatWindow.classList.remove('hidden');
+        gilesChatWindow.classList.add('flex');
+    } else {
+        gilesChatWindow.classList.add('hidden');
+        gilesChatWindow.classList.remove('flex');
+    }
+}
+
+gilesToggleBtn.addEventListener('click', toggleChat);
+gilesCloseBtn.addEventListener('click', toggleChat);
+
+// Chat Interaction
+gilesAskBtn.addEventListener('click', () => {
+    // 1. Add User Message
+    const userMsg = document.createElement('div');
+    userMsg.className = 'flex justify-end mb-4';
+    userMsg.innerHTML = `<div class="bg-blue-600 text-white p-3 rounded-lg rounded-br-none max-w-[80%]">What should I know about this?</div>`;
+    gilesChatLog.appendChild(userMsg);
+    gilesChatLog.scrollTop = gilesChatLog.scrollHeight;
+
+    // 2. Disable button temporarily
+    gilesAskBtn.disabled = true;
+    gilesAskBtn.textContent = 'Giles is polishing his glasses...';
+
+    // 3. Simulate Thinking Delay
+    setTimeout(() => {
+        // 4. Add Giles Message
+        const gilesMsg = document.createElement('div');
+        gilesMsg.className = 'flex justify-start mb-4';
+        const responseText = gilesPrompts[currentSection] || gilesPrompts['default'];
+
+        gilesMsg.innerHTML = `
+            <div class="flex flex-col max-w-[80%]">
+                <span class="text-xs text-gray-400 mb-1">Rupert Giles</span>
+                <div class="bg-gray-700 text-gray-200 p-3 rounded-lg rounded-bl-none border border-gray-600">
+                    ${responseText}
+                </div>
+            </div>`;
+
+        gilesChatLog.appendChild(gilesMsg);
+        gilesChatLog.scrollTop = gilesChatLog.scrollHeight;
+
+        // 5. Re-enable button
+        gilesAskBtn.disabled = false;
+        gilesAskBtn.textContent = 'Ask About This Section';
+
+    }, 1200);
+});

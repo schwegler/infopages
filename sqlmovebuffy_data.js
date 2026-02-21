@@ -29,3 +29,13 @@ export const cutoverSteps = [
     { id: 'online', text: 'Bring Cleveland Databases Online', done: false },
     { id: 'decom', text: 'Decommission Sunnydale (Salt and Burn)', done: false },
 ];
+
+export const gilesPrompts = {
+    'intro': 'Welcome. The Council has tasked us with this migration. It is... fraught with peril. Use the navigation to review each phase. I am here to assist with your research.',
+    'phase-1': 'The Data Migration Assistant results are in. We have identified compatibility issues—some "breaking changes" that require immediate attention. We must consult the ancient texts (documentation) to resolve these before we can even think of moving.',
+    'phase-2': 'Willow\'s testing spell—the DEA—has been most revealing. Comparing the Sunnydale workload against Cleveland shows a significant performance improvement, though there are a few degraded queries we must investigate. Better to find them now than in the heat of battle.',
+    'phase-3': 'This dependency map outlines our evacuation route. Note the "Log Shipping" spells; they provide a continuous stream of data to Cleveland, ensuring we have a warm standby. It is a fragile chain, but a necessary one.',
+    'phase-4': 'We are fortifying Cleveland with every protection available. Transparent Data Encryption for the data at rest, and Always Encrypted for our most sensitive secrets. And do not forget HSTS for the web server—we cannot allow any unencrypted whispers.',
+    'phase-5': 'The final ritual. The cutover checklist must be followed sequentially. Final log backups, IIS migration, then the code deployment. Only when the ritual is complete can we safely close the Sunnydale connection.',
+    'default': 'I am afraid I do not recall reading about that specific artifact. Perhaps check the index?'
+};

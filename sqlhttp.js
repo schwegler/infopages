@@ -346,7 +346,7 @@ function initConsole() {
     const consoleOutput = document.getElementById('console-output');
     const commands = {
         clr: { btn: 'btn-clr', text: "> sp_configure 'clr enabled', 1;\n> RECONFIGURE;", delay: 500 },
-        trust: { btn: 'btn-trust', text: "> ALTER DATABASE CurrentDB SET TRUSTWORTHY ON;", delay: 800 },
+        security: { btn: 'btn-security', text: "> -- Configuring Security (Certificate method)...\n> CREATE ASYMMETRIC KEY AppKey FROM EXECUTABLE FILE = '...dll';\n> CREATE LOGIN AppLogin FROM ASYMMETRIC KEY AppKey;\n> GRANT EXTERNAL ACCESS ASSEMBLY TO AppLogin;", delay: 800 },
         deploy: { btn: 'btn-deploy', text: "> Assembly and Function Ready", delay: 100 },
     };
 
