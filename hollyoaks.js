@@ -1,6 +1,39 @@
 
+import { createScrollObserver } from './src/utils.js';
+
 let appData = {};
 
+export function buildFamilyTreeHTML(nodes, characters) {
+    if (!nodes || nodes.length === 0) return '';
+    let html = '<ul>';
+    nodes.forEach(node => {
+        const character = characters[node.id] || { name: node.name };
+        html += `<li><button type="button" data-id="${node.id}" class="character-node rounded-md px-3 py-1.5 inline-block text-sm md:text-base text-left">${character.name} ${node.note ? `<em class="text-xs text-gray-500 font-normal">(${node.note})</em>` : ''}</button>`;
+        if (node.children) {
+            html += buildFamilyTreeHTML(node.children, characters);
+        }
+        html += '</li>';
+    });
+    html += '</ul>';
+    return html;
+}
+
+export function getCharacterDetails(charId, data) {
+    const char = data.characters[charId];
+    if (!char) return null;
+
+    // Filter timeline events relevant to this character and sort by year
+    const relevantEvents = data.timelineEvents.filter(event =>
+        event.title.includes(char.name) || (event.description && event.description.includes(char.name))
+    ).sort((a, b) => a.year - b.year);
+
+    return {
+        character: char,
+        events: relevantEvents
+    };
+}
+
+if (typeof document !== 'undefined') {
 document.addEventListener('DOMContentLoaded', () => {
     const yearSelect = document.getElementById('year-select');
     const characterModal = document.getElementById('character-modal');
@@ -9,43 +42,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastFocusedElement;
 
     // Intersection Observer for section reveal animations
-    const sectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                sectionObserver.unobserve(entry.target); // Observe once
-            }
-        });
-    }, { threshold: 0.1 }); // Trigger when 10% of the section is visible
-
-    document.querySelectorAll('.section-reveal').forEach(section => {
-        sectionObserver.observe(section);
+    const sectionObserver = createScrollObserver({
+        selector: '.section-reveal',
+        activeClass: 'is-visible',
+        threshold: 0.1,
+        unobserve: true
     });
 
     // Intersection Observer for timeline event card animations
-    const timelineEventObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                timelineEventObserver.unobserve(entry.target); // Observe once
-            }
-        });
-    }, { threshold: 0.2 }); // Trigger when 20% of the card is visible
-
-    function buildFamilyTreeHTML(nodes) {
-        if (!nodes || nodes.length === 0) return '';
-        let html = '<ul>';
-        nodes.forEach(node => {
-            const character = appData.characters[node.id] || { name: node.name };
-            html += `<li><button type="button" data-id="${node.id}" class="character-node rounded-md px-3 py-1.5 inline-block text-sm md:text-base text-left">${character.name} ${node.note ? `<em class="text-xs text-gray-500 font-normal">(${node.note})</em>` : ''}</button>`;
-            if (node.children) {
-                html += buildFamilyTreeHTML(node.children);
-            }
-            html += '</li>';
-        });
-        html += '</ul>';
-        return html;
-    }
+    const timelineEventObserver = createScrollObserver({
+        activeClass: 'is-visible',
+        threshold: 0.2,
+        unobserve: true
+    });
 
     function displayAllFamilies() {
         const allFamilyTreesContainer = document.getElementById('all-family-trees');
@@ -58,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             familySection.innerHTML = `
                 <h3 class="text-2xl font-bold text-blue-800 mb-4">${familyData.name}</h3>
                 <div class="family-tree" id="tree-${familyKey}">
-                    ${buildFamilyTreeHTML(familyData.tree)}
+                    ${buildFamilyTreeHTML(familyData.tree, appData.characters)}
                 </div>
             `;
             allFamilyTreesContainer.appendChild(familySection);
@@ -76,8 +85,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showCharacterModal(charId) {
         lastFocusedElement = document.activeElement;
-        const char = appData.characters[charId];
-        if (!char) {
+
+        const details = getCharacterDetails(charId, appData);
+
+        if (!details) {
             modalContent.innerHTML = `<p class="text-red-600">Details not available for this character.</p>`;
             characterModal.classList.add('is-visible');
             setTimeout(() => closeModalBtn.focus(), 50);
@@ -101,6 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
         charSummary.textContent = char.summary || 'No summary available.';
         modalContent.appendChild(charSummary);
 
+        const { character: char, events: relevantEvents } = details;
+
+        let eventsHtml = '';
         if (relevantEvents.length > 0) {
             const storylinesHeader = document.createElement('h4');
             storylinesHeader.className = 'font-semibold mt-4 mb-2 text-fuchsia-700';
@@ -296,3 +310,4 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(err => console.error('Error loading data:', err));
 });
+}

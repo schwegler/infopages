@@ -117,3 +117,47 @@ def test_sqlmovebuffy(page: Page, server):
         else:
             # Last step
             expect(status).to_have_text("The Hellmouth is Closed. Cleveland is Online.", timeout=5000)
+
+def test_giles_ai(page: Page, server):
+    # Mock setTimeout to be faster
+    page.add_init_script("""
+        const originalSetTimeout = window.setTimeout;
+        window.setTimeout = (fn, delay) => {
+                return originalSetTimeout(fn, 100);
+        };
+    """)
+
+    page.goto(f"http://localhost:{PORT}/sqlmovebuffy.html")
+
+    # 1. Open Chat
+    toggle_btn = page.locator("#giles-toggle-btn")
+    chat_window = page.locator("#giles-chat-window")
+
+    expect(chat_window).to_be_hidden()
+    toggle_btn.click()
+    expect(chat_window).to_be_visible()
+
+    # 2. Ask question at Intro (default)
+    ask_btn = page.locator("#giles-ask-btn")
+    chat_log = page.locator("#giles-chat-log")
+
+    ask_btn.click()
+    # Check for user message
+    expect(chat_log).to_contain_text("What should I know about this?")
+
+    # Check for Giles response (Intro text contains "Welcome")
+    expect(chat_log).to_contain_text("Welcome", timeout=2000)
+
+    # 3. Scroll to Phase 1 and Ask
+    page.locator("#phase-1").scroll_into_view_if_needed()
+    # Wait for intersection observer to update
+    page.wait_for_timeout(500)
+
+    ask_btn.click()
+    # Check for new response (Phase 1 text contains "Data Migration Assistant")
+    expect(chat_log).to_contain_text("Data Migration Assistant", timeout=2000)
+
+    # 4. Close Chat
+    close_btn = page.locator("#giles-close-btn")
+    close_btn.click()
+    expect(chat_window).to_be_hidden()

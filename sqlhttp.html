@@ -290,8 +290,8 @@
             <span class="text-gray-500">// Confirmation that API placed file in buffer. Archival is handled by SSU.</span>
             <span class="text-purple-400">return new</span> <span class="text-teal-300">SqlString</span>(<span class="text-yellow-300">"Success: Schematic received by fabricator."</span>);
         }
-        <span class="text-purple-400">catch</span> (Exception ex) {
-            <span class="text-purple-400">return new</span> <span class="text-teal-300">SqlString</span>($<span class="text-yellow-300">"Fabrication Error: {ex.Message}"</span>);
+        <span class="text-purple-400">catch</span> (Exception) {
+            <span class="text-purple-400">return new</span> <span class="text-teal-300">SqlString</span>(<span class="text-yellow-300">"Fabrication Error: Transmission failed."</span>);
         }
     }
 }
@@ -419,7 +419,7 @@
                     <div class="flex flex-col md:flex-row gap-8 items-start">
                         <div class="space-y-4 w-full md:w-auto">
                             <div id="btn-clr" class="lcars-button">1. Enable CLR Subsystem</div>
-                            <div id="btn-trust" class="lcars-button">2. Set Database Trustworthy</div>
+                            <div id="btn-security" class="lcars-button">2. Configure Assembly Security</div>
                             <div id="btn-deploy" class="lcars-button active">3. Assembly Ready for Deployment</div>
                         </div>
                         <div class="interactive-console p-4 flex-grow w-full">
