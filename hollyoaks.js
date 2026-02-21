@@ -3,6 +3,21 @@ import { createScrollObserver } from './src/utils.js';
 
 let appData = {};
 
+export function buildFamilyTreeHTML(nodes, characters) {
+    if (!nodes || nodes.length === 0) return '';
+    let html = '<ul>';
+    nodes.forEach(node => {
+        const character = characters[node.id] || { name: node.name };
+        html += `<li><button type="button" data-id="${node.id}" class="character-node rounded-md px-3 py-1.5 inline-block text-sm md:text-base text-left">${character.name} ${node.note ? `<em class="text-xs text-gray-500 font-normal">(${node.note})</em>` : ''}</button>`;
+        if (node.children) {
+            html += buildFamilyTreeHTML(node.children, characters);
+        }
+        html += '</li>';
+    });
+    html += '</ul>';
+    return html;
+}
+
 export function getCharacterDetails(charId, data) {
     const char = data.characters[charId];
     if (!char) return null;
@@ -41,21 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
         unobserve: true
     });
 
-    function buildFamilyTreeHTML(nodes) {
-        if (!nodes || nodes.length === 0) return '';
-        let html = '<ul>';
-        nodes.forEach(node => {
-            const character = appData.characters[node.id] || { name: node.name };
-            html += `<li><button type="button" data-id="${node.id}" class="character-node rounded-md px-3 py-1.5 inline-block text-sm md:text-base text-left">${character.name} ${node.note ? `<em class="text-xs text-gray-500 font-normal">(${node.note})</em>` : ''}</button>`;
-            if (node.children) {
-                html += buildFamilyTreeHTML(node.children);
-            }
-            html += '</li>';
-        });
-        html += '</ul>';
-        return html;
-    }
-
     function displayAllFamilies() {
         const allFamilyTreesContainer = document.getElementById('all-family-trees');
         allFamilyTreesContainer.innerHTML = '';
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             familySection.innerHTML = `
                 <h3 class="text-2xl font-bold text-blue-800 mb-4">${familyData.name}</h3>
                 <div class="family-tree" id="tree-${familyKey}">
-                    ${buildFamilyTreeHTML(familyData.tree)}
+                    ${buildFamilyTreeHTML(familyData.tree, appData.characters)}
                 </div>
             `;
             allFamilyTreesContainer.appendChild(familySection);
