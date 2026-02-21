@@ -283,8 +283,7 @@ function initStarfield() {
         ctx.fillStyle = 'black';
         ctx.fillRect(0,0,starfield.width, starfield.height);
 
-        ctx.fillStyle = 'white';
-
+        // Update positions
         for(let i=0; i<numStars; i++) {
             const s = stars[i];
             s.z -= speed;
@@ -293,27 +292,75 @@ function initStarfield() {
                 s.y = (Math.random() - 0.5) * starfield.height;
                 s.z = starfield.width;
             }
+        }
 
-            const k = 128.0 / s.z;
-            const px = s.x * k + centerX;
-            const py = s.y * k + centerY;
+        // Sort stars by z (descending) to process furthest first
+        // This makes shade and size monotonic, allowing for batching
+        stars.sort((a, b) => b.z - a.z);
 
-            if(px >= 0 && px < starfield.width && py >= 0 && py < starfield.height) {
-                let size = (1 - s.z / starfield.width) * 5;
-                let shade = parseInt((1 - s.z / starfield.width) * 255);
-                ctx.fillStyle = `rgb(${shade},${shade},${shade})`;
+        if (warp > 0) {
+            ctx.strokeStyle = `rgba(255,255,255,${warp})`;
 
-                if (warp > 0) {
-                    ctx.strokeStyle = `rgba(255,255,255,${warp})`;
-                    ctx.lineWidth = size;
-                    ctx.beginPath();
+            let currentSize = -1;
+            let pathEmpty = true;
+
+            for(let i=0; i<numStars; i++) {
+                const s = stars[i];
+                const k = 128.0 / s.z;
+                const px = s.x * k + centerX;
+                const py = s.y * k + centerY;
+
+                if(px >= 0 && px < starfield.width && py >= 0 && py < starfield.height) {
+                    let rawSize = (1 - s.z / starfield.width) * 5;
+                    // Quantize size to reduce batches
+                    let size = Math.round(rawSize * 10) / 10;
+                    if (size < 0.1) size = 0.1;
+
+                    if (size !== currentSize) {
+                        if (!pathEmpty) {
+                            ctx.stroke();
+                        }
+                        currentSize = size;
+                        ctx.lineWidth = size;
+                        ctx.beginPath();
+                        pathEmpty = true;
+                    }
+
                     ctx.moveTo(px, py);
                     ctx.lineTo(px + (s.x / s.z) * speed * 2, py + (s.y / s.z) * speed * 2);
-                    ctx.stroke();
-                } else {
-                    ctx.fillRect(px,py,size,size);
+                    pathEmpty = false;
                 }
             }
+            if (!pathEmpty) ctx.stroke();
+        } else {
+            let currentShade = -1;
+            let pathEmpty = true;
+
+            for(let i=0; i<numStars; i++) {
+                const s = stars[i];
+                const k = 128.0 / s.z;
+                const px = s.x * k + centerX;
+                const py = s.y * k + centerY;
+
+                if(px >= 0 && px < starfield.width && py >= 0 && py < starfield.height) {
+                    let shade = parseInt((1 - s.z / starfield.width) * 255);
+                    let size = (1 - s.z / starfield.width) * 5;
+
+                    if (shade !== currentShade) {
+                        if (!pathEmpty) {
+                            ctx.fill();
+                        }
+                        currentShade = shade;
+                        ctx.fillStyle = `rgb(${shade},${shade},${shade})`;
+                        ctx.beginPath();
+                        pathEmpty = true;
+                    }
+
+                    ctx.rect(px, py, size, size);
+                    pathEmpty = false;
+                }
+            }
+            if (!pathEmpty) ctx.fill();
         }
     }
 
