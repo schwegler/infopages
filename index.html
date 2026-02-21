@@ -314,20 +314,6 @@
                         </div>
                     </div>
                 </a>
-
-                <!-- Tudor Dynasty -->
-                <a href="tudor_dynasty.html" class="group block wired-card p-0 reveal stagger-delay-3 hover:scale-[1.02] transition-transform" style="border-color: #C5A059">
-                    <div class="p-8 h-full flex flex-col">
-                        <div class="tech-marker top-2 right-2">FILE.05</div>
-                        <h3 class="text-xl font-bold mb-4 text-[#C5A059] group-hover:text-white uppercase">The Dynastic Crucible</h3>
-                        <p class="text-gray-400 mono text-xs flex-grow mb-4">
-                            Protocol: Henry VIII's Wives.<br>Theme: Futuristic Museum.
-                        </p>
-                        <div class="text-[#C5A059] font-bold mono text-xs">
-                            [ VIEW_EXHIBIT ]
-                        </div>
-                    </div>
-                </a>
             </div>
         </div>
     </section>
@@ -339,19 +325,28 @@
         </p>
     </footer>
 
-    <script type="module">
-        import { createScrollObserver } from './src/utils.js';
-
+    <script>
         document.getElementById('year').textContent = new Date().getFullYear();
 
         // Intersection Observer for scroll animations
         document.addEventListener('DOMContentLoaded', () => {
-            createScrollObserver({
-                selector: '.reveal',
-                activeClass: 'active',
-                threshold: 0.1,
-                unobserve: true
-            });
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // Only animate once
+                    }
+                });
+            }, observerOptions);
+
+            const revealElements = document.querySelectorAll('.reveal');
+            revealElements.forEach(el => observer.observe(el));
         });
     </script>
 </body>

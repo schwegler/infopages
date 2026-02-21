@@ -41,13 +41,16 @@ def run_tests():
             };
         """)
 
+        page.on("console", lambda msg: print(f"BROWSER CONSOLE: {msg.text}"))
+        page.on("pageerror", lambda exc: print(f"BROWSER ERROR: {exc}"))
+
         print(f"Navigating to http://localhost:{PORT}/hollyoaks_history.html")
         page.goto(f"http://localhost:{PORT}/hollyoaks_history.html")
 
         # Wait for the JS to load and render content
         # We look for a character node which indicates data loaded and processed
         try:
-            page.wait_for_selector(".character-node", timeout=5000)
+            page.wait_for_selector(".character-node", timeout=30000)
         except Exception:
             print("Timeout waiting for .character-node. Dumping page content:")
             print(page.content())

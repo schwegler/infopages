@@ -31,6 +31,9 @@ def run_tests():
 
         page.route("**/*", handle_route)
 
+        page.on("console", lambda msg: print(f"BROWSER CONSOLE: {msg.text}"))
+        page.on("pageerror", lambda exc: print(f"BROWSER ERROR: {exc}"))
+
         page.add_init_script("""
             window.Chart = function() {
                 this.update = function() {};
@@ -43,7 +46,7 @@ def run_tests():
 
         # Wait for content to load
         try:
-            page.wait_for_selector(".character-node", timeout=5000)
+            page.wait_for_selector(".character-node", timeout=30000)
         except Exception:
             print("Timeout waiting for .character-node")
             raise

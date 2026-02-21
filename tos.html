@@ -125,17 +125,28 @@
         <p>&copy; <span id="year"></span> Schwegler. Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" class="hover:text-cyan-400 transition-colors">CC BY 4.0</a>.</p>
     </footer>
 
-    <script type="module">
-        import { initScrollObserver } from './utils.js';
-
+    <script>
         document.getElementById('year').textContent = new Date().getFullYear();
 
         // Intersection Observer for scroll animations
         document.addEventListener('DOMContentLoaded', () => {
-            initScrollObserver('.reveal', {
-                activeClass: 'active',
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
                 threshold: 0.1
-            });
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // Only animate once
+                    }
+                });
+            }, observerOptions);
+
+            const revealElements = document.querySelectorAll('.reveal');
+            revealElements.forEach(el => observer.observe(el));
         });
     </script>
 </body>
