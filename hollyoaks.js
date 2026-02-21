@@ -1,5 +1,5 @@
 
-import { createScrollObserver } from './src/utils.js';
+import { createRevealObserver } from './animations.js';
 
 let appData = {};
 
@@ -42,19 +42,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastFocusedElement;
 
     // Intersection Observer for section reveal animations
-    const sectionObserver = createScrollObserver({
-        selector: '.section-reveal',
-        activeClass: 'is-visible',
-        threshold: 0.1,
-        unobserve: true
+    const sectionObserver = createRevealObserver({ threshold: 0.1 });
+
+    document.querySelectorAll('.section-reveal').forEach(section => {
+        sectionObserver.observe(section);
     });
 
     // Intersection Observer for timeline event card animations
-    const timelineEventObserver = createScrollObserver({
-        activeClass: 'is-visible',
-        threshold: 0.2,
-        unobserve: true
-    });
+    const timelineEventObserver = createRevealObserver({ threshold: 0.2 });
 
     function displayAllFamilies() {
         const allFamilyTreesContainer = document.getElementById('all-family-trees');

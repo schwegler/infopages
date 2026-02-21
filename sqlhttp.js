@@ -3,7 +3,7 @@
  * Mission Control Logic and Page Initialization
  */
 
-import { createScrollObserver } from './src/utils.js';
+import { createRevealObserver } from './animations.js';
 
 export class MissionControl {
     constructor(canvas, statusElement, initiateBtn) {
@@ -198,12 +198,8 @@ export class MissionControl {
 
 // ... helper functions for other page logic ...
 function initObserver() {
-    createScrollObserver({
-        selector: '.lcars-panel-container, .section-divider, .nebula',
-        activeClass: 'visible',
-        threshold: 0.1,
-        unobserve: false
-    });
+    const observer = createRevealObserver({ activeClass: 'visible', unobserve: true });
+    document.querySelectorAll('.lcars-panel-container, .section-divider, .nebula').forEach(el => observer.observe(el));
 }
 
 function initCollapsibles() {
