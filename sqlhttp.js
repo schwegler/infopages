@@ -218,8 +218,11 @@ function initCollapsibles() {
             content.style.maxHeight = '0px';
         }
 
-        header.addEventListener('click', () => {
+        const toggle = () => {
             header.classList.toggle('open');
+            const isOpen = header.classList.contains('open');
+            header.setAttribute('aria-expanded', isOpen);
+
             const scanline = content.querySelector('.scanline');
             if (scanline) {
                 const parentContainer = scanline.parentNode;
@@ -237,6 +240,14 @@ function initCollapsibles() {
                 content.style.maxHeight = '0px';
             } else {
                 content.style.maxHeight = content.scrollHeight + "px";
+            }
+        };
+
+        header.addEventListener('click', toggle);
+        header.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggle();
             }
         });
     });
