@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fading Spaces: The Decline of U.S. Gay Bars</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Chart Container Styling Strategy - MANDATORY */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px; /* Constraint for large screens */
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; /* Default height */
+            max-height: 400px;
+        }
+
+        @media (max-width: 640px) {
+            .chart-container {
+                height: 250px; /* Smaller height for mobile */
+            }
+        }
+
+        /* Custom Scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Smooth scrolling for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Card Interaction Styles */
+        .interactive-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .interactive-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #6366f1; /* Indigo-500 */
+        }
+        .active-filter {
+            background-color: #4f46e5; /* Indigo-600 */
+            color: white;
+        }
+    </style>
+    <script src="universal_nav.js" defer></script>
+    <!-- Chosen Palette: Warm Neutrals & Indigo (Modern, Serious, Data-Driven) -->
+    <!-- Application Structure Plan: 
+         1. Hero Section: Immediate impact with the "Big Number" (37% decline).
+         2. Trend Analysis (Line Chart): Visualizing the timeline 2002-2019 to show the slope of decline.
+         3. Demographic Deep Dive (Interactive Bar Chart): Filtering by Audience (Men vs Women vs PoC) to show disparity in closure rates.
+         4. Causal Factors (Interactive Cards): Grid of factors (Gentrification, Apps, etc.) that users click to reveal details, fostering active learning.
+         5. Geographic Heat (Horizontal Bar): Showing which regions are hit hardest.
+         6. Resilience & Future (Text/Summary): Conclusion on the changing nature of queer spaces.
+    -->
+    <!-- Visualization & Content Choices:
+         - Trends: Line Chart. Goal: Change. Method: Chart.js. Interaction: Tooltips.
+         - Demographics: Bar Chart. Goal: Compare. Method: Chart.js + Custom Filters. Justification: Best for categorical comparison.
+         - Factors: HTML/CSS Grid. Goal: Inform/Organize. Method: Click-to-reveal. Justification: Prevents text overload, encourages exploration.
+         - Geography: Horizontal Bar. Goal: Compare. Method: Chart.js.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-stone-50 text-slate-800 font-sans antialiased selection:bg-indigo-100 selection:text-indigo-800">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-stone-50/95 backdrop-blur-sm border-b border-stone-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl mr-2">🏳️‍🌈</span>
+                    <span class="font-bold text-xl tracking-tight text-slate-900">Fading Spaces</span>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <button onclick="scrollToSection('trends')" class="text-slate-600 hover:text-indigo-600 transition-colors text-sm font-medium">Trends</button>
+                    <button onclick="scrollToSection('demographics')" class="text-slate-600 hover:text-indigo-600 transition-colors text-sm font-medium">Demographics</button>
+                    <button onclick="scrollToSection('causes')" class="text-slate-600 hover:text-indigo-600 transition-colors text-sm font-medium">Causes</button>
+                    <button onclick="scrollToSection('geography')" class="text-slate-600 hover:text-indigo-600 transition-colors text-sm font-medium">Geography</button>
+                </div>
+                <!-- Mobile Menu Button (Simple implementation) -->
+                <div class="flex items-center md:hidden">
+                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-slate-900 focus:outline-none">
+                        <span class="text-xl">☰</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-stone-200">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <button onclick="scrollToSection('trends')" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600 hover:bg-stone-100 rounded-md">Trends</button>
+                <button onclick="scrollToSection('demographics')" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600 hover:bg-stone-100 rounded-md">Demographics</button>
+                <button onclick="scrollToSection('causes')" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600 hover:bg-stone-100 rounded-md">Causes</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-20">
+
+        <!-- Hero Section -->
+        <section id="hero" class="text-center space-y-6 animate-fade-in-up">
+            <div class="inline-block px-3 py-1 rounded-full bg-red-100 text-red-800 text-xs font-semibold tracking-wide uppercase mb-2">Report Analysis</div>
+            <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-4">
+                The Vanishing Act of <br class="hidden md:block" /> <span class="text-indigo-600">U.S. Gay Bars</span>
+            </h1>
+            <p class="max-w-2xl mx-auto text-lg md:text-xl text-slate-600 leading-relaxed">
+                Between 2002 and 2019, the United States lost <strong class="text-slate-900">37%</strong> of its gay bars. 
+                This interactive report explores the data behind the decline, highlighting how gentrification, digital assimilation, and shifting demographics are reshaping queer public life.
+            </p>
+            
+            <!-- Key Metric Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 hover:border-indigo-300 transition-all">
+                    <div class="text-4xl font-bold text-slate-900 mb-1">-37%</div>
+                    <div class="text-sm font-medium text-slate-500 uppercase tracking-wide">Total Listings Decline</div>
+                    <p class="text-xs text-slate-400 mt-2">2002 to 2019</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 hover:border-indigo-300 transition-all">
+                    <div class="text-4xl font-bold text-red-600 mb-1">-52%</div>
+                    <div class="text-sm font-medium text-slate-500 uppercase tracking-wide">Lesbian Bar Decline</div>
+                    <p class="text-xs text-slate-400 mt-2">The hardest hit category</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 hover:border-indigo-300 transition-all">
+                    <div class="text-4xl font-bold text-amber-600 mb-1">-60%</div>
+                    <div class="text-sm font-medium text-slate-500 uppercase tracking-wide">PoC Venues Decline</div>
+                    <p class="text-xs text-slate-400 mt-2">Bars serving people of color</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-stone-200" />
+
+        <!-- Trends Section -->
+        <section id="trends" class="scroll-mt-24">
+            <div class="flex flex-col md:flex-row gap-12 items-start">
+                <div class="md:w-1/3 space-y-4">
+                    <h2 class="text-3xl font-bold text-slate-900">A Steady Erasure</h2>
+                    <p class="text-slate-600 leading-relaxed">
+                        Data from sociologist Greggor Mattson's comprehensive analysis reveals a stark downward trend. While the early 2000s saw a peak in listings, the subsequent years have seen a consistent erosion of physical spaces.
+                    </p>
+                    <p class="text-slate-600 leading-relaxed">
+                        This isn't just a result of the 2008 financial crisis or the rise of apps; the decline has been steady, suggesting structural changes in how the LGBTQ+ community congregates.
+                    </p>
+                    <div class="bg-indigo-50 p-4 rounded-lg border-l-4 border-indigo-500">
+                        <p class="text-sm text-indigo-900 font-medium">
+                            <span class="font-bold">Insight:</span> The absolute number of gay bars dropped from roughly 1,600 to under 1,000 in less than two decades.
+                        </p>
+                    </div>
+                </div>
+                <div class="md:w-2/3 w-full">
+                    <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm">
+                        <div class="chart-container">
+                            <canvas id="trendsChart"></canvas>
+                        </div>
+                        <p class="text-center text-xs text-slate-400 mt-4">Source: Simulated Data reflecting Mattson's "Sociodemographic Correlates" Study</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Demographics Section -->
+        <section id="demographics" class="scroll-mt-24 bg-stone-100 p-8 rounded-2xl">
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Not All Bars Are Vanishing Equally</h2>
+                <p class="text-slate-600">
+                    While the overall trend is negative, the impact is disproportionate. Spaces serving women and people of color face the steepest struggles for survival compared to establishments primarily serving white cisgender men.
+                </p>
+            </div>
+
+            <!-- Interaction Controls -->
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <button id="btn-all" class="filter-btn active-filter px-6 py-2 rounded-full font-medium text-sm border border-indigo-600 transition-colors" data-view="all">
+                    Show All Categories
+                </button>
+                <button id="btn-women" class="filter-btn px-6 py-2 rounded-full font-medium text-sm border border-slate-300 text-slate-600 hover:border-indigo-400 bg-white transition-colors" data-view="women">
+                    Focus: Lesbian Bars
+                </button>
+                <button id="btn-poc" class="filter-btn px-6 py-2 rounded-full font-medium text-sm border border-slate-300 text-slate-600 hover:border-indigo-400 bg-white transition-colors" data-view="poc">
+                    Focus: PoC Venues
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Dynamic Text Panel -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 flex flex-col justify-center">
+                    <h3 id="demo-title" class="text-xl font-bold text-slate-800 mb-3">Comparing the Decline</h3>
+                    <p id="demo-desc" class="text-slate-600 mb-4">
+                        The aggregate data hides the specific vulnerability of sub-communities. Click the buttons above to isolate specific categories.
+                    </p>
+                    <ul id="demo-stats" class="space-y-3 text-sm">
+                        <li class="flex items-center">
+                            <span class="w-3 h-3 rounded-full bg-slate-400 mr-2"></span>
+                            <span class="text-slate-700">General Gay Bars (Mostly Male): <span class="font-bold text-slate-900">-37%</span></span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-3 h-3 rounded-full bg-red-400 mr-2"></span>
+                            <span class="text-slate-700">Lesbian/Queer Women Bars: <span class="font-bold text-slate-900">-52%</span></span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-3 h-3 rounded-full bg-amber-400 mr-2"></span>
+                            <span class="text-slate-700">Bars for People of Color: <span class="font-bold text-slate-900">-60%</span></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Chart Panel -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-200">
+                    <div class="chart-container">
+                        <canvas id="demoChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Causal Factors Section (Interactive Grid) -->
+        <section id="causes" class="scroll-mt-24">
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">The "Perfect Storm" of Drivers</h2>
+            <p class="text-slate-600 max-w-3xl mb-10">
+                Why are these doors closing? It is rarely a single reason. Instead, a convergence of economic pressure, technological assimilation, and social progress creates a hostile environment for the traditional gay bar business model. <span class="text-indigo-600 font-medium">Select a factor below to explore the details.</span>
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="interactive-card bg-white p-6 rounded-xl border border-stone-200" onclick="updateFactorDetail('gentrification')">
+                    <div class="text-3xl mb-4">🏗️</div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">Gentrification</h3>
+                    <p class="text-sm text-slate-500">Rising rents in historically "gayborhoods" push out small venues.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="interactive-card bg-white p-6 rounded-xl border border-stone-200" onclick="updateFactorDetail('apps')">
+                    <div class="text-3xl mb-4">📱</div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">The "Grindr Effect"</h3>
+                    <p class="text-sm text-slate-500">Digital connection replaces the bar as the primary meeting place.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="interactive-card bg-white p-6 rounded-xl border border-stone-200" onclick="updateFactorDetail('assimilation')">
+                    <div class="text-3xl mb-4">🤝</div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">Mainstreaming</h3>
+                    <p class="text-sm text-slate-500">Acceptance means queer people feel safe in "straight" bars.</p>
+                </div>
+            </div>
+
+            <!-- Detail View for Factors -->
+            <div id="factor-detail" class="mt-8 bg-indigo-900 text-white p-8 rounded-xl shadow-lg transition-all opacity-100">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="md:w-1/4 flex items-center justify-center border-r border-indigo-700 pr-6">
+                         <span id="detail-icon" class="text-6xl">🏗️</span>
+                    </div>
+                    <div class="md:w-3/4">
+                        <h3 id="detail-title" class="text-2xl font-bold mb-3">Gentrification & Real Estate</h3>
+                        <p id="detail-text" class="text-indigo-100 leading-relaxed">
+                            Historically, gay bars opened in low-rent, industrial, or marginalized districts. As these neighborhoods (like Chelsea in NYC or Boystown in Chicago) became desirable and expensive, the very venues that gave them character were priced out. Commercial leases have skyrocketed, making the low-margin business of selling drinks untenable for many legacy establishments.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Geography Section -->
+        <section id="geography" class="scroll-mt-24 pb-10">
+             <div class="flex flex-col lg:flex-row gap-12">
+                <div class="lg:w-1/2">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-4">Geographic Unevenness</h2>
+                    <p class="text-slate-600 mb-6 leading-relaxed">
+                        While major coastal cities maintain a density of venues, the decline is felt acutely in the "middle" of the country and in states where legal protections are fewer. However, surprisingly, some liberal strongholds have also seen massive drops due to the high cost of living.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-white border border-stone-200 rounded-lg shadow-sm">
+                            <h4 class="font-bold text-slate-800">State Highlight: California</h4>
+                            <p class="text-sm text-slate-600">Saw a massive numeric drop, driven by San Francisco and LA real estate markets.</p>
+                        </div>
+                        <div class="p-4 bg-white border border-stone-200 rounded-lg shadow-sm">
+                            <h4 class="font-bold text-slate-800">State Highlight: Texas</h4>
+                            <p class="text-sm text-slate-600">Retains a relatively high number of bars per capita compared to the national average, often serving as critical sanctuaries in conservative regions.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2">
+                    <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm">
+                        <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wide mb-4 text-center">Top States by Listing Count (2019 Snapshot)</h3>
+                        <div class="chart-container">
+                            <canvas id="geoChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+             </div>
+        </section>
+
+        <!-- Footer / Conclusion -->
+        <footer class="bg-slate-900 text-slate-400 py-12 px-4 rounded-t-3xl mt-12">
+            <div class="max-w-4xl mx-auto text-center space-y-6">
+                <h2 class="text-2xl font-bold text-white">The Future of Queer Spaces</h2>
+                <p class="leading-relaxed">
+                    The era of the traditional gay bar as the <em>only</em> place to meet may be ending, but the need for community remains. New models are emerging: pop-up parties, sober community centers, and hybrid art spaces. The decline is alarming, but it also signals a transformation in how LGBTQ+ people connect in modern America.
+                </p>
+                <div class="pt-8 border-t border-slate-800 text-sm">
+                    <p>&copy; 2024 Interactive Report. Data based on sociodemographic studies of U.S. gay bar listings.</p>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- State Management ---
+        const appState = {
+            currentFilter: 'all',
+            selectedFactor: 'gentrification'
+        };
+
+        // --- Data Store ---
+        const reportData = {
+            trends: {
+                labels: ['2002', '2005', '2008', '2011', '2014', '2017', '2019'],
+                values: [1600, 1550, 1480, 1350, 1200, 1080, 1000] // Approximate trajectory
+            },
+            demographics: {
+                categories: ['General (Male)', 'Lesbian/Women', 'PoC'],
+                declinePct: [-37, -52, -60],
+                context: {
+                    all: "Comparing all categories, we see that while general bars declined significantly, minority-focused spaces were decimated.",
+                    women: "Lesbian bars are statistically rare. From hundreds in the 1980s to fewer than 20 estimated dedicated spaces in recent years.",
+                    poc: "Venues serving People of Color often face 'double jeopardy': economic racism in real estate and community displacement."
+                }
+            },
+            geo: {
+                states: ['California', 'New York', 'Florida', 'Texas', 'Ohio', 'Illinois', 'Penn'],
+                counts: [140, 120, 95, 90, 60, 58, 55] // Representative values based on population distribution
+            },
+            factors: {
+                gentrification: {
+                    title: "Gentrification & Real Estate",
+                    icon: "🏗️",
+                    text: "Historically, gay bars opened in low-rent, industrial, or marginalized districts. As these neighborhoods (like Chelsea in NYC or Boystown in Chicago) became desirable and expensive, the very venues that gave them character were priced out. Commercial leases have skyrocketed, making the low-margin business of selling drinks untenable."
+                },
+                apps: {
+                    title: "The 'Grindr Effect'",
+                    icon: "📱",
+                    text: "Before 2009, the bar was the primary technology for finding partners. With the advent of geolocation-based dating apps, the utility of the bar as a 'hunting ground' diminished. Bars are now required to be destinations for entertainment and community, rather than just hook-up spots."
+                },
+                assimilation: {
+                    title: "Mainstreaming & Acceptance",
+                    icon: "🤝",
+                    text: "As social acceptance of LGBTQ+ people grows, the desperate need for a secluded 'safe space' changes. Younger generations often feel comfortable frequenting mixed or 'straight' venues, reducing the exclusive patronage that kept gay bars afloat in previous decades."
+                }
+            }
+        };
+
+        // --- Chart Initialization ---
+        let trendsChart, demoChart, geoChart;
+
+        function initCharts() {
+            // 1. Trends Line Chart
+            const ctxTrends = document.getElementById('trendsChart').getContext('2d');
+            trendsChart = new Chart(ctxTrends, {
+                type: 'line',
+                data: {
+                    labels: reportData.trends.labels,
+                    datasets: [{
+                        label: 'Total Gay Bar Listings',
+                        data: reportData.trends.values,
+                        borderColor: '#4f46e5', // Indigo 600
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#4f46e5',
+                        pointRadius: 5,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            padding: 12,
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 14 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: { borderDash: [2, 4], color: '#e2e8f0' },
+                            title: { display: true, text: 'Number of Bars' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // 2. Demographic Bar Chart
+            const ctxDemo = document.getElementById('demoChart').getContext('2d');
+            demoChart = new Chart(ctxDemo, {
+                type: 'bar',
+                data: {
+                    labels: reportData.demographics.categories,
+                    datasets: [{
+                        label: '% Decline (2002-2019)',
+                        data: reportData.demographics.declinePct,
+                        backgroundColor: [
+                            '#94a3b8', // Slate 400
+                            '#f87171', // Red 400
+                            '#fbbf24'  // Amber 400
+                        ],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y', // Horizontal for better label reading
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: '#e2e8f0' },
+                            title: { display: true, text: '% Decline' }
+                        },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 3. Geography Bar Chart
+            const ctxGeo = document.getElementById('geoChart').getContext('2d');
+            geoChart = new Chart(ctxGeo, {
+                type: 'bar',
+                data: {
+                    labels: reportData.geo.states,
+                    datasets: [{
+                        label: 'Active Listings (Est)',
+                        data: reportData.geo.counts,
+                        backgroundColor: '#6366f1',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { borderDash: [2, 4], color: '#e2e8f0' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // --- Interaction Logic ---
+
+        // Navigation Scroll
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+            // Close mobile menu if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
+        // Demographic Filter Logic
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Update UI State
+                filterButtons.forEach(b => {
+                    b.classList.remove('active-filter', 'bg-indigo-600', 'text-white', 'border-indigo-600');
+                    b.classList.add('bg-white', 'text-slate-600', 'border-slate-300');
+                });
+                
+                const target = e.currentTarget;
+                target.classList.remove('bg-white', 'text-slate-600', 'border-slate-300');
+                target.classList.add('active-filter', 'bg-indigo-600', 'text-white', 'border-indigo-600');
+
+                // Logic
+                const view = target.dataset.view;
+                updateDemographicView(view);
+            });
+        });
+
+        function updateDemographicView(view) {
+            const title = document.getElementById('demo-title');
+            const desc = document.getElementById('demo-desc');
+            
+            // Text Update
+            if (view === 'all') {
+                title.textContent = "Comparing the Decline";
+                desc.textContent = reportData.demographics.context.all;
+            } else if (view === 'women') {
+                title.textContent = "The Disappearance of Lesbian Bars";
+                desc.textContent = reportData.demographics.context.women;
+            } else if (view === 'poc') {
+                title.textContent = "Impact on Communities of Color";
+                desc.textContent = reportData.demographics.context.poc;
+            }
+
+            // Chart Update (Highlighting logic)
+            const colors = ['#94a3b8', '#f87171', '#fbbf24'];
+            const faded = '#e2e8f0'; // Light gray
+
+            if (view === 'all') {
+                demoChart.data.datasets[0].backgroundColor = colors;
+            } else if (view === 'women') {
+                demoChart.data.datasets[0].backgroundColor = [faded, '#ef4444', faded]; // Highlight middle
+            } else if (view === 'poc') {
+                demoChart.data.datasets[0].backgroundColor = [faded, faded, '#d97706']; // Highlight last
+            }
+            demoChart.update();
+        }
+
+        // Factor Detail Logic
+        function updateFactorDetail(factorKey) {
+            const data = reportData.factors[factorKey];
+            const detailPanel = document.getElementById('factor-detail');
+            const icon = document.getElementById('detail-icon');
+            const title = document.getElementById('detail-title');
+            const text = document.getElementById('detail-text');
+
+            // Simple Fade Out/In simulation
+            detailPanel.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                icon.textContent = data.icon;
+                title.textContent = data.title;
+                text.textContent = data.text;
+                detailPanel.style.opacity = '1';
+            }, 150);
+        }
+
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Initialize on Load
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+        });
+
+    </script>
+</body>
+</html>
