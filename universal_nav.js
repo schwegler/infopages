@@ -50,7 +50,7 @@
         }
 
         /* Desktop Menu */
-        #universal-nav ul {
+        #universal-nav > ul {
             display: flex;
             list-style: none;
             margin: 0;
@@ -68,9 +68,10 @@
             padding: 0.5rem;
             position: relative;
             white-space: nowrap;
+            cursor: pointer;
         }
 
-        #universal-nav a:not(.brand):hover {
+        #universal-nav a:not(.brand):hover, #universal-nav .dropdown:hover > a {
             color: var(--nav-hover);
             background-color: rgba(57, 255, 20, 0.1);
             text-shadow: 0 0 8px var(--nav-hover);
@@ -91,8 +92,52 @@
             color: var(--nav-hover);
         }
         #universal-nav a:not(.brand):hover::before,
-        #universal-nav a:not(.brand):hover::after {
+        #universal-nav a:not(.brand):hover::after,
+        #universal-nav .dropdown:hover > a::before,
+        #universal-nav .dropdown:hover > a::after {
             opacity: 1;
+        }
+
+        /* Dropdown Styles */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--nav-bg);
+            border: 1px solid var(--nav-hover);
+            min-width: 250px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            z-index: 1000;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-menu li {
+            width: 100%;
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block !important;
+            width: 100%;
+            padding: 10px 15px !important;
+            box-sizing: border-box;
+            font-size: 0.85rem !important;
+            border-bottom: 1px solid #333;
+        }
+
+        .dropdown-menu li:last-child a {
+            border-bottom: none;
         }
 
         /* Hamburger Button */
@@ -129,7 +174,7 @@
                 display: flex;
             }
 
-            #universal-nav ul {
+            #universal-nav > ul {
                 position: fixed;
                 top: 0;
                 right: 0;
@@ -144,14 +189,51 @@
                 gap: 2rem;
                 padding-top: var(--nav-height);
                 border-left: 2px solid var(--nav-hover);
+                overflow-y: auto; /* Allow scrolling if menu is long */
             }
 
-            #universal-nav ul.open {
+            #universal-nav > ul.open {
                 transform: translateX(0);
             }
 
             #universal-nav a:not(.brand) {
                 font-size: 1.5rem;
+            }
+
+            /* Dropdown Mobile */
+            .dropdown {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .dropdown-menu {
+                position: static;
+                display: block; /* Always visible on mobile */
+                width: 100%;
+                border: none;
+                box-shadow: none;
+                background: transparent;
+                padding-left: 0;
+            }
+
+            .dropdown-menu li {
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+
+            .dropdown-menu a {
+                font-size: 1.2rem !important;
+                border: none;
+                padding: 5px 0 !important;
+                color: #888 !important;
+            }
+
+            .dropdown-menu a:hover {
+                color: var(--nav-hover) !important;
+                background: transparent !important;
             }
 
             /* Hamburger Animation */
@@ -173,11 +255,17 @@
 
     const navLinks = [
         { name: 'Home', url: 'index.html' },
-        { name: 'Starfleet SQL', url: 'sqlhttp.html' },
-        { name: 'Buffy Migration', url: 'sqlmovebuffy.html' },
-        { name: 'Hollyoaks History', url: 'hollyoaks_history.html' },
-        { name: 'TNA History', url: 'tna_history.html' },
-        { name: 'Gay Bars in Decline', url: 'gay_bar_closures.html' },
+        {
+            name: 'Projects',
+            type: 'dropdown',
+            items: [
+                { name: 'Starfleet SQL', url: 'sqlhttp.html' },
+                { name: 'Buffy Migration', url: 'sqlmovebuffy.html' },
+                { name: 'Hollyoaks History', url: 'hollyoaks_history.html' },
+                { name: 'TNA History', url: 'tna_history.html' },
+                { name: 'Gay Bars in Decline', url: 'gay_bar_closures.html' }
+            ]
+        },
         { name: 'Terms', url: 'tos.html' }
     ];
 
@@ -195,26 +283,71 @@
 
     navLinks.forEach(link => {
         const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = link.url;
-        a.textContent = link.name;
 
-        // Highlight current page
-        const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-        if (currentPath === link.url) {
-            a.style.color = 'var(--nav-hover)';
-            a.style.fontWeight = '700';
-            a.style.textShadow = '0 0 10px var(--nav-hover)';
+        if (link.type === 'dropdown') {
+            li.className = 'dropdown';
+
+            // Dropdown Toggle (Label)
+            const toggle = document.createElement('a');
+            toggle.textContent = link.name;
+            toggle.href = '#'; // Or javascript:void(0)
+            toggle.addEventListener('click', (e) => e.preventDefault());
+            li.appendChild(toggle);
+
+            // Dropdown Menu
+            const subUl = document.createElement('ul');
+            subUl.className = 'dropdown-menu';
+
+            link.items.forEach(item => {
+                const subLi = document.createElement('li');
+                const subA = document.createElement('a');
+                subA.href = item.url;
+                subA.textContent = item.name;
+
+                // Highlight current page in dropdown
+                const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+                if (currentPath === item.url) {
+                    subA.style.color = 'var(--nav-hover)';
+                    subA.style.fontWeight = '700';
+                }
+
+                // Close menu on link click (mobile)
+                subA.addEventListener('click', () => {
+                     if (window.innerWidth <= 768) {
+                        toggleMenu();
+                     }
+                });
+
+                subLi.appendChild(subA);
+                subUl.appendChild(subLi);
+            });
+
+            li.appendChild(subUl);
+
+        } else {
+            // Standard Link
+            const a = document.createElement('a');
+            a.href = link.url;
+            a.textContent = link.name;
+
+            // Highlight current page
+            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+            if (currentPath === link.url) {
+                a.style.color = 'var(--nav-hover)';
+                a.style.fontWeight = '700';
+                a.style.textShadow = '0 0 10px var(--nav-hover)';
+            }
+
+            // Close menu on link click (mobile)
+            a.addEventListener('click', () => {
+                 if (window.innerWidth <= 768) {
+                    toggleMenu();
+                 }
+            });
+
+            li.appendChild(a);
         }
 
-        // Close menu on link click (mobile)
-        a.addEventListener('click', () => {
-             if (window.innerWidth <= 768) {
-                toggleMenu();
-             }
-        });
-
-        li.appendChild(a);
         ul.appendChild(li);
     });
 
