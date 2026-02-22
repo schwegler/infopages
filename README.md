@@ -8,6 +8,7 @@ Welcome to My InfoPages, a collection of static web documents and guides. This r
 *   **[The Slayer's Guide to SQL Server Migration](sqlmovebuffy.html)**: A Buffy the Vampire Slayer-themed guide to migrating SQL Server databases.
 *   **[Hollyoaks: The First 20 Years](hollyoaks_history.html)**: An interactive exploration of the popular UK soap opera, Hollyoaks, covering its first two decades.
 *   **[Total Nonstop Action: The Cross The Line Era (2007-2009)](tna_history.html)**: A retrospective on TNA Wrestling's pivotal years (2007-2009), featuring data viz and a six-sided ring.
+*   **[Fading Spaces: The Decline of U.S. Gay Bars](gay_bar_closures.html)**: An interactive report on the 37% decline of U.S. gay bars between 2002 and 2019, examining trends, demographics, and causes.
 
 ## Site Policies
 
