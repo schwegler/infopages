@@ -17,6 +17,7 @@
             --neon-pink: #ff00ff;
             --neon-cyan: #00ffff;
             --neon-orange: #ff4500;
+            --neon-indigo: #4f46e5;
         }
         body {
             font-family: 'Exo 2', sans-serif;
@@ -85,6 +86,9 @@
 
         .wired-card.orange:hover { border-color: var(--neon-orange); box-shadow: 0 0 15px rgba(255, 69, 0, 0.2); }
         .wired-card.orange::before { background: var(--neon-orange); }
+
+        .wired-card.indigo:hover { border-color: var(--neon-indigo); box-shadow: 0 0 15px rgba(79, 70, 229, 0.2); }
+        .wired-card.indigo::before { background: var(--neon-indigo); }
 
         .tech-marker {
             position: absolute;
@@ -311,6 +315,20 @@
                         </p>
                         <div class="text-red-600 font-bold mono text-xs">
                             [ ENTER_ZONE ]
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Gay Bars in Decline -->
+                <a href="gay_bar_closures.html" class="group block wired-card p-0 reveal stagger-delay-3 indigo hover:scale-[1.02] transition-transform">
+                    <div class="p-8 h-full flex flex-col">
+                        <div class="tech-marker top-2 right-2">FILE.05</div>
+                        <h3 class="text-xl font-bold mb-4 text-[var(--neon-indigo)] group-hover:text-white uppercase">Fading Spaces: Gay Bar Decline</h3>
+                        <p class="text-gray-400 mono text-xs flex-grow mb-4">
+                            Protocol: Data visualization & report.<br>Theme: Modern Data.
+                        </p>
+                        <div class="text-[var(--neon-indigo)] font-bold mono text-xs">
+                            [ VIEW_REPORT ]
                         </div>
                     </div>
                 </a>
