@@ -184,4 +184,98 @@ cutoverBtn.addEventListener('click', () => {
 });
 
 // --- Giles AI Logic ---
-// ... as before, but prompts would be updated for new details
+const gilesData = {
+    'default': "Good heavens, are you quite sure you're ready for this? The Hellmouth is not to be trifled with.",
+    'dma-checklist': "Ah, the Data Migration Assistant. A useful tome, though dreadfully dry. It identifies the 'demons' hiding in your schema—deprecated features, breaking changes. One must know one's enemy before engaging.",
+    'run-dea-btn': "Testing is paramount! Willow's spell—er, the Database Experimentation Assistant—allows us to foresee the future without the nasty side effects of a prophecy. We capture the workload and replay it. Brilliant.",
+    'map-container': "The logistics of this evacuation are a nightmare. We cannot simply teleport the data; we must establish a convoy. Log shipping, or rather, a continuous chain of backups. Keep the chain unbroken, or we lose everything.",
+    'weapon-viz': "Cleveland may not be the Hellmouth, but it is not without its dangers. We must ward the new sanctuary. Transparent Data Encryption, Always Encrypted... think of them as protection spells that bind the data to the server.",
+    'cutover-checklist': "The final ritual. Precision is key. One mispronounced syllable—or one missed configuration step—and the portal fails. Follow the checklist. Do not deviate. And for goodness sake, don't forget the salt."
+};
+
+const gilesToggleBtn = document.getElementById('giles-toggle-btn');
+const gilesChatWindow = document.getElementById('giles-chat-window');
+const gilesCloseBtn = document.getElementById('giles-close-btn');
+const gilesAskBtn = document.getElementById('giles-ask-btn');
+const gilesChatLog = document.getElementById('giles-chat-log');
+
+function toggleGiles() {
+    gilesChatWindow.classList.toggle('hidden');
+    gilesChatWindow.classList.toggle('flex');
+    if (!gilesChatWindow.classList.contains('hidden') && gilesChatLog.children.length === 0) {
+        addMessage("Giles", gilesData['default']);
+    }
+}
+
+gilesToggleBtn.addEventListener('click', toggleGiles);
+
+gilesCloseBtn.addEventListener('click', () => {
+    gilesChatWindow.classList.add('hidden');
+    gilesChatWindow.classList.remove('flex');
+});
+
+gilesAskBtn.addEventListener('click', () => {
+    // Find active section
+    let activeKey = 'default';
+    const markers = ['dma-checklist', 'run-dea-btn', 'map-container', 'weapon-viz', 'cutover-checklist'];
+
+    // Simple heuristic: find the first marker that is visible in the viewport
+    for (const id of markers) {
+        const el = document.getElementById(id);
+        if (el) {
+            const rect = el.getBoundingClientRect();
+            // If the element is within the top 70% of the viewport or near the top
+            if (rect.top >= 0 && rect.top <= window.innerHeight * 0.8) {
+                activeKey = id;
+                break;
+            }
+             // Or if we are past it but it's still largely visible?
+             // Let's stick to the top logic, or maybe finding the one closest to center.
+             if (rect.top < 0 && rect.bottom > window.innerHeight * 0.2) {
+                 activeKey = id;
+                 // Don't break, keep checking for a better candidate if needed,
+                 // but typically sections are large so this is fine.
+             }
+        }
+    }
+
+    addMessage("You", "What do I do here?");
+    gilesAskBtn.disabled = true;
+    setTimeout(() => {
+        addMessage("Giles", gilesData[activeKey]);
+        gilesAskBtn.disabled = false;
+    }, 500);
+});
+
+function addMessage(sender, text) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'mb-4';
+
+    const senderSpan = document.createElement('span');
+    senderSpan.className = sender === 'Giles' ? 'text-blue-400 font-bold block mb-1' : 'text-gray-400 font-bold block mb-1';
+    senderSpan.textContent = sender + ': ';
+
+    const textSpan = document.createElement('span');
+    textSpan.className = 'text-gray-200';
+
+    msgDiv.appendChild(senderSpan);
+    msgDiv.appendChild(textSpan);
+    gilesChatLog.appendChild(msgDiv);
+    gilesChatLog.scrollTop = gilesChatLog.scrollHeight;
+
+    if (sender === 'Giles') {
+        typeText(textSpan, text);
+    } else {
+        textSpan.textContent = text;
+    }
+}
+
+function typeText(element, text, index = 0) {
+    if (index < text.length) {
+        element.textContent += text.charAt(index);
+        // Vary typing speed slightly for realism
+        setTimeout(() => typeText(element, text, index + 1), 20 + Math.random() * 20);
+    } else {
+        gilesChatLog.scrollTop = gilesChatLog.scrollHeight;
+    }
+}
