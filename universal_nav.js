@@ -118,7 +118,8 @@
             z-index: 1000;
         }
 
-        .dropdown:hover .dropdown-menu {
+        .dropdown:hover .dropdown-menu,
+        .dropdown:focus-within .dropdown-menu {
             display: block;
         }
 
@@ -291,12 +292,24 @@
             const toggle = document.createElement('a');
             toggle.textContent = link.name;
             toggle.href = '#'; // Or javascript:void(0)
+            toggle.setAttribute('aria-haspopup', 'true');
+            toggle.setAttribute('aria-expanded', 'false');
             toggle.addEventListener('click', (e) => e.preventDefault());
             li.appendChild(toggle);
 
             // Dropdown Menu
             const subUl = document.createElement('ul');
             subUl.className = 'dropdown-menu';
+
+            // Accessibility listeners
+            li.addEventListener('mouseenter', () => toggle.setAttribute('aria-expanded', 'true'));
+            li.addEventListener('mouseleave', () => toggle.setAttribute('aria-expanded', 'false'));
+            li.addEventListener('focusin', () => toggle.setAttribute('aria-expanded', 'true'));
+            li.addEventListener('focusout', (e) => {
+                if (!li.contains(e.relatedTarget)) {
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
 
             link.items.forEach(item => {
                 const subLi = document.createElement('li');
