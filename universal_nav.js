@@ -71,7 +71,10 @@
             cursor: pointer;
         }
 
-        #universal-nav a:not(.brand):hover, #universal-nav .dropdown:hover > a {
+        #universal-nav a:not(.brand):hover,
+        #universal-nav a:not(.brand):focus-visible,
+        #universal-nav .dropdown:hover > a,
+        #universal-nav .dropdown:focus-within > a {
             color: var(--nav-hover);
             background-color: rgba(57, 255, 20, 0.1);
             text-shadow: 0 0 8px var(--nav-hover);
@@ -91,10 +94,21 @@
             transition: opacity 0.2s;
             color: var(--nav-hover);
         }
+        #universal-nav a:focus-visible,
+        .hamburger:focus-visible {
+            outline: 2px solid var(--nav-hover);
+            outline-offset: 2px;
+            border-radius: 2px;
+        }
+
         #universal-nav a:not(.brand):hover::before,
         #universal-nav a:not(.brand):hover::after,
+        #universal-nav a:not(.brand):focus-visible::before,
+        #universal-nav a:not(.brand):focus-visible::after,
         #universal-nav .dropdown:hover > a::before,
-        #universal-nav .dropdown:hover > a::after {
+        #universal-nav .dropdown:hover > a::after,
+        #universal-nav .dropdown:focus-within > a::before,
+        #universal-nav .dropdown:focus-within > a::after {
             opacity: 1;
         }
 
@@ -118,7 +132,8 @@
             z-index: 1000;
         }
 
-        .dropdown:hover .dropdown-menu {
+        .dropdown:hover .dropdown-menu,
+        .dropdown:focus-within .dropdown-menu {
             display: block;
         }
 
@@ -291,7 +306,18 @@
             const toggle = document.createElement('a');
             toggle.textContent = link.name;
             toggle.href = '#'; // Or javascript:void(0)
+            toggle.setAttribute('aria-haspopup', 'true');
+            toggle.setAttribute('aria-expanded', 'false');
             toggle.addEventListener('click', (e) => e.preventDefault());
+
+            li.addEventListener('focusin', () => toggle.setAttribute('aria-expanded', 'true'));
+            li.addEventListener('focusout', (e) => {
+                 setTimeout(() => {
+                      // Using e.relatedTarget to check if focus is going to a child or leaving
+                      if (!li.contains(document.activeElement)) toggle.setAttribute('aria-expanded', 'false');
+                 }, 10);
+            });
+
             li.appendChild(toggle);
 
             // Dropdown Menu
@@ -355,14 +381,17 @@
     const hamburger = document.createElement('button');
     hamburger.className = 'hamburger';
     hamburger.ariaLabel = 'Toggle navigation';
+    hamburger.setAttribute('aria-expanded', 'false');
     hamburger.innerHTML = '<span></span><span></span><span></span>';
 
     hamburger.addEventListener('click', toggleMenu);
 
     function toggleMenu() {
+        const isExpanded = ul.classList.contains('open');
         ul.classList.toggle('open');
         hamburger.classList.toggle('open');
-        document.body.style.overflow = ul.classList.contains('open') ? 'hidden' : ''; // Prevent scrolling when menu is open
+        hamburger.setAttribute('aria-expanded', !isExpanded);
+        document.body.style.overflow = !isExpanded ? 'hidden' : ''; // Prevent scrolling when menu is open
     }
 
     nav.appendChild(ul);
