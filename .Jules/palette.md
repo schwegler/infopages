@@ -1,0 +1,3 @@
+## 2024-05-24 - Interactive Card Accessibility
+**Learning:** Found a pattern where interactive cards ("Causal Factors" in gay_bar_closures.html) were built using `<div>` elements with `onclick` handlers, rendering them inaccessible to keyboard and screen reader users.
+**Action:** Replaced the `<div>` elements with `<button type="button">`. To maintain the visual block-level layout expected of cards within the Tailwind framework, added `text-left w-full` to the classes. Additionally, added `aria-controls` to link to the corresponding detail panel and `focus-visible:ring-2` to provide clear focus indicators. This pattern of converting div-as-button should be reused for similar interactive card layouts across the site.
