@@ -1,0 +1,3 @@
+## 2026-03-03 - [Interactive Cards Accessibility]
+**Learning:** Interactive 'cards' acting as buttons to reveal additional content must use proper semantic elements (`<button>`) rather than `<div>` with `onclick` handlers. This ensures screen reader compatibility, keyboard navigation, and built-in focus management. When using Tailwind, block-level styling can easily be maintained on buttons by adding classes like `text-left w-full focus:outline-none focus-visible:ring-2`.
+**Action:** Replaced `<div>` cards with `<button type="button">` elements in `gay_bar_closures.html` to ensure causal factor cards are accessible to all users.
