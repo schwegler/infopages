@@ -95,8 +95,8 @@
                 </div>
                 <!-- Mobile Menu Button (Simple implementation) -->
                 <div class="flex items-center md:hidden">
-                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-slate-900 focus:outline-none">
-                        <span class="text-xl">☰</span>
+                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-slate-900 focus:outline-none" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle mobile menu">
+                        <span class="text-xl" aria-hidden="true">☰</span>
                     </button>
                 </div>
             </div>
@@ -185,14 +185,14 @@
             </div>
 
             <!-- Interaction Controls -->
-            <div class="flex flex-wrap justify-center gap-4 mb-8">
-                <button id="btn-all" class="filter-btn active-filter px-6 py-2 rounded-full font-medium text-sm border border-indigo-600 transition-colors" data-view="all">
+            <div class="flex flex-wrap justify-center gap-4 mb-8" role="group" aria-label="Filter Map View">
+                <button id="btn-all" class="filter-btn active-filter px-6 py-2 rounded-full font-medium text-sm border border-indigo-600 transition-colors" data-view="all" aria-pressed="true">
                     Show All Categories
                 </button>
-                <button id="btn-women" class="filter-btn px-6 py-2 rounded-full font-medium text-sm border border-slate-300 text-slate-600 hover:border-indigo-400 bg-white transition-colors" data-view="women">
+                <button id="btn-women" class="filter-btn px-6 py-2 rounded-full font-medium text-sm border border-slate-300 text-slate-600 hover:border-indigo-400 bg-white transition-colors" data-view="women" aria-pressed="false">
                     Focus: Lesbian Bars
                 </button>
-                <button id="btn-poc" class="filter-btn px-6 py-2 rounded-full font-medium text-sm border border-slate-300 text-slate-600 hover:border-indigo-400 bg-white transition-colors" data-view="poc">
+                <button id="btn-poc" class="filter-btn px-6 py-2 rounded-full font-medium text-sm border border-slate-300 text-slate-600 hover:border-indigo-400 bg-white transition-colors" data-view="poc" aria-pressed="false">
                     Focus: PoC Venues
                 </button>
             </div>
@@ -483,7 +483,10 @@
             const el = document.getElementById(id);
             if (el) el.scrollIntoView({ behavior: 'smooth' });
             // Close mobile menu if open
-            document.getElementById('mobile-menu').classList.add('hidden');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            if (mobileMenu) mobileMenu.classList.add('hidden');
+            if (mobileBtn) mobileBtn.setAttribute('aria-expanded', 'false');
         }
 
         // Demographic Filter Logic
@@ -494,11 +497,13 @@
                 filterButtons.forEach(b => {
                     b.classList.remove('active-filter', 'bg-indigo-600', 'text-white', 'border-indigo-600');
                     b.classList.add('bg-white', 'text-slate-600', 'border-slate-300');
+                    b.setAttribute('aria-pressed', 'false');
                 });
                 
                 const target = e.currentTarget;
                 target.classList.remove('bg-white', 'text-slate-600', 'border-slate-300');
                 target.classList.add('active-filter', 'bg-indigo-600', 'text-white', 'border-indigo-600');
+                target.setAttribute('aria-pressed', 'true');
 
                 // Logic
                 const view = target.dataset.view;
@@ -556,9 +561,11 @@
         }
 
         // Mobile Menu Toggle
-        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        mobileBtn.addEventListener('click', () => {
             const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
+            const isHidden = menu.classList.toggle('hidden');
+            mobileBtn.setAttribute('aria-expanded', !isHidden);
         });
 
         // Initialize on Load
