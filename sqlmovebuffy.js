@@ -145,7 +145,15 @@ document.querySelectorAll('.security-btn').forEach(btn => {
         weaponViz.style.borderColor = `var(--magic-${data.color}, var(--watcher-${data.color}))`;
         weaponIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="${data.icon}" />`;
         weaponIcon.style.color = `var(--magic-${data.color}, var(--watcher-${data.color}))`;
-        weaponDescEl.innerHTML = `<h5 class="text-2xl mb-2" style="color: var(--magic-${data.color}, var(--watcher-${data.color}))">${data.name}</h5><p>${data.desc}</p>`;
+        weaponDescEl.innerHTML = '';
+        const h5 = document.createElement('h5');
+        h5.className = 'text-2xl mb-2';
+        h5.style.color = `var(--magic-${data.color}, var(--watcher-${data.color}))`;
+        h5.textContent = data.name;
+        const p = document.createElement('p');
+        p.textContent = data.desc;
+        weaponDescEl.appendChild(h5);
+        weaponDescEl.appendChild(p);
     });
 });
 
