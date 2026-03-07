@@ -71,10 +71,14 @@
             cursor: pointer;
         }
 
-        #universal-nav a:not(.brand):hover, #universal-nav .dropdown:hover > a {
+        #universal-nav a:not(.brand):hover,
+        #universal-nav a:not(.brand):focus-visible,
+        #universal-nav .dropdown:hover > a,
+        #universal-nav .dropdown:focus-within > a {
             color: var(--nav-hover);
             background-color: rgba(57, 255, 20, 0.1);
             text-shadow: 0 0 8px var(--nav-hover);
+            outline: 1px solid var(--nav-hover);
         }
 
         #universal-nav a:not(.brand)::before {
@@ -93,8 +97,12 @@
         }
         #universal-nav a:not(.brand):hover::before,
         #universal-nav a:not(.brand):hover::after,
+        #universal-nav a:not(.brand):focus-visible::before,
+        #universal-nav a:not(.brand):focus-visible::after,
         #universal-nav .dropdown:hover > a::before,
-        #universal-nav .dropdown:hover > a::after {
+        #universal-nav .dropdown:hover > a::after,
+        #universal-nav .dropdown:focus-within > a::before,
+        #universal-nav .dropdown:focus-within > a::after {
             opacity: 1;
         }
 
@@ -118,7 +126,8 @@
             z-index: 1000;
         }
 
-        .dropdown:hover .dropdown-menu {
+        .dropdown:hover .dropdown-menu,
+        .dropdown:focus-within .dropdown-menu {
             display: block;
         }
 
@@ -289,8 +298,10 @@
 
             // Dropdown Toggle (Label)
             const toggle = document.createElement('a');
-            toggle.textContent = link.name;
+            toggle.innerHTML = link.name + ' <span aria-hidden="true" style="font-size: 0.8em; vertical-align: middle;">&#9662;</span>';
             toggle.href = '#'; // Or javascript:void(0)
+            toggle.setAttribute('aria-haspopup', 'true');
+            toggle.setAttribute('aria-expanded', 'false');
             toggle.addEventListener('click', (e) => e.preventDefault());
             li.appendChild(toggle);
 
