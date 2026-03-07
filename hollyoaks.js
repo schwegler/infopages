@@ -34,17 +34,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function buildFamilyTreeHTML(nodes) {
         if (!nodes || nodes.length === 0) return '';
-        let html = '<ul>';
+        const htmlParts = ['<ul>'];
         nodes.forEach(node => {
             const character = appData.characters[node.id] || { name: node.name };
-            html += `<li><button type="button" data-id="${node.id}" class="character-node rounded-md px-3 py-1.5 inline-block text-sm md:text-base text-left">${character.name} ${node.note ? `<em class="text-xs text-gray-500 font-normal">(${node.note})</em>` : ''}</button>`;
+            htmlParts.push(`<li><button type="button" data-id="${node.id}" class="character-node rounded-md px-3 py-1.5 inline-block text-sm md:text-base text-left">${character.name} ${node.note ? `<em class="text-xs text-gray-500 font-normal">(${node.note})</em>` : ''}</button>`);
             if (node.children) {
-                html += buildFamilyTreeHTML(node.children);
+                htmlParts.push(buildFamilyTreeHTML(node.children));
             }
-            html += '</li>';
+            htmlParts.push('</li>');
         });
-        html += '</ul>';
-        return html;
+        htmlParts.push('</ul>');
+        return htmlParts.join('');
     }
 
     function displayAllFamilies() {
