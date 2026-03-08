@@ -7,3 +7,6 @@
 ## 2024-03-20 - Interactive Cards as Buttons
 **Learning:** Interactive cards in this app (like those in gay_bar_closures.html) are implemented as <div> elements with onclick handlers, which breaks keyboard navigation and screen reader support.
 **Action:** When implementing interactive cards, use <button type="button"> instead of <div>. To maintain block-level visual layout within Tailwind, apply classes such as text-left and w-full.
+## 2024-03-22 - CSS-Only Reveal Components & Keyboard Focus
+**Learning:** CSS-only reveal components (like flip cards using `:hover` to show a back face) fail for keyboard users if they contain no inherently focusable elements (like buttons or links), making their content completely inaccessible via tab navigation.
+**Action:** Add `tabindex="0"` to the container element of CSS-only components lacking focusable children, and pair the `:hover` style with `:focus-within` (and add a visible `:focus-visible` outline) to ensure keyboard accessibility.
