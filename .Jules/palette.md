@@ -7,3 +7,6 @@
 ## 2024-03-20 - Interactive Cards as Buttons
 **Learning:** Interactive cards in this app (like those in gay_bar_closures.html) are implemented as <div> elements with onclick handlers, which breaks keyboard navigation and screen reader support.
 **Action:** When implementing interactive cards, use <button type="button"> instead of <div>. To maintain block-level visual layout within Tailwind, apply classes such as text-left and w-full.
+## 2026-03-05 - Synchronizing aria-expanded on icon-only toggle overlays
+**Learning:** Icon-only toggle buttons that open floating conversational interfaces or overlays must keep their `aria-expanded` state synchronized with the actual display state of the overlay they control. When these overlays are toggled via JS or closed via a secondary internal button (like a close button `&times;`), failing to update the `aria-expanded` attribute on the original trigger leaves screen readers with incorrect information about the interface.
+**Action:** Always add `aria-expanded` attributes to buttons controlling overlays, and ensure all JavaScript execution paths that change the overlay's visibility (opening, toggling, or closing) explicitly update the `aria-expanded` attribute on the trigger button to match.
