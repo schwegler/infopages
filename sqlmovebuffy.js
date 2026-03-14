@@ -13,10 +13,10 @@ const dmaChecklistEl = document.getElementById('dma-checklist');
 const dmaDetailsEl = document.getElementById('dma-details');
 dmaFindings.forEach(item => {
     dmaChecklistEl.innerHTML += `
-        <div class="dma-item card p-4 flex items-center gap-4 cursor-pointer hover:bg-red-900/20" data-note="${item.note}">
+        <button type="button" class="dma-item card p-4 flex items-center gap-4 cursor-pointer hover:bg-red-900/20 w-full text-left focus:outline-none focus:ring-2 focus:ring-red-500" data-note="${item.note}">
              <svg class="h-8 w-8 text-yellow-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${item.icon}" /></svg>
             <span class="text-lg">${item.text}</span>
-        </div>
+        </button>
     `;
 });
 
