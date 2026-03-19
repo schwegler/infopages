@@ -7,3 +7,6 @@
 ## 2024-03-20 - Interactive Cards as Buttons
 **Learning:** Interactive cards in this app (like those in gay_bar_closures.html) are implemented as <div> elements with onclick handlers, which breaks keyboard navigation and screen reader support.
 **Action:** When implementing interactive cards, use <button type="button"> instead of <div>. To maintain block-level visual layout within Tailwind, apply classes such as text-left and w-full.
+## 2024-05-28 - Focus Management for Dismissible Widgets
+**Learning:** Floating widgets or chat helpers (like the Giles AI in sqlmovebuffy.html) often lose focus context when closed, leaving keyboard users stranded at the end of the DOM. Returning focus to the triggering element upon closure is essential for a continuous, accessible keyboard navigation experience.
+**Action:** When implementing dismissible panels or chat interfaces, always ensure focus is programmatically returned to the button that opened it when the user dismisses the panel.
