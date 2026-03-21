@@ -7,3 +7,6 @@
 ## 2024-03-20 - Interactive Cards as Buttons
 **Learning:** Interactive cards in this app (like those in gay_bar_closures.html) are implemented as <div> elements with onclick handlers, which breaks keyboard navigation and screen reader support.
 **Action:** When implementing interactive cards, use <button type="button"> instead of <div>. To maintain block-level visual layout within Tailwind, apply classes such as text-left and w-full.
+## 2024-05-15 - Managing focus for floating/dismissible widgets
+**Learning:** Dismissible floating widgets (like the Giles AI helper) break keyboard navigation if they don't explicitly return focus to the triggering element (the toggle button) when closed. Additionally, icon-only toggle and close buttons require explicit `aria-label` attributes to be perceivable by screen readers.
+**Action:** When implementing floating widgets or modals, always ensure `aria-expanded` is synchronized on the toggle button, add `aria-label` to icon-only buttons, apply `focus-visible` styles for keyboard users, and explicitly call `.focus()` on the triggering element upon closure to maintain context.

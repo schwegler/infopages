@@ -202,8 +202,16 @@ const gilesChatLog = document.getElementById('giles-chat-log');
 function toggleGiles() {
     gilesChatWindow.classList.toggle('hidden');
     gilesChatWindow.classList.toggle('flex');
-    if (!gilesChatWindow.classList.contains('hidden') && gilesChatLog.children.length === 0) {
-        addMessage("Giles", gilesData['default']);
+    const isVisible = !gilesChatWindow.classList.contains('hidden');
+    gilesToggleBtn.setAttribute('aria-expanded', isVisible);
+
+    if (isVisible) {
+        if (gilesChatLog.children.length === 0) {
+            addMessage("Giles", gilesData['default']);
+        }
+    } else {
+        // Return focus to toggle button when closed via toggle
+        gilesToggleBtn.focus();
     }
 }
 
@@ -212,6 +220,8 @@ gilesToggleBtn.addEventListener('click', toggleGiles);
 gilesCloseBtn.addEventListener('click', () => {
     gilesChatWindow.classList.add('hidden');
     gilesChatWindow.classList.remove('flex');
+    gilesToggleBtn.setAttribute('aria-expanded', 'false');
+    gilesToggleBtn.focus();
 });
 
 gilesAskBtn.addEventListener('click', () => {
