@@ -366,13 +366,15 @@
     const hamburger = document.createElement('button');
     hamburger.className = 'hamburger';
     hamburger.ariaLabel = 'Toggle navigation';
+    hamburger.setAttribute('aria-expanded', 'false');
     hamburger.innerHTML = '<span></span><span></span><span></span>';
 
     hamburger.addEventListener('click', toggleMenu);
 
     function toggleMenu() {
-        ul.classList.toggle('open');
+        const isOpen = ul.classList.toggle('open');
         hamburger.classList.toggle('open');
+        hamburger.setAttribute('aria-expanded', String(isOpen));
         document.body.style.overflow = ul.classList.contains('open') ? 'hidden' : ''; // Prevent scrolling when menu is open
     }
 

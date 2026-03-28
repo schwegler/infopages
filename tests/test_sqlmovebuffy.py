@@ -27,7 +27,7 @@ def test_sqlmovebuffy(page: Page, server):
     page.add_init_script("""
         const originalSetTimeout = window.setTimeout;
         window.setTimeout = (fn, delay) => {
-                return originalSetTimeout(fn, 100); // Faster but allows checks
+                return originalSetTimeout(fn, 20); // Faster but allows checks
         };
     """)
 
