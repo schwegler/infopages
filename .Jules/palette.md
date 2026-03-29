@@ -7,3 +7,6 @@
 ## 2024-03-20 - Interactive Cards as Buttons
 **Learning:** Interactive cards in this app (like those in gay_bar_closures.html) are implemented as <div> elements with onclick handlers, which breaks keyboard navigation and screen reader support.
 **Action:** When implementing interactive cards, use <button type="button"> instead of <div>. To maintain block-level visual layout within Tailwind, apply classes such as text-left and w-full.
+## 2024-05-15 - [Screen Reader Support for Active Navigation Links]
+**Learning:** Highlighting the active page purely via CSS (e.g., text color or font weight) is inaccessible to screen readers.
+**Action:** Always programmatically apply `aria-current="page"` to the active navigation link to provide semantic meaning.

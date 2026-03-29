@@ -320,6 +320,7 @@
                 if (currentPath === item.url) {
                     subA.style.color = 'var(--nav-hover)';
                     subA.style.fontWeight = '700';
+                    subA.setAttribute('aria-current', 'page');
                 }
 
                 // Close menu on link click (mobile)
@@ -347,6 +348,7 @@
                 a.style.color = 'var(--nav-hover)';
                 a.style.fontWeight = '700';
                 a.style.textShadow = '0 0 10px var(--nav-hover)';
+                a.setAttribute('aria-current', 'page');
             }
 
             // Close menu on link click (mobile)
