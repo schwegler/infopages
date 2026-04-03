@@ -320,6 +320,7 @@
                 if (currentPath === item.url) {
                     subA.style.color = 'var(--nav-hover)';
                     subA.style.fontWeight = '700';
+                    subA.setAttribute('aria-current', 'page');
                 }
 
                 // Close menu on link click (mobile)
@@ -347,6 +348,7 @@
                 a.style.color = 'var(--nav-hover)';
                 a.style.fontWeight = '700';
                 a.style.textShadow = '0 0 10px var(--nav-hover)';
+                a.setAttribute('aria-current', 'page');
             }
 
             // Close menu on link click (mobile)
@@ -366,6 +368,7 @@
     const hamburger = document.createElement('button');
     hamburger.className = 'hamburger';
     hamburger.ariaLabel = 'Toggle navigation';
+    hamburger.setAttribute('aria-expanded', 'false');
     hamburger.innerHTML = '<span></span><span></span><span></span>';
 
     hamburger.addEventListener('click', toggleMenu);
@@ -373,7 +376,9 @@
     function toggleMenu() {
         ul.classList.toggle('open');
         hamburger.classList.toggle('open');
-        document.body.style.overflow = ul.classList.contains('open') ? 'hidden' : ''; // Prevent scrolling when menu is open
+        const isOpen = ul.classList.contains('open');
+        hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        document.body.style.overflow = isOpen ? 'hidden' : ''; // Prevent scrolling when menu is open
     }
 
     nav.appendChild(ul);
