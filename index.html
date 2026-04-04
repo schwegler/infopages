@@ -69,25 +69,26 @@
             transform-origin: left;
             transition: transform 0.3s ease;
         }
-        .wired-card:hover {
+        .wired-card:hover, .wired-card:focus-visible {
             border-color: var(--neon-green);
             box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
             transform: translateY(-2px);
+            outline: none;
         }
-        .wired-card:hover::before {
+        .wired-card:hover::before, .wired-card:focus-visible::before {
             transform: scaleX(1);
         }
 
-        .wired-card.pink:hover { border-color: var(--neon-pink); box-shadow: 0 0 15px rgba(255, 0, 255, 0.2); }
+        .wired-card.pink:hover, .wired-card.pink:focus-visible { border-color: var(--neon-pink); box-shadow: 0 0 15px rgba(255, 0, 255, 0.2); }
         .wired-card.pink::before { background: var(--neon-pink); }
 
-        .wired-card.cyan:hover { border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 255, 255, 0.2); }
+        .wired-card.cyan:hover, .wired-card.cyan:focus-visible { border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 255, 255, 0.2); }
         .wired-card.cyan::before { background: var(--neon-cyan); }
 
-        .wired-card.orange:hover { border-color: var(--neon-orange); box-shadow: 0 0 15px rgba(255, 69, 0, 0.2); }
+        .wired-card.orange:hover, .wired-card.orange:focus-visible { border-color: var(--neon-orange); box-shadow: 0 0 15px rgba(255, 69, 0, 0.2); }
         .wired-card.orange::before { background: var(--neon-orange); }
 
-        .wired-card.indigo:hover { border-color: var(--neon-indigo); box-shadow: 0 0 15px rgba(79, 70, 229, 0.2); }
+        .wired-card.indigo:hover, .wired-card.indigo:focus-visible { border-color: var(--neon-indigo); box-shadow: 0 0 15px rgba(79, 70, 229, 0.2); }
         .wired-card.indigo::before { background: var(--neon-indigo); }
 
         .tech-marker {
@@ -135,11 +136,12 @@
             transform: translateX(-100%);
             transition: transform 0.2s;
         }
-        .btn-wired:hover {
+        .btn-wired:hover, .btn-wired:focus-visible {
             color: #000;
             box-shadow: 0 0 20px var(--neon-cyan);
+            outline: none;
         }
-        .btn-wired:hover::after {
+        .btn-wired:hover::after, .btn-wired:focus-visible::after {
             transform: translateX(0);
         }
 
@@ -264,10 +266,10 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Starfleet Guide -->
-                <a href="sqlhttp.html" class="group block wired-card p-0 reveal stagger-delay-1 orange hover:scale-[1.02] transition-transform">
+                <a href="sqlhttp.html" class="group block wired-card p-0 reveal stagger-delay-1 orange hover:scale-[1.02] focus-visible:scale-[1.02] focus-visible:outline-none transition-transform">
                     <div class="p-8 h-full flex flex-col">
                         <div class="tech-marker top-2 right-2">FILE.01</div>
-                        <h3 class="text-xl font-bold mb-4 text-[var(--neon-orange)] group-hover:text-white uppercase">Starfleet Guide to Secure API Calls</h3>
+                        <h3 class="text-xl font-bold mb-4 text-[var(--neon-orange)] group-hover:text-white group-focus-visible:text-white uppercase">Starfleet Guide to Secure API Calls</h3>
                         <p class="text-gray-400 mono text-xs flex-grow mb-4">
                             Protocol: Secure API calls with C# and SQL.<br>Theme: LCARS.
                         </p>
@@ -278,10 +280,10 @@
                 </a>
 
                 <!-- Slayer's Guide -->
-                <a href="sqlmovebuffy.html" class="group block wired-card p-0 reveal stagger-delay-2 pink hover:scale-[1.02] transition-transform">
+                <a href="sqlmovebuffy.html" class="group block wired-card p-0 reveal stagger-delay-2 pink hover:scale-[1.02] focus-visible:scale-[1.02] focus-visible:outline-none transition-transform">
                     <div class="p-8 h-full flex flex-col">
                         <div class="tech-marker top-2 right-2">FILE.02</div>
-                        <h3 class="text-xl font-bold mb-4 text-[var(--neon-pink)] group-hover:text-white uppercase">The Slayer's Guide to Migration</h3>
+                        <h3 class="text-xl font-bold mb-4 text-[var(--neon-pink)] group-hover:text-white group-focus-visible:text-white uppercase">The Slayer's Guide to Migration</h3>
                         <p class="text-gray-400 mono text-xs flex-grow mb-4">
                             Protocol: SQL Server Database Migration.<br>Theme: Buffy.
                         </p>
@@ -292,10 +294,10 @@
                 </a>
 
                 <!-- Hollyoaks History -->
-                <a href="hollyoaks_history.html" class="group block wired-card p-0 reveal stagger-delay-3 cyan hover:scale-[1.02] transition-transform">
+                <a href="hollyoaks_history.html" class="group block wired-card p-0 reveal stagger-delay-3 cyan hover:scale-[1.02] focus-visible:scale-[1.02] focus-visible:outline-none transition-transform">
                     <div class="p-8 h-full flex flex-col">
                         <div class="tech-marker top-2 right-2">FILE.03</div>
-                        <h3 class="text-xl font-bold mb-4 text-[var(--neon-cyan)] group-hover:text-white uppercase">Hollyoaks: The First 20 Years</h3>
+                        <h3 class="text-xl font-bold mb-4 text-[var(--neon-cyan)] group-hover:text-white group-focus-visible:text-white uppercase">Hollyoaks: The First 20 Years</h3>
                         <p class="text-gray-400 mono text-xs flex-grow mb-4">
                             Protocol: Interactive history exploration.<br>Theme: Soap Opera.
                         </p>
@@ -306,10 +308,10 @@
                 </a>
 
                 <!-- TNA History -->
-                <a href="tna_history.html" class="group block wired-card p-0 reveal stagger-delay-2 hover:scale-[1.02] transition-transform" style="border-color: #ff0000">
+                <a href="tna_history.html" class="group block wired-card p-0 reveal stagger-delay-2 hover:scale-[1.02] focus-visible:scale-[1.02] focus-visible:outline-none transition-transform" style="border-color: #ff0000">
                     <div class="p-8 h-full flex flex-col">
                         <div class="tech-marker top-2 right-2">FILE.04</div>
-                        <h3 class="text-xl font-bold mb-4 text-red-600 group-hover:text-white uppercase">TNA Wrestling: Cross The Line</h3>
+                        <h3 class="text-xl font-bold mb-4 text-red-600 group-hover:text-white group-focus-visible:text-white uppercase">TNA Wrestling: Cross The Line</h3>
                         <p class="text-gray-400 mono text-xs flex-grow mb-4">
                             Protocol: Retrospective (2007-2009).<br>Theme: Wrestling Ring.
                         </p>
@@ -320,10 +322,10 @@
                 </a>
 
                 <!-- Gay Bars in Decline -->
-                <a href="gay_bar_closures.html" class="group block wired-card p-0 reveal stagger-delay-3 indigo hover:scale-[1.02] transition-transform">
+                <a href="gay_bar_closures.html" class="group block wired-card p-0 reveal stagger-delay-3 indigo hover:scale-[1.02] focus-visible:scale-[1.02] focus-visible:outline-none transition-transform">
                     <div class="p-8 h-full flex flex-col">
                         <div class="tech-marker top-2 right-2">FILE.05</div>
-                        <h3 class="text-xl font-bold mb-4 text-[var(--neon-indigo)] group-hover:text-white uppercase">Fading Spaces: Gay Bar Decline</h3>
+                        <h3 class="text-xl font-bold mb-4 text-[var(--neon-indigo)] group-hover:text-white group-focus-visible:text-white uppercase">Fading Spaces: Gay Bar Decline</h3>
                         <p class="text-gray-400 mono text-xs flex-grow mb-4">
                             Protocol: Data visualization & report.<br>Theme: Modern Data.
                         </p>
