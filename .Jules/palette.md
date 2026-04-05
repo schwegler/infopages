@@ -7,3 +7,6 @@
 ## 2024-03-20 - Interactive Cards as Buttons
 **Learning:** Interactive cards in this app (like those in gay_bar_closures.html) are implemented as <div> elements with onclick handlers, which breaks keyboard navigation and screen reader support.
 **Action:** When implementing interactive cards, use <button type="button"> instead of <div>. To maintain block-level visual layout within Tailwind, apply classes such as text-left and w-full.
+## 2026-04-05 - Consistent Keyboard Accessibility for Interactive Cards
+**Learning:** Keyboard users often lose vital visual context when navigating custom interactive cards because CSS `:hover` effects (and Tailwind `group-hover` utilities) do not automatically apply during focus states, making it difficult to distinguish the active element.
+**Action:** Always mirror `:hover` with `:focus-visible` in custom CSS, and pair Tailwind `hover:` with `focus-visible:` (and `group-hover:` with `group-focus-within:` or `group-focus-visible:`) on cards acting as interactive links/buttons. In addition, static container visual cards must have `tabindex="0"` if they don't inherently possess focusable elements, enabling `:focus-within` styles.
