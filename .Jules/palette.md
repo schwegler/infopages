@@ -7,3 +7,6 @@
 ## 2024-03-20 - Interactive Cards as Buttons
 **Learning:** Interactive cards in this app (like those in gay_bar_closures.html) are implemented as <div> elements with onclick handlers, which breaks keyboard navigation and screen reader support.
 **Action:** When implementing interactive cards, use <button type="button"> instead of <div>. To maintain block-level visual layout within Tailwind, apply classes such as text-left and w-full.
+## 2024-05-15 - CSS-only 3D Flip Card Keyboard Accessibility
+**Learning:** Pure CSS 3D flip cards using only `:hover` to rotate `rotateY(180deg)` are completely inaccessible to keyboard users, effectively hiding half the content.
+**Action:** Always add `tabindex="0"` to the card container and add `:focus-within` alongside `:hover` to trigger the flip transition. Additionally, provide a `:focus-visible` outline for clear visual feedback.
