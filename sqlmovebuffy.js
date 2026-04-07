@@ -202,7 +202,11 @@ const gilesChatLog = document.getElementById('giles-chat-log');
 function toggleGiles() {
     gilesChatWindow.classList.toggle('hidden');
     gilesChatWindow.classList.toggle('flex');
-    if (!gilesChatWindow.classList.contains('hidden') && gilesChatLog.children.length === 0) {
+
+    const isHidden = gilesChatWindow.classList.contains('hidden');
+    gilesToggleBtn.setAttribute('aria-expanded', !isHidden);
+
+    if (!isHidden && gilesChatLog.children.length === 0) {
         addMessage("Giles", gilesData['default']);
     }
 }
@@ -212,6 +216,8 @@ gilesToggleBtn.addEventListener('click', toggleGiles);
 gilesCloseBtn.addEventListener('click', () => {
     gilesChatWindow.classList.add('hidden');
     gilesChatWindow.classList.remove('flex');
+    gilesToggleBtn.setAttribute('aria-expanded', 'false');
+    gilesToggleBtn.focus();
 });
 
 gilesAskBtn.addEventListener('click', () => {
