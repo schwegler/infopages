@@ -200,19 +200,36 @@ const gilesAskBtn = document.getElementById('giles-ask-btn');
 const gilesChatLog = document.getElementById('giles-chat-log');
 
 function toggleGiles() {
-    gilesChatWindow.classList.toggle('hidden');
-    gilesChatWindow.classList.toggle('flex');
-    if (!gilesChatWindow.classList.contains('hidden') && gilesChatLog.children.length === 0) {
-        addMessage("Giles", gilesData['default']);
+    const isHidden = gilesChatWindow.classList.contains('hidden');
+
+    if (isHidden) {
+        // Opening
+        gilesChatWindow.classList.remove('hidden');
+        gilesChatWindow.classList.add('flex');
+        gilesToggleBtn.setAttribute('aria-expanded', 'true');
+
+        if (gilesChatLog.children.length === 0) {
+            addMessage("Giles", gilesData['default']);
+        }
+
+        // Focus the close button for accessibility when opened
+        gilesCloseBtn.focus();
+    } else {
+        // Closing
+        closeGiles();
     }
+}
+
+function closeGiles() {
+    gilesChatWindow.classList.add('hidden');
+    gilesChatWindow.classList.remove('flex');
+    gilesToggleBtn.setAttribute('aria-expanded', 'false');
+    gilesToggleBtn.focus();
 }
 
 gilesToggleBtn.addEventListener('click', toggleGiles);
 
-gilesCloseBtn.addEventListener('click', () => {
-    gilesChatWindow.classList.add('hidden');
-    gilesChatWindow.classList.remove('flex');
-});
+gilesCloseBtn.addEventListener('click', closeGiles);
 
 gilesAskBtn.addEventListener('click', () => {
     // Find active section
