@@ -1,0 +1,11 @@
+--- /home/jules/verification/verify_nav.py
++++ /home/jules/verification/verify_nav.py
+@@ -6,7 +6,7 @@
+     page.wait_for_timeout(500)
+
+     # Hover over the Projects dropdown to show it
+-    page.get_by_role("link", name="Projects ▾").hover()
++    page.get_by_text("Projects").hover()
+     page.wait_for_timeout(500)
+
+     # Click on the 'Buffy Migration' link
