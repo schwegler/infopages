@@ -88,14 +88,14 @@
                     <span class="font-bold text-xl tracking-tight text-slate-900">Fading Spaces</span>
                 </div>
                 <div class="hidden md:flex space-x-8 items-center">
-                    <button onclick="scrollToSection('trends')" class="text-slate-600 hover:text-indigo-600 transition-colors text-sm font-medium">Trends</button>
-                    <button onclick="scrollToSection('demographics')" class="text-slate-600 hover:text-indigo-600 transition-colors text-sm font-medium">Demographics</button>
-                    <button onclick="scrollToSection('causes')" class="text-slate-600 hover:text-indigo-600 transition-colors text-sm font-medium">Causes</button>
-                    <button onclick="scrollToSection('geography')" class="text-slate-600 hover:text-indigo-600 transition-colors text-sm font-medium">Geography</button>
+                    <button onclick="scrollToSection('trends')" class="text-slate-600 hover:text-indigo-600 transition-colors text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-sm">Trends</button>
+                    <button onclick="scrollToSection('demographics')" class="text-slate-600 hover:text-indigo-600 transition-colors text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-sm">Demographics</button>
+                    <button onclick="scrollToSection('causes')" class="text-slate-600 hover:text-indigo-600 transition-colors text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-sm">Causes</button>
+                    <button onclick="scrollToSection('geography')" class="text-slate-600 hover:text-indigo-600 transition-colors text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-sm">Geography</button>
                 </div>
                 <!-- Mobile Menu Button (Simple implementation) -->
                 <div class="flex items-center md:hidden">
-                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-slate-900 focus:outline-none" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle mobile menu">
+                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-sm" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle mobile menu">
                         <span class="text-xl" aria-hidden="true">☰</span>
                     </button>
                 </div>
@@ -104,9 +104,9 @@
         <!-- Mobile Menu Panel -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-stone-200">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <button onclick="scrollToSection('trends')" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600 hover:bg-stone-100 rounded-md">Trends</button>
-                <button onclick="scrollToSection('demographics')" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600 hover:bg-stone-100 rounded-md">Demographics</button>
-                <button onclick="scrollToSection('causes')" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600 hover:bg-stone-100 rounded-md">Causes</button>
+                <button onclick="scrollToSection('trends')" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600 hover:bg-stone-100 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Trends</button>
+                <button onclick="scrollToSection('demographics')" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600 hover:bg-stone-100 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Demographics</button>
+                <button onclick="scrollToSection('causes')" class="block w-full text-left px-3 py-2 text-base font-medium text-slate-600 hover:text-indigo-600 hover:bg-stone-100 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">Causes</button>
             </div>
         </div>
     </nav>
@@ -186,13 +186,13 @@
 
             <!-- Interaction Controls -->
             <div class="flex flex-wrap justify-center gap-4 mb-8" role="group" aria-label="Filter Map View">
-                <button id="btn-all" class="filter-btn active-filter px-6 py-2 rounded-full font-medium text-sm border border-indigo-600 transition-colors" data-view="all" aria-pressed="true">
+                <button id="btn-all" class="filter-btn active-filter px-6 py-2 rounded-full font-medium text-sm border border-indigo-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500" data-view="all" aria-pressed="true">
                     Show All Categories
                 </button>
-                <button id="btn-women" class="filter-btn px-6 py-2 rounded-full font-medium text-sm border border-slate-300 text-slate-600 hover:border-indigo-400 bg-white transition-colors" data-view="women" aria-pressed="false">
+                <button id="btn-women" class="filter-btn px-6 py-2 rounded-full font-medium text-sm border border-slate-300 text-slate-600 hover:border-indigo-400 bg-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500" data-view="women" aria-pressed="false">
                     Focus: Lesbian Bars
                 </button>
-                <button id="btn-poc" class="filter-btn px-6 py-2 rounded-full font-medium text-sm border border-slate-300 text-slate-600 hover:border-indigo-400 bg-white transition-colors" data-view="poc" aria-pressed="false">
+                <button id="btn-poc" class="filter-btn px-6 py-2 rounded-full font-medium text-sm border border-slate-300 text-slate-600 hover:border-indigo-400 bg-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500" data-view="poc" aria-pressed="false">
                     Focus: PoC Venues
                 </button>
             </div>
