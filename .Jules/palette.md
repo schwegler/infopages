@@ -10,3 +10,9 @@
 ## 2026-03-05 - Managing focus for dismissible floating widgets
 **Learning:** When implementing dismissible floating widgets or modals (like the Giles AI helper), always return focus to the triggering element upon closure to maintain keyboard accessibility context.
 **Action:** When adding or maintaining dismissible UI components, use JavaScript to focus the invoking element (e.g. `triggerBtn.focus()`) within the close handler.
+## 2026-04-21 - [Aria-Current for Navigation]
+**Learning:** Highlighting the active page purely via CSS (e.g., bolding text or changing color) is inaccessible to screen readers. To provide semantic meaning about the active page in navigation elements, the `aria-current="page"` attribute must be programmatically applied to the active link.
+**Action:** When building or maintaining navigation components, always ensure the active link receives the `aria-current="page"` attribute alongside any visual styling changes.
+## 2026-04-22 - Keyboard Focus Parity on Animated Cards
+**Learning:** Custom interactive elements (like the "wired cards" in `index.html`) that rely heavily on `:hover` pseudo-classes for visual feedback (scaling, glows, borders) often completely drop these styles for keyboard navigation, making them inaccessible to keyboard users who navigate via `Tab`.
+**Action:** When using Tailwind's `hover:` or `group-hover:` utilities, or custom CSS `:hover` states on interactive elements acting as cards/buttons, always pair them explicitly with `focus-visible:` and `group-focus-visible:` classes (and `:focus-visible` in CSS). To prevent double-outlines, combine this with `outline-none` when the custom focus state is highly visible.
