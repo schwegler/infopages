@@ -415,19 +415,21 @@ function initShields() {
         external: ['bridge', 'deflector'],
         unsafe: Object.keys(shipParts)
     };
+    const shipPartsValues = Object.values(shipParts);
     const descMapping = {
         safe: "<strong>SAFE:</strong> The Prime Directive. Code can only perform calculations. Access is restricted to the ship's computer core (the Bridge).",
         external: "<strong>EXTERNAL ACCESS:</strong> Standard Mission Protocol. Code can access external resources via the main deflector dish. Shields remain up.",
         unsafe: "<strong>UNSAFE:</strong> Red Alert! All systems are accessible, including warp drive and internal systems. Highly dangerous and rarely authorized."
     };
 
-    document.querySelectorAll('.permission-btn').forEach(btn => {
+    const permissionBtns = document.querySelectorAll('.permission-btn');
+    permissionBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            document.querySelectorAll('.permission-btn').forEach(b => b.classList.remove('active'));
+            permissionBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             const level = btn.dataset.level;
 
-            Object.values(shipParts).forEach(part => {
+            shipPartsValues.forEach(part => {
                 if(part) part.className.baseVal = 'ship-section-off'
             });
             partMapping[level].forEach(partKey => {
