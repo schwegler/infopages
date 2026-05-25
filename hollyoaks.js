@@ -51,8 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const allFamilyTreesContainer = document.getElementById('all-family-trees');
         allFamilyTreesContainer.innerHTML = '';
 
-        for (const familyKey in appData.familyStructures) {
-            const familyData = appData.familyStructures[familyKey];
+        for (const [familyKey, familyData] of Object.entries(appData.familyStructures)) {
             const familySection = document.createElement('div');
             familySection.className = 'bg-blue-50 p-6 rounded-lg shadow-inner mb-6 section-reveal'; // Light blue background for family cards
             familySection.innerHTML = `
