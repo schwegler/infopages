@@ -379,24 +379,24 @@ function initConsole() {
 
     Object.values(commands).forEach(cmd => {
         const btnEl = document.getElementById(cmd.btn);
-        if (btnEl) {
-            const handleInteraction = () => {
-                // Only clear active state from the console buttons
-                if (btnEl.parentElement) {
-                    btnEl.parentElement.querySelectorAll('.lcars-button').forEach(b => b.classList.remove('active'));
-                }
-                if(consoleOutput) consoleOutput.textContent = '';
-                typeCommand(cmd);
-            };
+        if (!btnEl) return;
 
-            btnEl.addEventListener('click', handleInteraction);
-            btnEl.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleInteraction();
-                }
-            });
-        }
+        const handleInteraction = () => {
+            // Only clear active state from the console buttons
+            if (btnEl.parentElement) {
+                btnEl.parentElement.querySelectorAll('.lcars-button').forEach(b => b.classList.remove('active'));
+            }
+            if(consoleOutput) consoleOutput.textContent = '';
+            typeCommand(cmd);
+        };
+
+        btnEl.addEventListener('click', handleInteraction);
+        btnEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleInteraction();
+            }
+        });
     });
 }
 
