@@ -2,11 +2,13 @@
     const style = document.createElement('style');
     style.textContent = `
         :root {
-            --nav-bg: #000000;
-            --nav-text: #cccccc;
-            --nav-hover: #39ff14;
-            --nav-height: 60px;
-            --nav-font: 'Courier New', Courier, monospace;
+            --nav-bg: rgba(9, 9, 11, 0.8);
+            --nav-border: rgba(39, 39, 42, 0.8);
+            --nav-text: #a1a1aa;
+            --nav-active: #f4f4f5;
+            --nav-accent: #6366f1;
+            --nav-height: 64px;
+            --nav-font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
@@ -19,19 +21,19 @@
             left: 0;
             width: 100%;
             background-color: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             color: var(--nav-text);
             z-index: 99999;
             font-family: var(--nav-font);
-            border-bottom: 2px solid var(--nav-hover);
+            border-bottom: 1px solid var(--nav-border);
             height: var(--nav-height);
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 1.5rem;
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.3s ease-in-out, background-color 0.3s ease;
             box-sizing: border-box;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         #universal-nav.nav-hidden {
@@ -41,12 +43,23 @@
         /* Logo / Brand */
         #universal-nav .brand {
             font-weight: 700;
-            color: #fff;
+            color: #ffffff;
             text-decoration: none;
-            font-size: 1.1rem;
-            display: block;
-            text-shadow: 0 0 5px rgba(57, 255, 20, 0.5);
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: -0.02em;
             white-space: nowrap;
+            transition: opacity 0.2s;
+        }
+
+        #universal-nav .brand:hover,
+        #universal-nav .brand:focus-visible {
+            opacity: 0.9;
+            outline: 2px solid var(--nav-accent);
+            outline-offset: 4px;
+            border-radius: 0.375rem;
         }
 
         /* Desktop Menu */
@@ -55,7 +68,7 @@
             list-style: none;
             margin: 0;
             padding: 0;
-            gap: 1.5rem;
+            gap: 1rem;
             align-items: center;
         }
 
@@ -63,9 +76,10 @@
             color: var(--nav-text);
             text-decoration: none;
             font-size: 0.9rem;
-            font-weight: 600;
+            font-weight: 500;
             transition: all 0.2s;
-            padding: 0.5rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 0.5rem;
             position: relative;
             white-space: nowrap;
             cursor: pointer;
@@ -75,35 +89,14 @@
         #universal-nav a:not(.brand):focus-visible,
         #universal-nav .dropdown:hover > a,
         #universal-nav .dropdown:focus-within > a {
-            color: var(--nav-hover);
-            background-color: rgba(57, 255, 20, 0.1);
-            text-shadow: 0 0 8px var(--nav-hover);
-            outline: 1px solid var(--nav-hover);
+            color: var(--nav-active);
+            background-color: rgba(39, 39, 42, 0.6);
+            outline: none;
         }
 
-        #universal-nav a:not(.brand)::before {
-            content: '[';
-            margin-right: 5px;
-            opacity: 0;
-            transition: opacity 0.2s;
-            color: var(--nav-hover);
-        }
-        #universal-nav a:not(.brand)::after {
-            content: ']';
-            margin-left: 5px;
-            opacity: 0;
-            transition: opacity 0.2s;
-            color: var(--nav-hover);
-        }
-        #universal-nav a:not(.brand):hover::before,
-        #universal-nav a:not(.brand):hover::after,
-        #universal-nav a:not(.brand):focus-visible::before,
-        #universal-nav a:not(.brand):focus-visible::after,
-        #universal-nav .dropdown:hover > a::before,
-        #universal-nav .dropdown:hover > a::after,
-        #universal-nav .dropdown:focus-within > a::before,
-        #universal-nav .dropdown:focus-within > a::after {
-            opacity: 1;
+        #universal-nav a:not(.brand):focus-visible {
+            ring: 2px solid var(--nav-accent);
+            box-shadow: 0 0 0 2px var(--nav-accent);
         }
 
         /* Dropdown Styles */
@@ -116,12 +109,15 @@
             position: absolute;
             top: 100%;
             left: 0;
-            background-color: var(--nav-bg);
-            border: 1px solid var(--nav-hover);
-            min-width: 250px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-            padding: 0;
-            margin: 0;
+            background-color: rgba(18, 18, 20, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--nav-border);
+            border-radius: 0.75rem;
+            min-width: 220px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+            padding: 0.5rem;
+            margin-top: 0.5rem;
             list-style: none;
             z-index: 1000;
         }
@@ -139,14 +135,18 @@
         .dropdown-menu a {
             display: block !important;
             width: 100%;
-            padding: 10px 15px !important;
+            padding: 8px 12px !important;
             box-sizing: border-box;
-            font-size: 0.85rem !important;
-            border-bottom: 1px solid #333;
+            font-size: 0.875rem !important;
+            border-radius: 0.375rem;
+            color: var(--nav-text) !important;
+            border-bottom: none !important;
         }
 
-        .dropdown-menu li:last-child a {
-            border-bottom: none;
+        .dropdown-menu a:hover,
+        .dropdown-menu a:focus-visible {
+            color: var(--nav-active) !important;
+            background-color: rgba(39, 39, 42, 0.8) !important;
         }
 
         /* Hamburger Button */
@@ -164,17 +164,18 @@
         }
 
         .hamburger span {
-            width: 2rem;
-            height: 0.25rem;
+            width: 1.75rem;
+            height: 0.15rem;
             background: var(--nav-text);
-            transition: all 0.3s linear;
+            transition: all 0.3s ease;
             position: relative;
             transform-origin: 1px;
+            border-radius: 2px;
         }
 
-        .hamburger:hover span {
-            background: var(--nav-hover);
-            box-shadow: 0 0 5px var(--nav-hover);
+        .hamburger:hover span,
+        .hamburger:focus-visible span {
+            background: var(--nav-active);
         }
 
         /* Mobile Styles */
@@ -189,16 +190,17 @@
                 right: 0;
                 height: 100vh;
                 width: 100%;
-                background-color: var(--nav-bg);
+                background-color: rgba(9, 9, 11, 0.98);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 transform: translateX(100%);
                 transition: transform 0.3s ease-in-out;
-                gap: 2rem;
+                gap: 1.5rem;
                 padding-top: var(--nav-height);
-                border-left: 2px solid var(--nav-hover);
-                overflow-y: auto; /* Allow scrolling if menu is long */
+                overflow-y: auto;
             }
 
             #universal-nav > ul.open {
@@ -206,7 +208,7 @@
             }
 
             #universal-nav a:not(.brand) {
-                font-size: 1.5rem;
+                font-size: 1.25rem;
             }
 
             /* Dropdown Mobile */
@@ -215,33 +217,34 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 1rem;
+                gap: 0.75rem;
             }
 
             .dropdown-menu {
                 position: static;
-                display: block; /* Always visible on mobile */
+                display: block;
                 width: 100%;
                 border: none;
                 box-shadow: none;
                 background: transparent;
                 padding-left: 0;
+                margin-top: 0;
             }
 
             .dropdown-menu li {
                 text-align: center;
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.25rem;
             }
 
             .dropdown-menu a {
-                font-size: 1.2rem !important;
+                font-size: 1.1rem !important;
                 border: none;
-                padding: 5px 0 !important;
-                color: #888 !important;
+                padding: 6px 0 !important;
+                color: var(--nav-text) !important;
             }
 
             .dropdown-menu a:hover {
-                color: var(--nav-hover) !important;
+                color: var(--nav-active) !important;
                 background: transparent !important;
             }
 
@@ -299,7 +302,7 @@
             // Dropdown Toggle (Label)
             const toggle = document.createElement('a');
             toggle.innerHTML = link.name + ' <span aria-hidden="true" style="font-size: 0.8em; vertical-align: middle;">&#9662;</span>';
-            toggle.href = '#'; // Or javascript:void(0)
+            toggle.href = '#';
             toggle.setAttribute('aria-haspopup', 'true');
             toggle.setAttribute('aria-expanded', 'false');
             toggle.addEventListener('click', (e) => e.preventDefault());
@@ -318,7 +321,7 @@
                 // Highlight current page in dropdown
                 const currentPath = window.location.pathname.split('/').pop() || 'index.html';
                 if (currentPath === item.url) {
-                    subA.style.color = 'var(--nav-hover)';
+                    subA.style.color = 'var(--nav-active)';
                     subA.style.fontWeight = '700';
                     subA.setAttribute('aria-current', 'page');
                 }
@@ -345,9 +348,8 @@
             // Highlight current page
             const currentPath = window.location.pathname.split('/').pop() || 'index.html';
             if (currentPath === link.url) {
-                a.style.color = 'var(--nav-hover)';
+                a.style.color = 'var(--nav-active)';
                 a.style.fontWeight = '700';
-                a.style.textShadow = '0 0 10px var(--nav-hover)';
                 a.setAttribute('aria-current', 'page');
             }
 
@@ -373,9 +375,10 @@
     hamburger.addEventListener('click', toggleMenu);
 
     function toggleMenu() {
-        ul.classList.toggle('open');
+        const isOpen = ul.classList.toggle('open');
         hamburger.classList.toggle('open');
-        document.body.style.overflow = ul.classList.contains('open') ? 'hidden' : ''; // Prevent scrolling when menu is open
+        hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        document.body.style.overflow = isOpen ? 'hidden' : '';
     }
 
     nav.appendChild(ul);
@@ -391,7 +394,7 @@
 
         if (Math.abs(lastScrollTop - currentScrollTop) <= delta) return;
 
-        if (currentScrollTop > lastScrollTop && currentScrollTop > 60) {
+        if (currentScrollTop > lastScrollTop && currentScrollTop > 64) {
             nav.classList.add('nav-hidden');
             if (ul.classList.contains('open')) {
                 toggleMenu();
