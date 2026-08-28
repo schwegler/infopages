@@ -271,6 +271,7 @@
             name: 'Projects',
             type: 'dropdown',
             items: [
+                { name: 'Bluesky Block Checker', url: 'bsky_mutual_blocks.html' },
                 { name: 'Starfleet SQL', url: 'sqlhttp.html' },
                 { name: 'Buffy Migration', url: 'sqlmovebuffy.html' },
                 { name: 'Hollyoaks History', url: 'hollyoaks_history.html' },

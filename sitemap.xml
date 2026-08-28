@@ -6,6 +6,11 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://infopages.pages.dev/bsky_mutual_blocks.html</loc>
+    <lastmod>2026-02-19</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://infopages.pages.dev/sqlhttp.html</loc>
     <lastmod>2026-02-19</lastmod>
     <priority>0.8</priority>

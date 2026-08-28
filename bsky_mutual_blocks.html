@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bluesky Mutuals Block Checker — Schwegler // Digital Garden</title>
+  <meta name="description" content="Technical overview, architecture, and feature documentation for the Bluesky Mutuals Block Checker, a client-side AT Protocol graph analysis tool.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              200: '#bae0fd',
+              300: '#7cc7fb',
+              400: '#38a9f8',
+              500: '#0085ff', /* Bluesky Signature Blue */
+              600: '#0267d2',
+              700: '#0452a8',
+              800: '#08468a',
+              900: '#0c3b72',
+              950: '#08254c',
+            },
+            slate: {
+              850: '#151f32',
+              950: '#090d16',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Fira Code', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts & Lucide Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="universal_nav.js" defer></script>
+
+  <style>
+    /* Custom Scrollbar and Subtle Glass Elements */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white min-h-screen flex flex-col justify-between">
+
+  <!-- ========================================================================= -->
+  <!-- Hero / Header Section                                                     -->
+  <!-- ========================================================================= -->
+  <main class="flex-grow">
+    <section class="relative overflow-hidden pt-12 pb-16 lg:pt-20 lg:pb-24 border-b border-slate-850">
+      <!-- Background Ambient Glow -->
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-brand-500/10 blur-[130px] rounded-full pointer-events-none -z-10"></div>
+
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Breadcrumb -->
+        <div class="flex items-center space-x-2 text-xs font-mono text-slate-400 mb-6">
+          <a href="index.html" class="hover:text-brand-400 transition-colors">garden</a>
+          <span>/</span>
+          <a href="index.html#projects" class="hover:text-brand-400 transition-colors">projects</a>
+          <span>/</span>
+          <span class="text-brand-400">bsky-mutual-blocks</span>
+        </div>
+
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div class="space-y-4 max-w-3xl">
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-medium tracking-wide">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>AT Protocol · Social Graph Auditing · Edge Hosted</span>
+            </div>
+
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+              Bluesky Mutuals <br class="hidden sm:inline"/>
+              <span class="bg-gradient-to-r from-brand-400 via-cyan-300 to-sky-200 bg-clip-text text-transparent">Block Checker</span>
+            </h1>
+
+            <p class="text-base sm:text-lg text-slate-300 leading-relaxed">
+              A secure, client-side analysis tool built on the AT Protocol to scan mutual follow connections, audit asymmetrical block relationships, and detect top blockers across decentralized social graphs.
+            </p>
+          </div>
+
+          <!-- CTAs -->
+          <div class="flex flex-col sm:flex-row md:flex-col gap-3 w-full md:w-auto shrink-0">
+            <a href="https://bsky-mutual-blocks.pages.dev/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-semibold shadow-lg shadow-brand-500/25 transition-all transform hover:-translate-y-0.5 text-sm">
+              <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+              <span>Launch Application</span>
+            </a>
+            <a href="https://github.com/schwegler/bsky-mutual-blocks" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-medium transition-all text-sm">
+              <i data-lucide="code-2" class="w-4 h-4"></i>
+              <span>GitHub Repository</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Tech Badges Bar -->
+        <div class="mt-10 pt-6 border-t border-slate-850 flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
+          <span class="text-slate-400 font-mono font-medium mr-2 uppercase tracking-wider">Stack:</span>
+          <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300">React 18</span>
+          <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300">TypeScript</span>
+          <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Vite</span>
+          <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Tailwind CSS</span>
+          <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-brand-500/30 text-brand-300 font-mono">@atproto/api</span>
+          <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-amber-500/30 text-amber-300">Cloudflare Pages</span>
+          <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-emerald-500/30 text-emerald-300">100% Client-Side</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- Content Grid & Deep Dive                                                  -->
+    <!-- ========================================================================= -->
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+      <!-- Section 1: Overview & Motivation -->
+      <section class="space-y-6">
+        <div class="flex items-center space-x-3 text-brand-400">
+          <i data-lucide="info" class="w-5 h-5"></i>
+          <h2 class="text-xl font-bold uppercase tracking-wider font-mono text-white">Project Overview & Purpose</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-3">
+            <h3 class="text-lg font-semibold text-white flex items-center space-x-2">
+              <i data-lucide="shield-alert" class="w-5 h-5 text-amber-400"></i>
+              <span>The Problem Space</span>
+            </h3>
+            <p class="text-slate-300 text-sm leading-relaxed">
+              In decentralized social networks using the AT Protocol (such as Bluesky), social graph operations like follows, mutes, and blocks are stored as individual records in distributed user repositories (PDS). Because timelines and feeds can suppress blocked posts silently or produce disjointed reply trees, users frequently experience unexplained interaction drops among their mutual connections.
+            </p>
+          </div>
+
+          <div class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-3">
+            <h3 class="text-lg font-semibold text-white flex items-center space-x-2">
+              <i data-lucide="cpu" class="w-5 h-5 text-brand-400"></i>
+              <span>The Solution</span>
+            </h3>
+            <p class="text-slate-300 text-sm leading-relaxed">
+              <strong>Bluesky Mutuals Block Checker</strong> provides a transparent, zero-install web interface that authenticates directly with Bluesky, computes the exact intersection of your follow graph (<code class="text-xs bg-slate-900 px-1 py-0.5 rounded text-brand-300">A ∩ B</code>), and audits block statuses and top blockers within your mutual circle in real time.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Key Features -->
+      <section class="space-y-6">
+        <div class="flex items-center space-x-3 text-brand-400">
+          <i data-lucide="sparkles" class="w-5 h-5"></i>
+          <h2 class="text-xl font-bold uppercase tracking-wider font-mono text-white">Key Features</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Feature 1 -->
+          <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800 hover:border-brand-500/40 transition-all space-y-2">
+            <div class="w-9 h-9 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center">
+              <i data-lucide="users" class="w-5 h-5"></i>
+            </div>
+            <h4 class="font-semibold text-white text-base">Mutual Follows Isolation</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Fetches full follows and follower collections via cursor pagination and calculates bidirectional mutuals.
+            </p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800 hover:border-brand-500/40 transition-all space-y-2">
+            <div class="w-9 h-9 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center">
+              <i data-lucide="user-x" class="w-5 h-5"></i>
+            </div>
+            <h4 class="font-semibold text-white text-base">Block Relationship Audit</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Queries AT Protocol relationship endpoints to isolate incoming blocks, outgoing blocks, and reciprocal block states.
+            </p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800 hover:border-brand-500/40 transition-all space-y-2">
+            <div class="w-9 h-9 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
+              <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+            </div>
+            <h4 class="font-semibold text-white text-base">Top Mutual Blockers Scan</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Aggregates network block telemetry to identify third-party accounts that hold the highest number of blocks among your mutuals.
+            </p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800 hover:border-brand-500/40 transition-all space-y-2">
+            <div class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+              <i data-lucide="lock" class="w-5 h-5"></i>
+            </div>
+            <h4 class="font-semibold text-white text-base">Privacy & Zero Retention</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Operates 100% in the client's browser. No database, no backend server logging credentials, and no external tracking.
+            </p>
+          </div>
+
+          <!-- Feature 5 -->
+          <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800 hover:border-brand-500/40 transition-all space-y-2">
+            <div class="w-9 h-9 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">
+              <i data-lucide="gauge" class="w-5 h-5"></i>
+            </div>
+            <h4 class="font-semibold text-white text-base">Intelligent Throttling</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Batched XRPC requests with dynamic concurrency limits and exponential backoff to respect Bluesky rate limits.
+            </p>
+          </div>
+
+          <!-- Feature 6 -->
+          <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800 hover:border-brand-500/40 transition-all space-y-2">
+            <div class="w-9 h-9 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
+              <i data-lucide="file-down" class="w-5 h-5"></i>
+            </div>
+            <h4 class="font-semibold text-white text-base">Data Exporting</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Quickly export full audit findings and account DID manifests to CSV or JSON formats for offline review.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Architecture & Data Flow -->
+      <section class="space-y-6">
+        <div class="flex items-center space-x-3 text-brand-400">
+          <i data-lucide="git-branch" class="w-5 h-5"></i>
+          <h2 class="text-xl font-bold uppercase tracking-wider font-mono text-white">Architecture & Data Flow</h2>
+        </div>
+
+        <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-slate-800 space-y-6">
+          <p class="text-slate-300 text-sm">
+            Because the application is hosted statically on <strong>Cloudflare Pages</strong>, communication occurs directly between the browser runtime and Bluesky's AppView/PDS infrastructure via XRPC calls:
+          </p>
+
+          <!-- Flowchart Visual -->
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-center text-xs font-mono">
+            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 flex flex-col justify-center items-center space-y-2">
+              <i data-lucide="log-in" class="w-5 h-5 text-brand-400"></i>
+              <span class="font-semibold text-slate-200">1. Auth / Handle</span>
+              <span class="text-slate-400 text-[10px]">Resolve DID & initialize session</span>
+            </div>
+            <div class="hidden md:flex items-center justify-center text-slate-600">
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </div>
+            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 flex flex-col justify-center items-center space-y-2">
+              <i data-lucide="refresh-cw" class="w-5 h-5 text-cyan-400"></i>
+              <span class="font-semibold text-slate-200">2. Graph Fetch</span>
+              <span class="text-slate-400 text-[10px]">Paginate follows & followers</span>
+            </div>
+            <div class="hidden md:flex items-center justify-center text-slate-600">
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </div>
+            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 flex flex-col justify-center items-center space-y-2">
+              <i data-lucide="layers" class="w-5 h-5 text-purple-400"></i>
+              <span class="font-semibold text-slate-200">3. Set Intersection</span>
+              <span class="text-slate-400 text-[10px]">Filter mutual DIDs</span>
+            </div>
+            <div class="hidden md:flex items-center justify-center text-slate-600">
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </div>
+            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 flex flex-col justify-center items-center space-y-2">
+              <i data-lucide="search" class="w-5 h-5 text-amber-400"></i>
+              <span class="font-semibold text-slate-200">4. Batch Audit</span>
+              <span class="text-slate-400 text-[10px]">Query block records & states</span>
+            </div>
+            <div class="hidden md:flex items-center justify-center text-slate-600">
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </div>
+            <div class="p-3 bg-slate-900 rounded-lg border border-emerald-500/30 flex flex-col justify-center items-center space-y-2">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i>
+              <span class="font-semibold text-slate-200">5. Report Render</span>
+              <span class="text-slate-400 text-[10px]">Display table, stats & export</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Tech Stack Deep Dive -->
+      <section class="space-y-6">
+        <div class="flex items-center space-x-3 text-brand-400">
+          <i data-lucide="code" class="w-5 h-5"></i>
+          <h2 class="text-xl font-bold uppercase tracking-wider font-mono text-white">Technical Deep Dive & Code Architecture</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Stack Item: ATProto SDK -->
+          <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-white text-base flex items-center space-x-2">
+                <i data-lucide="terminal" class="w-4 h-4 text-brand-400"></i>
+                <span>AT Protocol Lexicon APIs</span>
+              </h3>
+              <span class="text-[10px] font-mono bg-brand-500/20 text-brand-300 px-2 py-0.5 rounded">Core Engine</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Uses <code class="text-brand-300 font-mono">@atproto/api</code> to interface with XRPC endpoints. Key lexicons utilized:
+            </p>
+            <ul class="text-xs text-slate-400 font-mono space-y-1 pl-4 list-disc marker:text-brand-500">
+              <li><code class="text-slate-200">app.bsky.graph.getFollows</code> — Cursor-based following list</li>
+              <li><code class="text-slate-200">app.bsky.graph.getFollowers</code> — Cursor-based followers list</li>
+              <li><code class="text-slate-200">app.bsky.graph.getRelationships</code> — Batch relationship status query</li>
+              <li><code class="text-slate-200">app.bsky.actor.getProfile</code> — Hydrating handle, display name & avatar</li>
+            </ul>
+          </div>
+
+          <!-- Stack Item: Cloudflare Pages & Edge -->
+          <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-white text-base flex items-center space-x-2">
+                <i data-lucide="cloud" class="w-4 h-4 text-amber-400"></i>
+                <span>Cloudflare Pages & CI/CD</span>
+              </h3>
+              <span class="text-[10px] font-mono bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded">Edge Infra</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Continuous deployment hooked directly into GitHub (<code class="text-slate-200 font-mono">schwegler/bsky-mutual-blocks</code>).
+            </p>
+            <ul class="text-xs text-slate-400 font-mono space-y-1 pl-4 list-disc marker:text-amber-500">
+              <li>Automatic branch previews on pull requests</li>
+              <li>Production deploys directly from <code class="text-slate-200">main</code> branch</li>
+              <li>Global Anycast Edge CDN distribution with minimal TTFB</li>
+              <li>Zero server management or runtime infrastructure costs</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Sample Code Implementation Block -->
+        <div class="rounded-2xl border border-slate-800 bg-slate-900 overflow-hidden shadow-2xl">
+          <div class="px-4 py-3 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <div class="w-3 h-3 rounded-full bg-rose-500/80"></div>
+              <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
+              <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+              <span class="ml-2 text-xs font-mono text-slate-400">src/utils/mutualsScanner.ts</span>
+            </div>
+            <span class="text-[11px] font-mono text-slate-400">TypeScript / @atproto/api</span>
+          </div>
+
+          <div class="p-4 sm:p-6 overflow-x-auto text-xs font-mono leading-relaxed text-slate-300">
+<pre><span class="text-purple-400">import</span> { BskyAgent } <span class="text-purple-400">from</span> <span class="text-emerald-300">'@atproto/api'</span>;
+
+<span class="text-slate-500">// 1. Compute Mutual Accounts from Follow & Follower collections</span>
+<span class="text-purple-400">export async function</span> <span class="text-blue-400">getMutuals</span>(agent: BskyAgent, actorDid: <span class="text-amber-300">string</span>) {
+  <span class="text-purple-400">const</span> follows = <span class="text-purple-400">await</span> <span class="text-blue-400">fetchAllFollows</span>(agent, actorDid);
+  <span class="text-purple-400">const</span> followers = <span class="text-purple-400">await</span> <span class="text-blue-400">fetchAllFollowers</span>(agent, actorDid);
+
+  <span class="text-purple-400">const</span> followerDidSet = <span class="text-purple-400">new</span> <span class="text-amber-300">Set</span>(followers.map(f =&gt; f.did));
+  <span class="text-purple-400">return</span> follows.filter(f =&gt; followerDidSet.has(f.did));
+}
+
+<span class="text-slate-500">// 2. Batch-Query Relationship Statuses to detect block flags</span>
+<span class="text-purple-400">export async function</span> <span class="text-blue-400">auditRelationships</span>(agent: BskyAgent, mutualDids: <span class="text-amber-300">string</span>[]) {
+  <span class="text-purple-400">const</span> BATCH_SIZE = <span class="text-cyan-400">30</span>;
+  <span class="text-purple-400">const</span> results = [];
+
+  <span class="text-purple-400">for</span> (<span class="text-purple-400">let</span> i = <span class="text-cyan-400">0</span>; i &lt; mutualDids.length; i += BATCH_SIZE) {
+    <span class="text-purple-400">const</span> batch = mutualDids.slice(i, i + BATCH_SIZE);
+    <span class="text-purple-400">const</span> res = <span class="text-purple-400">await</span> agent.app.bsky.graph.getRelationships({
+      actor: agent.session?.did!,
+      others: batch
+    });
+    results.push(...res.data.relationships);
+  }
+  <span class="text-purple-400">return</span> results;
+}</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Project Meta & Links -->
+      <section class="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-brand-950/40 via-slate-900 to-slate-950 border border-brand-500/20 space-y-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="text-xl font-bold text-white">Explore the Project</h3>
+            <p class="text-sm text-slate-400 mt-1">
+              Check out the live web tool or inspect the complete TypeScript source repository.
+            </p>
+          </div>
+
+          <div class="flex items-center space-x-3">
+            <a href="https://bsky-mutual-blocks.pages.dev/" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition-colors">
+              <span>Open App</span>
+              <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+            </a>
+            <a href="https://github.com/schwegler/bsky-mutual-blocks" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center space-x-1.5 transition-colors">
+              <span>GitHub</span>
+              <i data-lucide="github" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- Footer (Standard Schwegler Digital Garden Footer)                         -->
+  <!-- ========================================================================= -->
+  <footer class="border-t border-slate-850 bg-slate-950 py-10 mt-16 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+      <div class="flex justify-center space-x-6">
+        <a href="index.html" class="hover:text-slate-300 transition-colors">Home</a>
+        <a href="index.html#projects" class="hover:text-slate-300 transition-colors">Projects</a>
+        <a href="tos.html" class="hover:text-slate-300 transition-colors">Terms of Service</a>
+        <a href="https://github.com/schwegler" target="_blank" rel="noopener noreferrer" class="hover:text-slate-300 transition-colors">GitHub Profile</a>
+      </div>
+      <p class="font-mono">
+        © 2026 SCHWEGLER // <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer" class="underline hover:text-slate-300">CC BY 4.0 LICENSE</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Initialize Lucide Icons -->
+  <script>
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>
