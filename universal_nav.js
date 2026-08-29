@@ -309,6 +309,23 @@
             toggle.addEventListener('click', (e) => e.preventDefault());
             li.appendChild(toggle);
 
+            // Dynamic aria-expanded for dropdown
+            const updateAriaExpanded = (isExpanded) => {
+                toggle.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+            };
+            li.addEventListener('mouseenter', () => updateAriaExpanded(true));
+            li.addEventListener('mouseleave', () => {
+                if (!li.contains(document.activeElement)) {
+                    updateAriaExpanded(false);
+                }
+            });
+            li.addEventListener('focusin', () => updateAriaExpanded(true));
+            li.addEventListener('focusout', (e) => {
+                if (!li.contains(e.relatedTarget)) {
+                    updateAriaExpanded(false);
+                }
+            });
+
             // Dropdown Menu
             const subUl = document.createElement('ul');
             subUl.className = 'dropdown-menu';

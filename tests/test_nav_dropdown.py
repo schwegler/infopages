@@ -69,9 +69,9 @@ def run_tests():
         print("✅ PASS: Projects link is focused.")
 
         # Verify dropdown menu visibility on focus
-        # NEW BEHAVIOR: It should be visible (fix)
         expect(dropdown_menu).to_be_visible()
-        print("✅ PASS: Dropdown menu is visible on focus.")
+        expect(projects_link).to_have_attribute("aria-expanded", "true")
+        print("✅ PASS: Dropdown menu is visible on focus and aria-expanded is true.")
 
         # Verify "Bluesky Block Checker" link is present in dropdown menu
         bsky_link = dropdown_menu.locator("a", has_text="Bluesky Block Checker")
