@@ -4,6 +4,7 @@ Welcome to My InfoPages, a collection of static web documents and guides. This r
 
 ## Available Pages
 
+*   **[Bluesky Mutuals Block Checker](bsky_mutual_blocks.html)**: Client-side AT Protocol graph analysis tool to scan mutual follow connections and audit block relationships.
 *   **[C# & SQL: A Starfleet Guide to Secure API Calls](sqlhttp.html)**: Learn about secure API calls with C# and SQL, framed as a Starfleet mission log.
 *   **[The Slayer's Guide to SQL Server Migration](sqlmovebuffy.html)**: A Buffy the Vampire Slayer-themed guide to migrating SQL Server databases.
 *   **[Hollyoaks: The First 20 Years](hollyoaks_history.html)**: An interactive exploration of the popular UK soap opera, Hollyoaks, covering its first two decades.

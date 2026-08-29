@@ -73,6 +73,12 @@ def run_tests():
         expect(dropdown_menu).to_be_visible()
         print("✅ PASS: Dropdown menu is visible on focus.")
 
+        # Verify "Bluesky Block Checker" link is present in dropdown menu
+        bsky_link = dropdown_menu.locator("a", has_text="Bluesky Block Checker")
+        expect(bsky_link).to_be_attached()
+        expect(bsky_link).to_have_attribute("href", "bsky_mutual_blocks.html")
+        print("✅ PASS: Bluesky Block Checker link verified in dropdown menu.")
+
         browser.close()
 
 if __name__ == "__main__":
