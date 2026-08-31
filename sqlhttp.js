@@ -218,22 +218,22 @@ function initCollapsibles() {
             content.style.maxHeight = '0px';
         }
 
+        let scanline = content.querySelector('.scanline');
+        let parentContainer = scanline ? scanline.parentNode : null;
+        let padd = parentContainer ? parentContainer.querySelector('.code-block') : null;
+
         const toggle = () => {
             header.classList.toggle('open');
             const isOpen = header.classList.contains('open');
             header.setAttribute('aria-expanded', isOpen);
 
-            const scanline = content.querySelector('.scanline');
-            if (scanline) {
-                const parentContainer = scanline.parentNode;
-                if (parentContainer) {
-                    const newScanline = scanline.cloneNode(true);
-                    const padd = parentContainer.querySelector('.code-block');
-                    if (padd) {
-                        newScanline.style.setProperty('--scan-height', padd.offsetHeight + 'px');
-                    }
-                    parentContainer.replaceChild(newScanline, scanline);
+            if (scanline && parentContainer) {
+                const newScanline = scanline.cloneNode(true);
+                if (padd) {
+                    newScanline.style.setProperty('--scan-height', padd.offsetHeight + 'px');
                 }
+                parentContainer.replaceChild(newScanline, scanline);
+                scanline = newScanline;
             }
 
             if (content.style.maxHeight !== '0px') {
