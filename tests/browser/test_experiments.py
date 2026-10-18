@@ -106,7 +106,7 @@ def test_brand_contact_and_no_js_history(browser, site_url):
     page.goto(f'{site_url}/index.html')
     expect(page.get_by_role('link', name='Email andrew@schweg.xyz')).to_have_attribute('href','mailto:andrew@schweg.xyz')
     expect(page.get_by_role('link', name='A schweg.xyz project')).to_have_attribute('href','https://schweg.xyz/')
-    assert json.loads(page.locator('script[type="application/ld+json"]').text_content())['email']=='andrew@schweg.xyz'
+    assert 'email' not in json.loads(page.locator('script[type="application/ld+json"]').text_content())
     page.goto(f'{site_url}/resume.html')
     expect(page.locator('main a[href="mailto:andrew@schweg.xyz"]')).to_be_visible()
     context.close()
