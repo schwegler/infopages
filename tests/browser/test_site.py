@@ -132,8 +132,9 @@ def test_print_profile_metadata_and_evidence(clean_page,site_url):
     expect(page.locator('header')).not_to_be_visible();expect(page.locator('footer')).not_to_be_visible();expect(page.locator('.print-controls')).not_to_be_visible()
     assert 'pending' not in page.locator('main').inner_text().lower()
     out=Path('artifacts');out.mkdir(exist_ok=True)
-    page.pdf(path=str(out/'resume-print.pdf'),format='A4',prefer_css_page_size=True)
-    page.emulate_media(media='screen');page.goto(f'{site_url}/index.html');page.set_viewport_size({'width':1536,'height':1024})
+    for paper in ['Letter', 'A4']:
+        page.pdf(path=str(out/f'resume-{paper}.pdf'),format=paper,tagged=True,outline=True)
+    page.emulate_media(media='screen');page.set_viewport_size({'width':1536,'height':1024})
     page.screenshot(path=str(out/'resume-desktop.png'),full_page=True)
     page.set_viewport_size({'width':390,'height':844});page.screenshot(path=str(out/'resume-mobile.png'),full_page=True)
 
@@ -168,3 +169,29 @@ def test_approved_signature_alignment_and_credit(clean_page,site_url):
             centers=page.locator('header .brand-name,header #nav').evaluate_all('(nodes)=>nodes.map(el=>{const r=el.getBoundingClientRect();return r.y+r.height/2})')
             assert abs(centers[0]-centers[1])<2
         assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
+
+
+def test_comprehensive_resume_reading_and_print_action(clean_page, site_url):
+    page=clean_page; page.goto(f'{site_url}/resume.html')
+    expect(page.get_by_role('heading', name='Andrew Schwegler', exact=True)).to_be_visible()
+    expect(page.locator('#current')).to_be_visible()
+    expect(page.locator('main')).to_contain_text('July 2026–present')
+    expect(page.locator('main')).to_contain_text('June 2024–June 2026')
+    expect(page.locator('main')).to_contain_text('Techie Diva')
+    expect(page.locator('main')).to_contain_text('2007–2013')
+    expect(page.locator('.resume-role')).to_have_count(8)
+    expect(page.locator('.earlier-roles > li')).to_have_count(9)
+    expect(page.locator('.resume-projects a')).to_have_count(3)
+    expect(page.locator('main a[href="mailto:andrew@schweg.xyz"]')).to_have_text('andrew@schweg.xyz')
+    page.evaluate('window.print = () => { window.printRequested = true; }')
+    page.get_by_role('button', name='Print / save as PDF').click()
+    assert page.evaluate('window.printRequested')
+    for width in [1440, 390]:
+        page.set_viewport_size({'width':width,'height':900})
+        assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
+    page.emulate_media(media='print')
+    expect(page.locator('.print-controls')).not_to_be_visible()
+    expect(page.locator('footer')).not_to_be_visible()
+    assert page.locator('.resume-page').count()==3
+    for group in page.locator('.resume-page').all()[1:]:
+        assert group.evaluate("el => getComputedStyle(el).breakBefore")=='page'

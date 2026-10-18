@@ -17,7 +17,7 @@ Open <http://127.0.0.1:8000/>. Use a server: ES modules and the history JSON req
 - `index.html`: professional introduction, selected work, background, skills, education and contact.
 - `work.html`: complete filterable project directory.
 - `notes.html`: culture/data experiments, blog and Trove links.
-- `resume.html`: compact résumé with a print / save as PDF action.
+- `resume.html`: comprehensive career résumé with a three-page print / save as PDF layout.
 - `bsky_mutual_blocks.html`: AT Protocol application overview and launch/source links.
 - `sqlhttp.html`: C# / SQL permissions guide and local payload simulation.
 - `sqlmovebuffy.html`: migration assessment, comparison, dependencies, security and cutover rehearsal.
