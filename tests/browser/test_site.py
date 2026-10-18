@@ -152,3 +152,19 @@ def test_history_dataset_is_rendered_as_text(clean_page,site_url):
     expect(page.get_by_role('button',name=payload,exact=True)).to_be_visible()
     expect(page.locator('#families img, #timeline img')).to_have_count(0)
     assert page.evaluate('window.injected') is None
+
+
+def test_approved_signature_alignment_and_credit(clean_page,site_url):
+    page=clean_page;page.goto(f'{site_url}/index.html')
+    for width in [390,768,1440]:
+        page.set_viewport_size({'width':width,'height':900})
+        logo=page.locator('header img.wordmark')
+        assert logo.evaluate('async(el)=>{await el.decode();return el.naturalWidth===1945&&el.naturalHeight===576}')
+        expect(page.get_by_role('link',name='Andrew Schwegler home',exact=True)).to_be_visible()
+        expect(page.get_by_role('link',name='A schweg.xyz project',exact=True)).to_have_attribute('href','https://schweg.xyz/')
+        credit=page.locator('.creator-credit img')
+        assert credit.bounding_box()['width']==132
+        if width==1440:
+            centers=page.locator('header .brand-name,header #nav').evaluate_all('(nodes)=>nodes.map(el=>{const r=el.getBoundingClientRect();return r.y+r.height/2})')
+            assert abs(centers[0]-centers[1])<2
+        assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
