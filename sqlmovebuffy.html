@@ -50,8 +50,7 @@
       </button>
       <nav aria-label="Main navigation" id="nav">
         <a href="index.html#experience">Résumé</a
-        ><a href="work.html">Selected work</a
-        ><a href="notes.html">Notes &amp; experiments</a
+        ><a href="work.html">Projects &amp; experiments</a
         ><a href="index.html#contact">Contact</a>
       </nav>
     </header>
@@ -65,31 +64,31 @@
       >
       <section class="project-hero">
         <a class="back" href="work.html">Selected work / 03</a>
-        <p class="eyebrow marker">Technical guide</p>
-        <h1>The Slayer’s guide to SQL migration<span class="dot">.</span></h1>
-        <p class="intro">A practical migration, with a little Buffy.</p>
+        <p class="eyebrow marker">Sunnydale → Cleveland</p>
+        <h1>The Hellmouth Migration</h1>
+        <p class="intro">A Slayer’s guide to SQL Server relocation.</p>
       </section>
       <nav aria-label="On this page" class="experiment-nav">
         <a href="#assessment">Assess</a><a href="#comparison">Compare</a
         ><a href="#dependencies">Dependencies</a
-        ><a href="#rehearsal">Rehearse</a><a href="#giles">Giles</a
-        ><a href="#reference">Reference</a>
+        ><a href="#security-guide">Armory</a><a href="#rehearsal">Rehearse</a
+        ><a href="#giles">Giles</a><a href="#reference">Reference</a>
       </nav>
       <p class="notice" id="experiment-status" role="status">
         Interactive controls require the page scripts. If they do not appear,
         reload this page. Static reference notes remain available below.
       </p>
       <section class="project-intro experiment-lead">
-        <h2>Check the plan.<br />Then make the move.</h2>
+        <h2>Every apocalypse needs a plan.</h2>
         <p>
-          A Buffy-inspired SQL Server migration learning guide. Every control
-          below runs locally, using illustrative examples rather than a live
-          environment.
+          From Giles’s research to Willow’s testing spell: a Buffy-inspired SQL
+          Server migration learning guide. Every control below runs locally,
+          using illustrative examples rather than a live environment.
         </p>
       </section>
       <section id="assessment">
         <p class="eyebrow marker">01 / Assessment</p>
-        <h2>Start with what could break.</h2>
+        <h2 data-chapter="I">Research at the Library</h2>
         <p class="section-description">
           Work through these four checks before comparing workloads or
           rehearsing a cutover.
@@ -172,7 +171,7 @@
           <p class="eyebrow">02 / Workload comparison</p>
           <span>Illustrative data</span>
         </div>
-        <h2>Test the workload, not just the move.</h2>
+        <h2 data-chapter="II">Willow’s Testing Spell</h2>
         <p>
           Willow’s testing spell compares the original illustrative source and
           target workload. Reveal the results to inspect the category counts; no
@@ -238,10 +237,10 @@
         </div>
       </section>
       <section id="dependencies">
-        <p class="eyebrow marker">03 / Dependencies &amp; security</p>
+        <p class="eyebrow marker">03 / Dependencies</p>
         <div class="two-col">
           <div>
-            <h2>Map the connections.</h2>
+            <h2 data-chapter="III">The Evacuation Convoy</h2>
             <figure class="dependency-figure">
               <svg
                 aria-labelledby="dependency-map-title"
@@ -302,8 +301,13 @@
               <li>API database ↔ Data database</li>
             </ul>
           </div>
-          <div id="security-guide">
-            <h2>Choose the protection.</h2>
+        </div>
+      </section>
+      <section id="security-guide">
+        <p class="eyebrow marker">04 / Security</p>
+        <div class="armory">
+          <div>
+            <h2 data-chapter="IV">Fortifying Cleveland</h2>
             <select aria-label="Security topic" id="security">
               <option value="tde">Transparent Data Encryption</option>
               <option value="ae">Always Encrypted</option>
@@ -318,8 +322,8 @@
         </div>
       </section>
       <section class="demo" id="rehearsal">
-        <p class="eyebrow">04 / Cutover rehearsal</p>
-        <h2>A sequence you can account for.</h2>
+        <p class="eyebrow">05 / Cutover ritual</p>
+        <h2 data-chapter="V">Averting the Apocalypse</h2>
         <ol id="cutover-list">
           <li>Apply final log backups</li>
           <li>Migrate application configuration</li>
