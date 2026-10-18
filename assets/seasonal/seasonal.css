@@ -1,0 +1,141 @@
+.seasonal-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 16px;
+  padding: 20px 16px;
+  font:
+    13px/1.5 system-ui,
+    sans-serif;
+  color: inherit;
+  border-top: 1px solid #8c809844;
+}
+.seasonal-controls button {
+  font: inherit;
+  min-height: 44px;
+  padding: 10px 14px;
+  color: inherit;
+  background: transparent;
+  border: 1px solid #8c809866;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.seasonal-controls button[aria-pressed="true"] {
+  background: #533365;
+  color: #fff;
+  border-color: #533365;
+}
+.seasonal-controls button:focus-visible {
+  outline: 3px solid #9b6423;
+  outline-offset: 3px;
+}
+.seasonal-status {
+  font-size: 12px;
+}
+.seasonal-scene[hidden] {
+  display: none !important;
+}
+.seasonal-scene {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 0 auto 32px;
+  padding: 24px 32px;
+  max-width: 1160px;
+  border: 1px solid #bca6c4;
+  border-radius: 14px;
+  background: #f3edf6;
+  color: #342540;
+  overflow: hidden;
+}
+.seasonal-scene img {
+  display: block;
+  width: 112px;
+  height: 140px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+.seasonal-scene p {
+  margin: 0;
+}
+.seasonal-scene .seasonal-kicker {
+  font:
+    600 10px/1.5 system-ui,
+    sans-serif;
+  letter-spacing: 0.18em;
+  color: #705276;
+}
+.seasonal-scene .seasonal-title {
+  font:
+    clamp(24px, 3vw, 36px)/1.2 Georgia,
+    serif;
+  margin: 8px 0;
+}
+.seasonal-scene .seasonal-detail {
+  font:
+    14px/1.6 system-ui,
+    sans-serif;
+  max-width: 48ch;
+  color: #5d4d64;
+}
+.seasonal-telly {
+  background: #211d32;
+  color: #faf2e5;
+  border-color: #554363;
+}
+.seasonal-telly .seasonal-kicker {
+  color: #e6b584;
+}
+.seasonal-telly .seasonal-detail {
+  color: #e0d4e6;
+}
+.seasonal-moots {
+  background: #f4eee5;
+  border-color: #c9b9a3;
+}
+.seasonal-moots .seasonal-kicker {
+  color: #78531f;
+}
+html[data-season="halloween"] {
+  --seasonal-accent: #78452a;
+}
+html[data-season="halloween"] .seasonal-controls {
+  border-top-color: #b98d5766;
+}
+@media (max-width: 600px) {
+  .seasonal-scene {
+    gap: 12px;
+    padding: 20px 16px;
+    margin-bottom: 24px;
+    border-radius: 10px;
+  }
+  .seasonal-scene img {
+    width: 80px;
+    height: 112px;
+  }
+  .seasonal-scene .seasonal-detail {
+    font-size: 12px;
+  }
+  .seasonal-controls {
+    justify-content: flex-start;
+  }
+  .seasonal-status {
+    flex-basis: 100%;
+  }
+}
+@media print {
+  .seasonal-scene,
+  .seasonal-controls {
+    display: none !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .seasonal-scene,
+  .seasonal-controls {
+    animation: none !important;
+    transition: none !important;
+  }
+}
