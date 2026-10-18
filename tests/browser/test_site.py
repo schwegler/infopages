@@ -3,7 +3,7 @@ import json
 import pytest
 from playwright.sync_api import expect
 
-ROUTES=['index.html','work.html','notes.html','resume.html','bsky_mutual_blocks.html','sqlhttp.html','sqlmovebuffy.html','hollyoaks_history.html','tna_history.html','gay_bar_closures.html','tos.html']
+ROUTES=['five_pm_cat_club.html','index.html','work.html','notes.html','resume.html','bsky_mutual_blocks.html','sqlhttp.html','sqlmovebuffy.html','hollyoaks_history.html','tna_history.html','gay_bar_closures.html','tos.html']
 @pytest.mark.parametrize('route',ROUTES)
 def test_pages_are_self_contained_and_responsive(clean_page,site_url,route):
     page=clean_page

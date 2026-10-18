@@ -6,7 +6,7 @@ import json
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parent.parent
-ROUTES = {'index.html','work.html','notes.html','resume.html','bsky_mutual_blocks.html','sqlhttp.html','sqlmovebuffy.html','hollyoaks_history.html','tna_history.html','gay_bar_closures.html','tos.html'}
+ROUTES = {'five_pm_cat_club.html','index.html','work.html','notes.html','resume.html','bsky_mutual_blocks.html','sqlhttp.html','sqlmovebuffy.html','hollyoaks_history.html','tna_history.html','gay_bar_closures.html','tos.html'}
 PROFILE_URLS = {'https://github.com/schwegler','https://www.linkedin.com/in/schwegler','https://tacobout.online'}
 
 class Page(HTMLParser):
