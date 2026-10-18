@@ -1,290 +1,277 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Slayer's Guide to SQL Server Migration</title>
-    <link href="css/style.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --slayer-red: #B91C1C;
-            --watcher-blue: #3B82F6;
-            --magic-purple: #9333EA;
-            --scroll: 0;
-        }
-        html {
-            scroll-behavior: smooth;
-        }
-        body {
-            font-family: 'Libre Baskerville', serif;
-            background-color: #000000;
-            color: #E5E7EB;
-            background-image: linear-gradient(to bottom, #000000, #111827 50%, #000000);
-            overflow-x: hidden;
-        }
-        h1, h2, h3, h4, h5 {
-            font-family: 'Creepster', cursive;
-            letter-spacing: 2px;
-            color: var(--slayer-red);
-            text-shadow: 1px 1px 3px #000, 0 0 10px var(--slayer-red);
-        }
-        .sub-heading {
-             font-family: 'IM Fell English SC', serif;
-             color: #9CA3AF;
-             letter-spacing: 1px;
-        }
-        .card {
-            background-color: rgba(17, 24, 39, 0.6);
-            border: 1px solid #374151;
-            backdrop-filter: blur(8px);
-            transition: all 0.3s ease;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
-        }
-        .card:hover {
-            border-color: var(--slayer-red);
-            transform: translateY(-5px);
-        }
-        .btn {
-            background-color: var(--slayer-red);
-            color: #FFFFFF;
-            font-family: 'Creepster', cursive;
-            font-size: 1.25rem;
-            letter-spacing: 1.5px;
-            transition: all 0.3s ease;
-            border: 1px solid #FCA5A5;
-            padding: 0.75rem 1.5rem;
-            box-shadow: 0 5px 15px rgba(185, 28, 28, 0.3);
-        }
-        .btn:hover:not(:disabled) {
-            background-color: #991B1B;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(185, 28, 28, 0.5);
-        }
-        .btn:disabled {
-            background-color: #374151;
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-        .code-block {
-            background-color: rgba(2, 6, 23, 0.7);
-            color: #E5E7EB;
-            font-family: 'Courier New', Courier, monospace;
-            white-space: pre-wrap;
-            border: 1px solid #4B5563;
-        }
-        .phase-number {
-            font-family: 'Creepster', cursive;
-            font-size: 5rem;
-            line-height: 1;
-            color: var(--slayer-red);
-            opacity: 0.7;
-        }
-        .giles-ai {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 50;
-        }
-        .giles-btn {
-            background-color: var(--watcher-blue);
-            border-radius: 9999px;
-            width: 70px;
-            height: 70px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            transition: all 0.3s ease;
-        }
-        .giles-btn:hover { transform: scale(1.1); }
-        .giles-chat-window {
-            width: 400px;
-            height: 500px;
-            background-color: #1F2937;
-            border: 2px solid var(--watcher-blue);
-            border-radius: 1rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-        }
-        .loader {
-            width: 20px;
-            height: 20px;
-            border: 3px solid #FFF;
-            border-bottom-color: transparent;
-            border-radius: 50%;
-            display: inline-block;
-            box-sizing: border-box;
-            animation: rotation 1s linear infinite;
-        }
-        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        #header-bg {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%;
-            height: 100vh;
-            background-image: url('https://placehold.co/1200x800/000000/B91C1C?text=HELLMOUTH');
-            background-size: cover;
-            background-position: center;
-            opacity: 0.15;
-            z-index: -1;
-            transition: opacity 0.5s ease;
-        }
-
-        .server-node .server-icon {
-            transition: all 0.3s ease;
-        }
-        .server-node:hover .server-icon {
-            color: var(--magic-purple);
-            transform: scale(1.2);
-        }
-
-        .dependency-line {
-            stroke-width: 2;
-            transition: all 0.3s ease;
-            stroke-dasharray: 8, 8;
-            animation: dash 40s linear infinite;
-        }
-        @keyframes dash { to { stroke-dashoffset: -1000; } }
-    </style>
-    <script src="universal_nav.js" defer></script>
-</head>
-<body class="text-gray-200">
-    <div id="header-bg"></div>
-
-    <div class="container mx-auto p-4 md:p-8 max-w-6xl">
-
-        <!-- Header -->
-        <header class="text-center min-h-[80vh] flex flex-col justify-center items-center mb-16">
-            <h1 class="text-7xl md:text-9xl">The Hellmouth Migration</h1>
-            <h2 class="text-3xl md:text-4xl text-gray-300 sub-heading mt-4">A Slayer's Guide to SQL Server Relocation</h2>
-            <p class="text-lg mt-8 max-w-4xl mx-auto leading-relaxed">
-                The old Sunnydale servers are a bust. A recent... *incident*... revealed they're sitting on a Hellmouth of security flaws. It's time to evacuate. The new servers in Cleveland are clean, demon-free, and running Windows Server 2025 with SQL Server 2019. But moving **38 databases** across three interconnected servers—one of which is also running the town's public-facing web server (IIS)—is harder than stopping the apocalypse. Good thing we have a plan.
-            </p>
-        </header>
-
-        <!-- Phase 1: The Library (Assessment) -->
-        <section class="mb-24">
-            <div class="flex items-center gap-6 mb-4">
-                <div class="phase-number">I</div>
-                <h3 class="text-4xl md:text-5xl">Phase One: Research at the Library</h3>
-            </div>
-            <p class="mb-8 text-lg">Every battle starts with research. Before we move a single byte, we need Giles to hit the books. Our "books" are the **Data Migration Assistant (DMA)**, which will scan all 38 databases. We also need to consult the forbidden texts on web server configuration to map out the IIS dependencies. This is no longer a simple scan; it's a full-scale intelligence operation.</p>
-            <div class="card rounded-lg p-6">
-                <h4 class="text-3xl text-center mb-2">The Tome of Prophecies</h4>
-                <p class="text-center mb-8 sub-heading">DMA has returned from the stacks. Its findings are recorded below.</p>
-                <div id="dma-checklist" class="grid md:grid-cols-2 gap-6">
-                    <!-- Checklist items will be injected by JS -->
-                </div>
-                <div id="dma-details" class="mt-6 p-4 bg-black rounded-lg min-h-[80px] text-center flex items-center justify-center">
-                    <p class="text-gray-400">Click a finding to read Giles's notes.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Phase 2: Willow's Spell (Testing) -->
-        <section class="mb-24">
-             <div class="flex items-center gap-6 mb-4">
-                <div class="phase-number">II</div>
-                <h3 class="text-4xl md:text-5xl">Phase Two: Willow's Testing Spell</h3>
-            </div>
-            <p class="mb-8 text-lg">Simply knowing the demons isn't enough. We need to test our new weapons. This is a job for Willow and the **Database Experimentation Assistant (DEA)**. DEA is our magic box: it captures a workload from our old Sunnydale servers and replays it on a test version of our new Cleveland server. We can see if any of our spells (queries) backfire before the real fight.</p>
-            <div class="card rounded-lg p-6 text-center">
-                 <h4 class="text-3xl mb-4">Casting the Scrying Spell</h4>
-                 <p class="mb-6 sub-heading">Run the DEA replay to compare Sunnydale vs. Cleveland.</p>
-                 <button id="run-dea-btn" class="btn">Analyze Workload</button>
-                 <div id="dea-results" class="grid md:grid-cols-2 gap-8 mt-8 text-left hidden">
-                     <div class="p-4 bg-black/30 rounded-lg">
-                         <h5 class="text-2xl text-center mb-4">Sunnydale (SQL 2016)</h5>
-                         <div id="dea-results-source"></div>
-                     </div>
-                     <div class="p-4 bg-black/30 rounded-lg">
-                         <h5 class="text-2xl text-center mb-4">Cleveland (SQL 2019)</h5>
-                         <div id="dea-results-target"></div>
-                     </div>
-                 </div>
-            </div>
-        </section>
-        
-        <!-- Phase 3: The Convoy (Data Movement) -->
-        <section class="mb-24">
-             <div class="flex items-center gap-6 mb-4">
-                <div class="phase-number">III</div>
-                <h3 class="text-4xl md:text-5xl">Phase Three: The Evacuation Convoy</h3>
-            </div>
-            <p class="mb-8 text-lg">We're not using Log Shipping—that's a permanent bridge, and we need to *abandon* this place. Instead, we'll establish a **chain of protection spells**: a continuous, automated relay of Log Backups every 15 minutes. This keeps a warm copy of our databases ready in Cleveland without creating a permanent link to the Hellmouth. This map shows the server roles and their chaotic connections.</p>
-            <div class="card rounded-lg p-6">
-                <h4 class="text-3xl text-center mb-8">Inter-Server Dependency Map</h4>
-                <div class="relative h-96" id="map-container">
-                    <svg id="dependency-map" class="w-full h-full absolute inset-0"></svg>
-                    <!-- Server nodes will be positioned by JS -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Phase 4: The Armory (Security) -->
-        <section class="mb-24">
-            <div class="flex items-center gap-6 mb-4">
-                <div class="phase-number">IV</div>
-                <h3 class="text-4xl md:text-5xl">Phase Four: Fortifying Cleveland</h3>
-            </div>
-            <p class="mb-8 text-lg">We didn't leave Sunnydale just for better weather. The new Council HQ needs to be a fortress. A security event *forced* this move, so we're not cutting corners. This is the armory, where we equip our new SQL *and* IIS servers with every weapon in our arsenal.</p>
-            <div class="card rounded-lg p-6 grid md:grid-cols-3 gap-6 items-center">
-                <div class="md:col-span-1 flex flex-col items-center gap-4">
-                    <!-- Security weapon buttons -->
-                    <button class="security-btn btn w-full" data-weapon="tde">Transparent Data Encryption</button>
-                    <button class="security-btn btn w-full" data-weapon="ae">Always Encrypted</button>
-                    <button class="security-btn btn w-full" data-weapon="hsts">IIS: HSTS Protocol</button>
-                    <button class="security-btn btn w-full" data-weapon="audit">Unified Auditing</button>
-                </div>
-                <div class="md:col-span-2 text-center">
-                    <div id="weapon-viz" class="h-48 w-48 mx-auto mb-4 bg-black rounded-full flex items-center justify-center transition-all duration-500 border-4 border-transparent">
-                        <svg id="weapon-icon" class="h-24 w-24 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    </div>
-                    <div id="weapon-desc" class="p-2 min-h-[100px]">
-                        <p class="text-gray-400">Select a weapon to learn how it protects us.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Phase 5: The Apocalypse (Cutover) -->
-        <section class="mb-16">
-            <div class="flex items-center gap-6 mb-4">
-                <div class="phase-number">V</div>
-                <h3 class="text-4xl md:text-5xl">Phase Five: Averting the Apocalypse</h3>
-            </div>
-            <p class="mb-8 text-lg">This is it. The final battle. We've done our research, tested our spells, and fortified our position. Now, we perform the final ritual to shut down the Sunnydale Hellmouth and bring the Cleveland Council online. This includes migrating the IIS configuration and deploying the application code. Follow the checklist precisely. There's no room for error.</p>
-            <div class="card rounded-lg p-6">
-                <h4 class="text-3xl text-center mb-6">The Cutover Ritual</h4>
-                <div id="cutover-checklist" class="space-y-4 max-w-2xl mx-auto text-lg mb-8">
-                    <!-- Cutover checklist items -->
-                </div>
-                <div class="text-center">
-                    <button id="cutover-btn" class="btn text-2xl px-12 py-4">Begin the Ritual</button>
-                    <p id="cutover-status" class="text-2xl mt-4 hidden sub-heading"></p>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Giles AI Helper -->
-        <div class="giles-ai">
-             <div id="giles-chat-window" class="giles-chat-window hidden flex-col rounded-lg">
-                <div class="p-4 bg-gray-800 rounded-t-lg flex justify-between items-center">
-                    <h5 class="text-2xl text-white">Consult the Watcher</h5>
-                    <button id="giles-close-btn" aria-label="Close AI Helper" class="text-gray-400 hover:text-white text-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">&times;</button>
-                </div>
-                <div id="giles-chat-log" class="flex-grow p-4 overflow-y-auto bg-black/20"></div>
-                <div class="p-2 border-t border-gray-600">
-                     <button id="giles-ask-btn" class="w-full btn focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">Ask About This Section</button>
-                </div>
-            </div>
-            <button id="giles-toggle-btn" aria-label="Toggle AI Helper" aria-expanded="false" aria-controls="giles-chat-window" class="giles-btn flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
-                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>
-            </button>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Andrew Schwegler — databases, software and interactive explanations."
+    />
+    <title>The Slayer’s guide to SQL migration — Andrew Schwegler</title>
+    <link rel="stylesheet" href="assets/site.css" />
+    <script type="module" src="assets/js/site.js"></script>
+    <script type="module" src="assets/js/migration.js"></script>
+    <link
+      rel="canonical"
+      href="https://infopages.pages.dev/sqlmovebuffy.html"
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="The Slayer’s guide to SQL migration — Andrew Schwegler"
+    />
+    <meta
+      property="og:url"
+      content="https://infopages.pages.dev/sqlmovebuffy.html"
+    />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#f7f7f2" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header>
+      <a class="brand" href="index.html"
+        ><span class="monogram">As</span><span>Andrew Schwegler</span></a
+      ><button hidden class="menu" aria-expanded="false" aria-controls="nav">
+        Menu <span>+</span>
+      </button>
+      <nav id="nav" aria-label="Main navigation">
+        <a href="index.html#experience">Résumé</a
+        ><a href="work.html">Selected work</a
+        ><a href="notes.html">Notes & experiments</a
+        ><a href="index.html#contact">Contact</a>
+      </nav>
+    </header>
+    <main id="main" tabindex="-1">
+      <noscript
+        ><p class="notice">
+          JavaScript is disabled. The résumé, project descriptions and reading
+          sections remain available. Interactive demonstrations and filters
+          require JavaScript.
+        </p></noscript
+      >
+      <section class="project-hero">
+        <a class="back" href="work.html">Selected work / 03</a>
+        <p class="eyebrow marker">Technical guide</p>
+        <h1>The Slayer’s guide to SQL migration<span class="dot">.</span></h1>
+        <p class="intro">A practical migration, with a little Buffy.</p>
+      </section>
+      <section class="project-intro">
+        <h2>Check the plan.<br />Then make the move.</h2>
+        <p>
+          A Buffy-inspired SQL Server migration learning guide. Every control
+          below runs locally, using illustrative examples rather than a live
+          environment.
+        </p>
+      </section>
+      <section>
+        <p class="eyebrow marker">01 / Assessment</p>
+        <h2>Start with what could break.</h2>
+        <div class="checklist">
+          <label
+            ><input type="checkbox" /> Review compatibility and deprecated
+            features</label
+          ><label
+            ><input type="checkbox" /> Inventory dependencies and
+            integrations</label
+          ><label
+            ><input type="checkbox" /> Test backups and restore
+            procedures</label
+          ><label
+            ><input type="checkbox" /> Agree validation and rollback
+            criteria</label
+          >
         </div>
-
-    </div>
-
-<script type="module" src="sqlmovebuffy.js"></script>
-</body>
+        <p id="assessment-status" aria-live="polite">
+          0 of 4 assessment steps complete
+        </p>
+      </section>
+      <section class="demo">
+        <div class="demo-head">
+          <p class="eyebrow">02 / Workload comparison</p>
+          <span>Illustrative data</span>
+        </div>
+        <h2>Test the workload, not just the move.</h2>
+        <button
+          class="button"
+          id="compare"
+          aria-controls="compare-result"
+          aria-expanded="false"
+        >
+          Run example comparison
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M4 12h15m-6-6 6 6-6 6"
+              stroke="currentColor"
+              stroke-width="1.4"
+            />
+          </svg>
+        </button>
+        <div id="compare-result" hidden>
+          <div class="table-wrap">
+            <table>
+              <caption>
+                Illustrative DEA results retained from the original guide
+              </caption>
+              <thead>
+                <tr>
+                  <th>Result</th>
+                  <th>Source</th>
+                  <th>Target</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Improved</th>
+                  <td>0</td>
+                  <td>953</td>
+                </tr>
+                <tr>
+                  <th>Degraded</th>
+                  <td>0</td>
+                  <td>12</td>
+                </tr>
+                <tr>
+                  <th>Errors</th>
+                  <td>32</td>
+                  <td>5</td>
+                </tr>
+                <tr>
+                  <th>Stable</th>
+                  <td>1222</td>
+                  <td>284</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Example only. These values demonstrate the comparison interface, not
+            a measured professional result.
+          </p>
+        </div>
+      </section>
+      <section>
+        <p class="eyebrow marker">03 / Dependencies & security</p>
+        <div class="two-col">
+          <div>
+            <h2>Map the connections.</h2>
+            <details>
+              <summary>Application → API → Database</summary>
+              <p>
+                Check connection strings, service accounts, firewall rules,
+                scheduled jobs and integration dependencies. Validate the
+                complete application path after migration.
+              </p>
+            </details>
+          </div>
+          <div>
+            <h2>Choose the protection.</h2>
+            <select id="security" aria-label="Security topic">
+              <option value="tde">Transparent Data Encryption</option>
+              <option value="ae">Always Encrypted</option>
+              <option value="hsts">HSTS</option>
+              <option value="audit">Auditing</option>
+            </select>
+            <p id="security-text" aria-live="polite">
+              Encrypts database files at rest. Validate certificate and key
+              backup procedures before migration.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section class="demo">
+        <p class="eyebrow">04 / Cutover rehearsal</p>
+        <h2>A sequence you can account for.</h2>
+        <ol id="cutover-list">
+          <li>Apply final log backups</li>
+          <li>Migrate application configuration</li>
+          <li>Deploy application code</li>
+          <li>Validate data and application behavior</li>
+          <li>Switch application traffic</li>
+          <li>Confirm service health</li>
+          <li>Retire the source after the agreed retention period</li>
+        </ol>
+        <button id="cutover" class="button">
+          Run rehearsal
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M4 12h15m-6-6 6 6-6 6"
+              stroke="currentColor"
+              stroke-width="1.4"
+            />
+          </svg>
+        </button>
+        <p id="cutover-status" role="status">Ready for a local walkthrough.</p>
+      </section>
+      <section class="reading">
+        <details>
+          <summary>Ask Giles: what should I check?</summary>
+          <p>
+            This is a scripted guide, not an AI service. Start with assessment
+            and dependencies, compare representative workloads, rehearse
+            rollback, then validate the whole application after cutover.
+          </p>
+        </details>
+      </section>
+      <section class="reading">
+        <details>
+          <summary>Original project: reading & technical detail</summary>
+          <p class="source-note">
+            Content retained from the existing public project. Technical
+            examples and historical claims should be reviewed before
+            publication.
+          </p>
+          <h2>A Slayer&#x27;s Guide to SQL Server Relocation</h2>
+          <h3>Phase One: Research at the Library</h3>
+          <p>
+            Every battle starts with research. Before we move a single byte, we
+            need Giles to hit the books. Our &quot;books&quot; are the **Data
+            Migration Assistant (DMA)**, which will scan all 38 databases. We
+            also need to consult the forbidden texts on web server configuration
+            to map out the IIS dependencies. This is no longer a simple scan;
+            it&#x27;s a full-scale intelligence operation.
+          </p>
+          <p>
+            DMA has returned from the stacks. Its findings are recorded below.
+          </p>
+          <p>Click a finding to read Giles&#x27;s notes.</p>
+          <h3>Phase Two: Willow&#x27;s Testing Spell</h3>
+          <h3>Phase Three: The Evacuation Convoy</h3>
+          <p>Select a weapon to learn how it protects us.</p>
+          <h3>Phase Five: Averting the Apocalypse</h3>
+        </details>
+      </section>
+      <section class="next">
+        <a href="hollyoaks_history.html"
+          ><small>Next project</small>
+          <h2>
+            Hollyoaks: the first 20 years<svg
+              class="arrow"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M4 12h15m-6-6 6 6-6 6"
+                stroke="currentColor"
+                stroke-width="1.4"
+              />
+            </svg></h2
+        ></a>
+      </section>
+    </main>
+    <footer>
+      <a class="brand" href="index.html"
+        >Andrew Schwegler<span class="dot">.</span></a
+      >
+      <p>Databases, systems & a curious mind.</p>
+      <div>
+        <a href="https://tacobout.online">tacobout.online</a
+        ><a href="https://trove.schweg.xyz">Trove</a><a href="tos.html">Terms</a
+        ><a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+      </div>
+      <small>© <span data-year>2026</span> Andrew Schwegler</small>
+    </footer>
+  </body>
 </html>

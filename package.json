@@ -1,28 +1,22 @@
 {
-  "name": "app",
-  "version": "1.0.0",
-  "description": "Welcome to My InfoPages, a collection of static web documents and guides. This repository contains various informational pages served as a static site.",
+  "name": "infopages",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Andrew Schwegler’s digital résumé and interactive public projects",
   "type": "module",
-  "main": "hollyoaks.js",
-  "directories": {
-    "test": "tests"
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:css": "tailwindcss -i ./src/input.css -o ./css/style.css"
+    "test": "node --test tests/*.test.mjs",
+    "check": "prettier --check '*.html' 'assets/**/*.{js,css}' 'tests/*.mjs' '*.json' 'docs/*.md' README.md .github/workflows/test.yml && python3 scripts/validate_site.py && node scripts/check_syntax.mjs",
+    "format": "prettier --write '*.html' 'assets/**/*.{js,css}' 'tests/*.mjs' '*.json' 'docs/*.md' README.md .github/workflows/test.yml",
+    "test:browser": "python3 -m pytest tests/browser -q",
+    "build": "npm run check && npm test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/schwegler/infopages.git"
+    "url": "https://github.com/schwegler/infopages.git"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/schwegler/infopages/issues"
-  },
-  "homepage": "https://github.com/schwegler/infopages#readme",
   "devDependencies": {
-    "tailwindcss": "^3.4.17"
+    "prettier": "3.9.10"
   }
 }
