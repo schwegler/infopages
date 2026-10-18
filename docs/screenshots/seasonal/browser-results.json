@@ -8,5 +8,8 @@
   "reset": true,
   "print": true,
   "emptyAlt": true,
-  "errors": []
+  "errors": [],
+  "keyboard": true,
+  "storageDenied": true,
+  "crossTabReset": true
 }

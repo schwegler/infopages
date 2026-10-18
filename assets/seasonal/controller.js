@@ -1,4 +1,4 @@
-/* Seasonal controller v1: explicit opt-in; no dates, network requests or auto-activation. */
+/* Seasonal controller v1: explicit opt-in; no calendar activation or remote services. */
 (() => {
   const script = document.currentScript;
   const base = new URL(".", script.src);
