@@ -51,6 +51,20 @@
     copy.append(label, title, detail);
     scene.append(copy, art);
     main.prepend(scene);
+    // Existing character placements wear the same costume while enabled.
+    const portraits = [
+      ...document.querySelectorAll(
+        'img[src*="/telly_"], img[src*="/duo_left_telly_host_transparent"], img[src*="/andrew-pencil-mascot"]',
+      ),
+    ].map((image) => ({
+      image,
+      original: Object.fromEntries(
+        ["src", "srcset", "sizes", "alt"].map((attribute) => [
+          attribute,
+          image.getAttribute(attribute),
+        ]),
+      ),
+    }));
     const controls = document.createElement("section");
     controls.className = "seasonal-controls";
     controls.dataset.seasonalControls = "";
@@ -72,6 +86,20 @@
       if (active) root.dataset.season = "halloween";
       else delete root.dataset.season;
       scene.hidden = !active;
+      portraits.forEach(({ image, original }) => {
+        if (active) {
+          image.src = new URL("mascot.png", base).href;
+          image.removeAttribute("srcset");
+          image.removeAttribute("sizes");
+          image.alt = "";
+        } else {
+          Object.entries(original).forEach(([attribute, value]) => {
+            if (value === null) image.removeAttribute(attribute);
+            else image.setAttribute(attribute, value);
+          });
+        }
+      });
+
       toggle.setAttribute("aria-pressed", String(active));
       status.textContent = active ? "Halloween on" : "Seasonal appearance off";
     };
