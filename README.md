@@ -53,3 +53,7 @@ Publish the repository root as before. The site remains ordinary HTML, CSS, JS a
 ## License
 
 The repository LICENSE and previous README identify CC BY 4.0. The existing package metadata says ISC, and the retained terms contain incompatible restrictions. These have not been silently reconciled. Owner review is required; see the content-source notes.
+
+## Experiment repair review
+
+See [the route-by-route repair audit](docs/experiment-repair-audit.md) and [shared brand usage](docs/brand-usage.md). Browser tests exercise every experiment at phone, tablet and desktop sizes and upload reading/result screenshots through CI.
