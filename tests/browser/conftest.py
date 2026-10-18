@@ -9,6 +9,18 @@ ROOT=Path(__file__).resolve().parents[2]
 @pytest.fixture(scope='session')
 def site_url():
     class Handler(http.server.SimpleHTTPRequestHandler):
+        # Cloudflare Pages serves extensionless HTML and the legacy Notes redirects.
+        def do_GET(self):
+            path=self.path.split('?',1)[0]
+            if path in ('/notes','/notes.html'):
+                self.send_response(301);self.send_header('Location','/work');self.end_headers();return
+            super().do_GET()
+        def translate_path(self, path):
+            resolved=Path(super().translate_path(path))
+            if not resolved.suffix and resolved.with_suffix('.html').is_file():
+                return str(resolved.with_suffix('.html'))
+            return str(resolved)
+
         def end_headers(self):
             for line in (ROOT/'_headers').read_text().splitlines():
                 if line.startswith('  '):
