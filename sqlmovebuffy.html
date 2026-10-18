@@ -1,45 +1,52 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
     <meta
-      name="description"
       content="Andrew Schwegler — databases, software and interactive explanations."
+      name="description"
     />
     <title>The Slayer’s guide to SQL migration — Andrew Schwegler</title>
-    <link rel="stylesheet" href="assets/site.css" />
-    <script type="module" src="assets/js/site.js"></script>
-    <script type="module" src="assets/js/migration.js"></script>
+    <link href="assets/site.css" rel="stylesheet" />
+    <script src="assets/js/site.js" type="module"></script>
+    <script src="assets/js/migration.js" type="module"></script>
     <link
-      rel="canonical"
       href="https://infopages.pages.dev/sqlmovebuffy.html"
+      rel="canonical"
     />
-    <meta property="og:type" content="website" />
+    <meta content="website" property="og:type" />
     <meta
-      property="og:title"
       content="The Slayer’s guide to SQL migration — Andrew Schwegler"
+      property="og:title"
     />
     <meta
-      property="og:url"
       content="https://infopages.pages.dev/sqlmovebuffy.html"
+      property="og:url"
     />
-    <meta name="color-scheme" content="light" />
-    <meta name="theme-color" content="#f7f7f2" />
-    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <meta content="light" name="color-scheme" />
+    <meta content="#f7f7f2" name="theme-color" />
+    <link href="assets/favicon.svg" rel="icon" type="image/svg+xml" />
   </head>
-  <body>
+  <body class="experiment-page">
     <a class="skip" href="#main">Skip to content</a>
     <header>
       <a class="brand" href="index.html"
-        ><span class="monogram">As</span><span>Andrew Schwegler</span></a
-      ><button hidden class="menu" aria-expanded="false" aria-controls="nav">
+        ><img
+          alt="schweg.xyz"
+          class="wordmark"
+          height="52"
+          src="assets/brand/schweg-xyz-ink.svg"
+          width="164"
+        /><span class="brand-name">Andrew Schwegler</span></a
+      ><button aria-controls="nav" aria-expanded="false" class="menu" hidden="">
         Menu <span>+</span>
       </button>
-      <nav id="nav" aria-label="Main navigation">
+      <nav aria-label="Main navigation" id="nav">
         <a href="index.html#experience">Résumé</a
         ><a href="work.html">Selected work</a
-        ><a href="notes.html">Notes & experiments</a
+        ><a href="notes.html">Notes &amp; experiments</a
         ><a href="index.html#contact">Contact</a>
       </nav>
     </header>
@@ -57,7 +64,13 @@
         <h1>The Slayer’s guide to SQL migration<span class="dot">.</span></h1>
         <p class="intro">A practical migration, with a little Buffy.</p>
       </section>
-      <section class="project-intro">
+      <nav aria-label="On this page" class="experiment-nav">
+        <a href="#assessment">Assess</a><a href="#comparison">Compare</a
+        ><a href="#dependencies">Dependencies</a
+        ><a href="#rehearsal">Rehearse</a><a href="#giles">Giles</a
+        ><a href="#reference">Reference</a>
+      </nav>
+      <section class="project-intro experiment-lead">
         <h2>Check the plan.<br />Then make the move.</h2>
         <p>
           A Buffy-inspired SQL Server migration learning guide. Every control
@@ -65,50 +78,64 @@
           environment.
         </p>
       </section>
-      <section>
+      <section id="assessment">
         <p class="eyebrow marker">01 / Assessment</p>
         <h2>Start with what could break.</h2>
+        <p class="section-description">
+          Work through these four checks before comparing workloads or
+          rehearsing a cutover.
+        </p>
         <div class="checklist">
           <label
             ><input type="checkbox" /> Review compatibility and deprecated
-            features</label
+            features<small
+              >Check version compatibility and features scheduled for
+              removal.</small
+            ></label
           ><label
             ><input type="checkbox" /> Inventory dependencies and
-            integrations</label
+            integrations<small
+              >Include jobs, service accounts, integrations and application
+              connections.</small
+            ></label
           ><label
-            ><input type="checkbox" /> Test backups and restore
-            procedures</label
+            ><input type="checkbox" /> Test backups and restore procedures<small
+              >A backup is useful only if the restore path has been
+              rehearsed.</small
+            ></label
           ><label
             ><input type="checkbox" /> Agree validation and rollback
-            criteria</label
+            criteria<small
+              >Define success and the conditions that require a rollback.</small
+            ></label
           >
         </div>
-        <p id="assessment-status" aria-live="polite">
+        <p aria-live="polite" id="assessment-status">
           0 of 4 assessment steps complete
         </p>
       </section>
-      <section class="demo">
+      <section class="demo" id="comparison">
         <div class="demo-head">
           <p class="eyebrow">02 / Workload comparison</p>
           <span>Illustrative data</span>
         </div>
         <h2>Test the workload, not just the move.</h2>
         <button
-          class="button"
-          id="compare"
           aria-controls="compare-result"
           aria-expanded="false"
+          class="button"
+          id="compare"
         >
           Run example comparison
-          <svg class="arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <svg aria-hidden="true" class="arrow" fill="none" viewbox="0 0 24 24">
             <path
               d="M4 12h15m-6-6 6 6-6 6"
               stroke="currentColor"
               stroke-width="1.4"
-            />
+            ></path>
           </svg>
         </button>
-        <div id="compare-result" hidden>
+        <div hidden="" id="compare-result">
           <div class="table-wrap">
             <table>
               <caption>
@@ -151,8 +178,8 @@
           </p>
         </div>
       </section>
-      <section>
-        <p class="eyebrow marker">03 / Dependencies & security</p>
+      <section id="dependencies">
+        <p class="eyebrow marker">03 / Dependencies &amp; security</p>
         <div class="two-col">
           <div>
             <h2>Map the connections.</h2>
@@ -167,20 +194,20 @@
           </div>
           <div>
             <h2>Choose the protection.</h2>
-            <select id="security" aria-label="Security topic">
+            <select aria-label="Security topic" id="security">
               <option value="tde">Transparent Data Encryption</option>
               <option value="ae">Always Encrypted</option>
               <option value="hsts">HSTS</option>
               <option value="audit">Auditing</option>
             </select>
-            <p id="security-text" aria-live="polite">
+            <p aria-live="polite" id="security-text">
               Encrypts database files at rest. Validate certificate and key
               backup procedures before migration.
             </p>
           </div>
         </div>
       </section>
-      <section class="demo">
+      <section class="demo" id="rehearsal">
         <p class="eyebrow">04 / Cutover rehearsal</p>
         <h2>A sequence you can account for.</h2>
         <ol id="cutover-list">
@@ -192,19 +219,19 @@
           <li>Confirm service health</li>
           <li>Retire the source after the agreed retention period</li>
         </ol>
-        <button id="cutover" class="button">
+        <button class="button" id="cutover">
           Run rehearsal
-          <svg class="arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <svg aria-hidden="true" class="arrow" fill="none" viewbox="0 0 24 24">
             <path
               d="M4 12h15m-6-6 6 6-6 6"
               stroke="currentColor"
               stroke-width="1.4"
-            />
+            ></path>
           </svg>
         </button>
         <p id="cutover-status" role="status">Ready for a local walkthrough.</p>
       </section>
-      <section class="reading">
+      <section class="reading" id="giles">
         <details>
           <summary>Ask Giles: what should I check?</summary>
           <p>
@@ -214,29 +241,29 @@
           </p>
         </details>
       </section>
-      <section class="reading">
+      <section class="reading reference-section" id="reference">
         <details>
-          <summary>Original project: reading & technical detail</summary>
+          <summary>Reference notes &amp; original examples</summary>
           <p class="source-note">
-            Content retained from the existing public project. Technical
-            examples and historical claims should be reviewed before
-            publication.
+            Retained project notes and examples. Demonstrations are
+            illustrative; check current platform documentation and original
+            research before relying on them.
           </p>
-          <h2>A Slayer&#x27;s Guide to SQL Server Relocation</h2>
+          <h2>A Slayer's Guide to SQL Server Relocation</h2>
           <h3>Phase One: Research at the Library</h3>
           <p>
             Every battle starts with research. Before we move a single byte, we
-            need Giles to hit the books. Our &quot;books&quot; are the **Data
-            Migration Assistant (DMA)**, which will scan all 38 databases. We
-            also need to consult the forbidden texts on web server configuration
-            to map out the IIS dependencies. This is no longer a simple scan;
-            it&#x27;s a full-scale intelligence operation.
+            need Giles to hit the books. Our "books" are the **Data Migration
+            Assistant (DMA)**, which will scan all 38 databases. We also need to
+            consult the forbidden texts on web server configuration to map out
+            the IIS dependencies. This is no longer a simple scan; it's a
+            full-scale intelligence operation.
           </p>
           <p>
             DMA has returned from the stacks. Its findings are recorded below.
           </p>
-          <p>Click a finding to read Giles&#x27;s notes.</p>
-          <h3>Phase Two: Willow&#x27;s Testing Spell</h3>
+          <p>Click a finding to read Giles's notes.</p>
+          <h3>Phase Two: Willow's Testing Spell</h3>
           <h3>Phase Three: The Evacuation Convoy</h3>
           <p>Select a weapon to learn how it protects us.</p>
           <h3>Phase Five: Averting the Apocalypse</h3>
@@ -247,31 +274,43 @@
           ><small>Next project</small>
           <h2>
             Hollyoaks: the first 20 years<svg
-              class="arrow"
-              viewBox="0 0 24 24"
-              fill="none"
               aria-hidden="true"
+              class="arrow"
+              fill="none"
+              viewbox="0 0 24 24"
             >
               <path
                 d="M4 12h15m-6-6 6 6-6 6"
                 stroke="currentColor"
                 stroke-width="1.4"
-              />
+              ></path>
             </svg></h2
         ></a>
       </section>
     </main>
     <footer>
-      <a class="brand" href="index.html"
-        >Andrew Schwegler<span class="dot">.</span></a
+      <a
+        aria-label="A schweg.xyz project"
+        class="creator-credit"
+        href="https://schweg.xyz/"
+        ><span>a</span
+        ><img
+          alt="schweg.xyz"
+          decoding="async"
+          height="39"
+          loading="lazy"
+          src="assets/brand/schweg-xyz-ink.svg"
+          width="124"
+        /><span>project</span></a
       >
-      <p>Databases, systems & a curious mind.</p>
+      <p>Databases, systems &amp; a curious mind.</p>
       <div>
         <a href="https://tacobout.online">tacobout.online</a
         ><a href="https://trove.schweg.xyz">Trove</a><a href="tos.html">Terms</a
         ><a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        <a href="mailto:andrew@schweg.xyz">Email Andrew</a>
       </div>
-      <small>© <span data-year>2026</span> Andrew Schwegler</small>
+      <small>© <span data-year="">2026</span> Andrew Schwegler</small>
     </footer>
   </body>
 </html>

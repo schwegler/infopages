@@ -1,3 +1,4 @@
+import { barChart, lineChart } from "./charts.js";
 import { q, qa, setPressed, element, renderTable } from "./dom.js";
 const tna = {
   2007: [
@@ -43,9 +44,34 @@ function renderYear(year) {
     ),
     renderTable(headers, rows),
   );
+  const chart =
+    year === "2007"
+      ? barChart(
+          rows.map((row) => [row[0], parseInt(row[1], 10)]),
+          "Original roster-share illustration · percent, not independently verified",
+        )
+      : year === "2008"
+        ? barChart(
+            rows.flatMap((row) =>
+              headers
+                .slice(1)
+                .map((header, i) => [row[0] + " / " + header, row[i + 1]]),
+            ),
+            "Original faction-results illustration · counts, not independently verified",
+            18,
+          )
+        : lineChart(
+            rows.map((row) => row[0]),
+            [
+              ["Main event focus", rows.map((row) => row[1])],
+              ["X Division focus", rows.map((row) => row[2])],
+            ],
+            "Original focus illustration · source index; methodology not supplied",
+          );
   q("#tna-story").replaceChildren(
     element("h3", title),
     element("p", description),
+    chart,
     element(
       "p",
       "Historical narrative retained from the existing retrospective.",
@@ -134,6 +160,21 @@ if (q("#demographic")) {
   );
   const geography = q("#geography");
   geography.append(
+    barChart(
+      [
+        ["California", 140],
+        ["New York", 120],
+        ["Florida", 95],
+        ["Texas", 90],
+        ["Ohio", 60],
+        ["Illinois", 58],
+        ["Pennsylvania", 55],
+      ],
+      "Illustrative original state counts · representative, not verified venue counts",
+      160,
+    ),
+  );
+  geography.append(
     element(
       "p",
       "Illustrative state counts from the original source code, described there as representative values based on population distribution. Not verified venue counts.",
@@ -172,5 +213,11 @@ if (q("#demographic")) {
       ],
     ),
   );
-  q("#demographic").after(trends);
+  const trendChart = lineChart(
+    ["2002", "2005", "2008", "2011", "2014", "2017", "2019"],
+    [["Illustrative listings", [1600, 1550, 1480, 1350, 1200, 1080, 1000]]],
+    "Approximate original trajectory · not a verified time series",
+    1800,
+  );
+  q("#demographic").after(trendChart, trends);
 }

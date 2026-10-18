@@ -1,42 +1,49 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
     <meta
-      name="description"
       content="Andrew Schwegler — databases, software and interactive explanations."
+      name="description"
     />
-    <title>Secure API calls with C# & SQL — Andrew Schwegler</title>
-    <link rel="stylesheet" href="assets/site.css" />
-    <script type="module" src="assets/js/site.js"></script>
-    <script type="module" src="assets/js/sql-guide.js"></script>
-    <link rel="canonical" href="https://infopages.pages.dev/sqlhttp.html" />
-    <meta property="og:type" content="website" />
+    <title>Secure API calls with C# &amp; SQL — Andrew Schwegler</title>
+    <link href="assets/site.css" rel="stylesheet" />
+    <script src="assets/js/site.js" type="module"></script>
+    <script src="assets/js/sql-guide.js" type="module"></script>
+    <link href="https://infopages.pages.dev/sqlhttp.html" rel="canonical" />
+    <meta content="website" property="og:type" />
     <meta
-      property="og:title"
       content="Secure API calls with C# &amp; SQL — Andrew Schwegler"
+      property="og:title"
     />
     <meta
-      property="og:url"
       content="https://infopages.pages.dev/sqlhttp.html"
+      property="og:url"
     />
-    <meta name="color-scheme" content="light" />
-    <meta name="theme-color" content="#f7f7f2" />
-    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <meta content="light" name="color-scheme" />
+    <meta content="#f7f7f2" name="theme-color" />
+    <link href="assets/favicon.svg" rel="icon" type="image/svg+xml" />
   </head>
-  <body>
+  <body class="experiment-page">
     <a class="skip" href="#main">Skip to content</a>
     <header>
       <a class="brand" href="index.html"
-        ><span class="monogram">As</span><span>Andrew Schwegler</span></a
-      ><button hidden class="menu" aria-expanded="false" aria-controls="nav">
+        ><img
+          alt="schweg.xyz"
+          class="wordmark"
+          height="52"
+          src="assets/brand/schweg-xyz-ink.svg"
+          width="164"
+        /><span class="brand-name">Andrew Schwegler</span></a
+      ><button aria-controls="nav" aria-expanded="false" class="menu" hidden="">
         Menu <span>+</span>
       </button>
-      <nav id="nav" aria-label="Main navigation">
+      <nav aria-label="Main navigation" id="nav">
         <a href="index.html#experience">Résumé</a
         ><a href="work.html">Selected work</a
-        ><a href="notes.html">Notes & experiments</a
+        ><a href="notes.html">Notes &amp; experiments</a
         ><a href="index.html#contact">Contact</a>
       </nav>
     </header>
@@ -51,28 +58,31 @@
       <section class="project-hero">
         <a class="back" href="work.html">Selected work / 02</a>
         <p class="eyebrow marker">Technical guide</p>
-        <h1>Secure API calls with C# & SQL<span class="dot">.</span></h1>
+        <h1>Secure API calls with C# &amp; SQL<span class="dot">.</span></h1>
         <p class="intro">A mission in secure integration.</p>
       </section>
-      <section class="project-intro">
-        <h2>Good boundaries.<br />Safer integrations.</h2>
+      <nav aria-label="On this page" class="experiment-nav">
+        <a href="#demo">Demo</a><a href="#permissions">Permissions</a
+        ><a href="#reference">Code &amp; reference</a>
+      </nav>
+      <section class="project-intro experiment-lead">
         <p>
           A Starfleet-themed learning guide to C#, SQL Server and outbound HTTP.
           This interactive console is a local simulation: it never connects to a
           database or executes SQL.
         </p>
       </section>
-      <section class="demo">
+      <section class="demo" id="demo">
         <div class="demo-head">
           <p class="eyebrow">Mission control / Local simulation</p>
           <span>SQL CLR permissions</span>
         </div>
         <h2>Choose a permission boundary.</h2>
-        <div class="filters" role="group" aria-label="Permission level">
-          <button data-permission="SAFE" aria-pressed="true">SAFE</button
-          ><button data-permission="EXTERNAL_ACCESS" aria-pressed="false">
+        <div aria-label="Permission level" class="filters" role="group">
+          <button aria-pressed="true" data-permission="SAFE">SAFE</button
+          ><button aria-pressed="false" data-permission="EXTERNAL_ACCESS">
             EXTERNAL_ACCESS</button
-          ><button data-permission="UNSAFE" aria-pressed="false">UNSAFE</button>
+          ><button aria-pressed="false" data-permission="UNSAFE">UNSAFE</button>
         </div>
         <p id="permission-text">
           SAFE restricts access to external resources. Outbound network access
@@ -83,22 +93,24 @@
           <span>(used only in this local demonstration)</span></label
         ><textarea id="payload" rows="4" spellcheck="false">
 &lt;p&gt;Hello, world.&lt;/p&gt;</textarea
-        ><button class="button" id="run-mission">
+        ><button aria-controls="console" class="button" id="run-mission">
           Run demonstration
-          <svg class="arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <svg aria-hidden="true" class="arrow" fill="none" viewbox="0 0 24 24">
             <path
               d="M4 12h15m-6-6 6 6-6 6"
               stroke="currentColor"
               stroke-width="1.4"
-            />
-          </svg>
+            ></path>
+          </svg></button
+        ><button class="text-link" id="reset-mission" type="button">
+          Reset demo
         </button>
         <pre id="console" role="status">
 Ready. Select a permission level, then run the demonstration.</pre>
       </section>
-      <section class="reading">
+      <section class="reading" id="permissions">
         <h2>The integration boundary</h2>
-        <details open>
+        <details open="">
           <summary>What belongs in the application layer?</summary>
           <p>
             Prefer a dedicated application or service for outbound API calls
@@ -125,23 +137,22 @@ Ready. Select a permission level, then run the demonstration.</pre>
           </p>
         </details>
       </section>
-      <section class="reading">
+      <section class="reading reference-section" id="reference">
         <details>
-          <summary>Original project: reading & technical detail</summary>
+          <summary>Reference notes &amp; original examples</summary>
           <p class="source-note">
-            Content retained from the existing public project. Technical
-            examples and historical claims should be reviewed before
-            publication.
+            Retained project notes and examples. Demonstrations are
+            illustrative; check current platform documentation and original
+            research before relying on them.
           </p>
           <h2>A Starfleet Guide to Secure API Calls</h2>
           <p>
-            Captain&#x27;s Log, Stardate 99981.3. Our mission: to transmit a
-            document schematic (an HTML string) from the U.S.S.
-            Enterprise&#x27;s database to a networked fabrication station. This
-            station will generate a Digital Document, place it in a subspace
-            relay buffer, where Starfleet Support Unit&#x27;s Archival Team will
-            retrieve and log it. This complex, multi-stage operation requires
-            the utmost precision.
+            Captain's Log, Stardate 99981.3. Our mission: to transmit a document
+            schematic (an HTML string) from the U.S.S. Enterprise's database to
+            a networked fabrication station. This station will generate a
+            Digital Document, place it in a subspace relay buffer, where
+            Starfleet Support Unit's Archival Team will retrieve and log it.
+            This complex, multi-stage operation requires the utmost precision.
           </p>
           <p>
             Every successful mission depends on its crew. This operation
@@ -177,20 +188,20 @@ public partial class DocumentFabricationProtocol
     {
         // Protocol 1.1: Verify fabrication station coordinates.
         if (apiUrl.IsNull || !Uri.TryCreate(apiUrl.Value, UriKind.Absolute, out Uri uri))
-            return new SqlString(&quot;Error: Invalid API coordinates.&quot;);
+            return new SqlString("Error: Invalid API coordinates.");
 
         // Protocol 2.4: Secure channels only.
         if (uri.Scheme != Uri.UriSchemeHttps)
-            return new SqlString(&quot;Error: Unsecure channel.&quot;);
+            return new SqlString("Error: Unsecure channel.");
 
         // Protocol 2.5: Verify destination is a trusted Starfleet fabricator.
-        if (!uri.Host.EndsWith(&quot;.starfleet.local&quot;, StringComparison.OrdinalIgnoreCase))
-            return new SqlString(&quot;Error: Untrusted destination.&quot;);
+        if (!uri.Host.EndsWith(".starfleet.local", StringComparison.OrdinalIgnoreCase))
+            return new SqlString("Error: Untrusted destination.");
 
         try
         {
             // Prepare the schematic (HTML) for transport.
-            var content = new StringContent(htmlPayload.Value, Encoding.UTF8, &quot;application/json&quot;);
+            var content = new StringContent(htmlPayload.Value, Encoding.UTF8, "application/json");
 
             // Transmit data via POST and await response.
             Task&lt;HttpResponseMessage&gt; responseTask = client.PostAsync(uri, content);
@@ -199,17 +210,17 @@ public partial class DocumentFabricationProtocol
             response.EnsureSuccessStatusCode();
 
             // Confirmation that API placed file in buffer. Archival is handled by SSU.
-            return new SqlString(&quot;Success: Schematic received by fabricator.&quot;);
+            return new SqlString("Success: Schematic received by fabricator.");
         }
         catch (Exception ex) {
-            return new SqlString($&quot;Fabrication Error: {ex.Message}&quot;);
+            return new SqlString($"Fabrication Error: {ex.Message}");
         }
     }
 }</pre>
           <h3>From the Bridge: The T-SQL Command</h3>
           <p>
             The CLR function is the away team, but this stored procedure is the
-            Captain&#x27;s command that gives them their orders. This is how you
+            Captain's command that gives them their orders. This is how you
             execute the C# code from within SQL Server, passing the necessary
             mission parameters.
           </p>
@@ -220,20 +231,20 @@ AS
 BEGIN
     SET NOCOUNT ON;
     -- Set target fabrication station coordinates. Store this in a config table, not here!
-    DECLARE @ApiEndpoint NVARCHAR(2048) = N&#x27;https://api.example.invalid/api/createpdf&#x27;;
+    DECLARE @ApiEndpoint NVARCHAR(2048) = N'https://api.example.invalid/api/createpdf';
     DECLARE @Status NVARCHAR(MAX);
 
     -- Log the attempt.
-    PRINT &#x27;Authorizing transmission to &#x27; + @ApiEndpoint;
+    PRINT 'Authorizing transmission to ' + @ApiEndpoint;
 
     BEGIN TRY
         -- Execute the CLR function, passing the coordinates and the schematic.
         SELECT @Status = dbo.CreateDocument(@ApiEndpoint, @HtmlContent);
 
         -- Verify mission success.
-        IF (@Status LIKE &#x27;Success:%&#x27;)
+        IF (@Status LIKE 'Success:%')
         BEGIN
-            PRINT &#x27;Confirmation received. Document fabrication initiated.&#x27;;
+            PRINT 'Confirmation received. Document fabrication initiated.';
         END
         ELSE
         BEGIN
@@ -242,13 +253,13 @@ BEGIN
         END
     END TRY
     BEGIN CATCH
-        PRINT &#x27;RED ALERT: Mission failed. An unknown anomaly occurred during transmission.&#x27;;
+        PRINT 'RED ALERT: Mission failed. An unknown anomaly occurred during transmission.';
         THROW;
     END CATCH
 END</pre>
           <p>
             Before the Stored Procedure can issue commands, the CLR assembly
-            must be beamed into the ship&#x27;s computer and registered. These
+            must be beamed into the ship's computer and registered. These
             commands load the compiled C# code and create the SQL Function that
             links to it.
           </p>
@@ -256,7 +267,7 @@ END</pre>
 -- Load the compiled .dll file into SQL Server.
 -- The DLL must be on a path accessible by the SQL Server service account.
 CREATE ASSEMBLY DocumentFabricationAssembly
-FROM &#x27;C:\Example\CLR\DocumentFabricationProtocol.dll&#x27;
+FROM 'C:\Example\CLR\DocumentFabricationProtocol.dll'
 WITH PERMISSION_SET = EXTERNAL_ACCESS;
 GO
 
@@ -271,14 +282,14 @@ AS EXTERNAL NAME DocumentFabricationAssembly.[DocumentFabricationProtocol].Creat
 GO</pre>
           <p>
             These are the preliminary system checks required before deploying
-            any CLR assembly. Execute them to ensure the ship&#x27;s computer is
+            any CLR assembly. Execute them to ensure the ship's computer is
             ready to accept our new protocols.
           </p>
           <p>
             The `PERMISSION_SET` is like setting our shield strength. Even with
             a complex mission, we must use the correct clearance.
             `EXTERNAL_ACCESS` is required for any network communication. Select
-            a level to see the corresponding power allocation on the ship&#x27;s
+            a level to see the corresponding power allocation on the ship's
             schematic.
           </p>
           <p>
@@ -293,31 +304,43 @@ GO</pre>
           ><small>Next project</small>
           <h2>
             The Slayer’s guide to SQL migration<svg
-              class="arrow"
-              viewBox="0 0 24 24"
-              fill="none"
               aria-hidden="true"
+              class="arrow"
+              fill="none"
+              viewbox="0 0 24 24"
             >
               <path
                 d="M4 12h15m-6-6 6 6-6 6"
                 stroke="currentColor"
                 stroke-width="1.4"
-              />
+              ></path>
             </svg></h2
         ></a>
       </section>
     </main>
     <footer>
-      <a class="brand" href="index.html"
-        >Andrew Schwegler<span class="dot">.</span></a
+      <a
+        aria-label="A schweg.xyz project"
+        class="creator-credit"
+        href="https://schweg.xyz/"
+        ><span>a</span
+        ><img
+          alt="schweg.xyz"
+          decoding="async"
+          height="39"
+          loading="lazy"
+          src="assets/brand/schweg-xyz-ink.svg"
+          width="124"
+        /><span>project</span></a
       >
-      <p>Databases, systems & a curious mind.</p>
+      <p>Databases, systems &amp; a curious mind.</p>
       <div>
         <a href="https://tacobout.online">tacobout.online</a
         ><a href="https://trove.schweg.xyz">Trove</a><a href="tos.html">Terms</a
         ><a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        <a href="mailto:andrew@schweg.xyz">Email Andrew</a>
       </div>
-      <small>© <span data-year>2026</span> Andrew Schwegler</small>
+      <small>© <span data-year="">2026</span> Andrew Schwegler</small>
     </footer>
   </body>
 </html>
