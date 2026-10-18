@@ -122,3 +122,17 @@ def test_mascot_disclosures_are_native_and_use_approved_png(clean_page, site_url
         expect(image).to_be_visible()
         assert image.evaluate('async(el)=>{await el.decode();return el.naturalWidth===1145 && el.naturalHeight===1374}')
         assert image.bounding_box()['width']==96
+
+@pytest.mark.parametrize('route', EXPERIMENTS)
+@pytest.mark.parametrize('width,height',[(390,568),(768,600),(1440,600)])
+def test_experiment_short_viewports_and_theme(clean_page,site_url,route,width,height):
+    page=clean_page;page.set_viewport_size({'width':width,'height':height})
+    page.emulate_media(reduced_motion='reduce')
+    page.goto(f'{site_url}/{route}.html')
+    assert page.locator('h1').inner_text().strip()
+    assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
+    assert page.locator('main').evaluate('(e)=>getComputedStyle(e).backgroundColor') != page.locator('body').evaluate('(e)=>getComputedStyle(e).backgroundColor')
+    assert page.locator('header .wordmark').get_attribute('src')=='assets/brand/schweg-signature-ink.png'
+    button=page.locator('main button:visible').first
+    if button.count():
+        button.focus();expect(button).to_be_focused()
