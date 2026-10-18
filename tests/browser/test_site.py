@@ -10,6 +10,9 @@ def test_pages_are_self_contained_and_responsive(clean_page,site_url,route):
     requests=[];page.on('request',lambda request:requests.append(request.url))
     page.goto(f'{site_url}/{route}')
     expect(page.locator('h1')).to_have_count(1)
+    support=page.locator('footer').get_by_role('link',name='Help with hosting',exact=True)
+    expect(support).to_have_count(1)
+    expect(support).to_have_attribute('href','https://paypal.me/schwegler')
     if route=='hollyoaks_history.html':expect(page.locator('#timeline-count')).to_have_text('25 events shown')
     for width in (1536,390,320):
         page.set_viewport_size({'width':width,'height':900})

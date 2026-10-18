@@ -25,3 +25,7 @@ The canonical `https://infopages.pages.dev/` comes from the existing sitemap and
 ## Public contact update
 
 The user explicitly supplied `andrew@schweg.xyz` as the public iCloud+ contact address on 2026-10-18. It replaces the public contact path, including print résumé and Person JSON-LD. This is a content change only; no authentication, DNS or mail settings are modified.
+
+## Public hosting support
+
+The user supplied `https://paypal.me/schwegler` as their public support destination. Every route includes a discreet “Help with hosting” footer link alongside creator attribution and contact. It is an ordinary link, with no payment initiated, account setup, popup, paywall or charity/tax claim. Venmo and Cash App destinations remain unspecified and are not added. The professional print résumé hides the footer as before.
