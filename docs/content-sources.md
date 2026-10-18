@@ -28,4 +28,4 @@ The user explicitly supplied `andrew@schweg.xyz` as the public iCloud+ contact a
 
 ## Public hosting support
 
-The user supplied `https://paypal.me/schwegler` as their public support destination. Every route includes a discreet “Help with hosting” footer link alongside creator attribution and contact. It is an ordinary link, with no payment initiated, account setup, popup, paywall or charity/tax claim. Venmo and Cash App destinations remain unspecified and are not added. The professional print résumé hides the footer as before.
+The user supplied `https://paypal.me/schwegler` as their public support destination. Every route includes a discreet native “Help with hosting” disclosure alongside creator attribution and contact. Its clearly labeled options use the exact user-supplied URLs: PayPal `https://paypal.me/schwegler`, Venmo `https://venmo.com/u/Schwegler`, and Cash App `https://cash.app/$schwg`. It is an ordinary link, with no payment initiated, account setup, popup, paywall or charity/tax claim. The professional print résumé hides the footer as before.

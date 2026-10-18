@@ -2045,3 +2045,26 @@ header .brand {
   align-items: center;
   font-size: 12px;
 }
+
+/* Optional hosting support stays secondary to the creator credit. */
+footer .support-links {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+footer .support-links summary {
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.support-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 16px;
+  margin-top: 8px;
+}
+.support-choices a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
