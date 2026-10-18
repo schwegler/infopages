@@ -11,7 +11,11 @@
     <title>Fading Spaces — Andrew Schwegler</title>
     <link href="assets/site.css" rel="stylesheet" />
     <script src="assets/js/site.js" type="module"></script>
-    <script src="assets/js/research.js" type="module"></script>
+    <script
+      data-experiment=""
+      src="assets/js/research.js"
+      type="module"
+    ></script>
     <link
       href="https://infopages.pages.dev/gay_bar_closures.html"
       rel="canonical"
@@ -66,6 +70,10 @@
         ><a href="#causes">Causes</a><a href="#geography-section">Geography</a
         ><a href="#reference">Reference</a>
       </nav>
+      <p class="notice" id="experiment-status" role="status">
+        Interactive controls require the page scripts. If they do not appear,
+        reload this page. Static reference notes remain available below.
+      </p>
       <section class="project-intro experiment-lead" id="overview">
         <h2>A changing map<br />of community.</h2>
         <p>
@@ -96,7 +104,13 @@
             People of color
           </button>
         </div>
-        <div aria-live="polite" id="demographic"></div>
+        <div aria-live="polite" id="demographic">
+          <p>
+            Original reported declines: 37% overall, 52% for women’s bars, and
+            60% for bars serving people of color. Interactive comparisons
+            require the page script.
+          </p>
+        </div>
       </section>
       <section id="causes">
         <h2>Explore the contributing factors.</h2>
@@ -110,7 +124,13 @@
               03 / Mainstreaming
             </button>
           </div>
-          <article aria-live="polite" id="factor"></article>
+          <article aria-live="polite" id="factor">
+            <p>
+              The original report discusses real-estate pressure, online
+              connection and mainstreaming. Interactive factor selection
+              requires the page script.
+            </p>
+          </article>
         </div>
       </section>
       <section class="reading" id="geography-section">
@@ -125,86 +145,41 @@
         <details>
           <summary>Reference notes &amp; original examples</summary>
           <p class="source-note">
-            Retained project notes and examples. Demonstrations are
-            illustrative; check current platform documentation and original
-            research before relying on them.
+            The existing project reports a 37% decline in U.S. gay-bar listings
+            from 2002 to 2019 and attributes its framing to sociologist Greggor
+            Mattson. The primary study has not been independently reconciled in
+            this redesign. Listings are not a census of every operating venue.
           </p>
+          <h2>Read the measures with their limits.</h2>
+          <h3>Decline by demographic</h3>
           <p>
-            Between 2002 and 2019, the United States lost 37% of its gay bars.
-            This interactive report explores the data behind the decline,
-            highlighting how gentrification, digital assimilation, and shifting
-            demographics are reshaping queer public life.
+            <a href="#demographics">Compare the demographic views</a>. The
+            original reported declines are 37% for general male-oriented bars,
+            52% for women’s bars and 60% for bars serving people of color.
+            Selecting a group reorders the comparison; it does not change the
+            source values.
           </p>
+          <h3>The original trend illustration</h3>
           <p>
-            Data from sociologist Greggor Mattson's comprehensive analysis
-            reveals a stark downward trend. While the early 2000s saw a peak in
-            listings, the subsequent years have seen a consistent erosion of
-            physical spaces.
+            The visible line chart uses the old code’s approximate 2002–2019
+            trajectory. Its exact values remain in an expandable table. Those
+            illustrative counts have not been validated as a measured time
+            series.
           </p>
+          <h3>Contributing factors</h3>
           <p>
-            This isn't just a result of the 2008 financial crisis or the rise of
-            apps; the decline has been steady, suggesting structural changes in
-            how the LGBTQ+ community congregates.
+            <a href="#causes">Explore the three factor explanations</a>:
+            real-estate pressure, changing online connection and mainstreaming.
+            They are narrative contributors, not quantified causal estimates.
           </p>
+          <h3>Geography</h3>
           <p>
-            Insight: The absolute number of gay bars dropped from roughly 1,600
-            to under 1,000 in less than two decades.
+            <a href="#geography-section"
+              >Inspect the state bars and exact table</a
+            >. These seven counts were explicitly representative values in the
+            old source, not verified state-level venue counts. No missing map is
+            implied.
           </p>
-          <p>
-            Source: Simulated Data reflecting Mattson's "Sociodemographic
-            Correlates" Study
-          </p>
-          <h2>Not All Bars Are Vanishing Equally</h2>
-          <p>
-            While the overall trend is negative, the impact is disproportionate.
-            Spaces serving women and people of color face the steepest struggles
-            for survival compared to establishments primarily serving white
-            cisgender men.
-          </p>
-          <p>
-            The aggregate data hides the specific vulnerability of
-            sub-communities. Click the buttons above to isolate specific
-            categories.
-          </p>
-          <p>
-            Why are these doors closing? It is rarely a single reason. Instead,
-            a convergence of economic pressure, technological assimilation, and
-            social progress creates a hostile environment for the traditional
-            gay bar business model. Select a factor below to explore the
-            details.
-          </p>
-          <p>
-            Rising rents in historically "gayborhoods" push out small venues.
-          </p>
-          <p>
-            Digital connection replaces the bar as the primary meeting place.
-          </p>
-          <p>Acceptance means queer people feel safe in "straight" bars.</p>
-          <p>
-            Historically, gay bars opened in low-rent, industrial, or
-            marginalized districts. As these neighborhoods (like Chelsea in NYC
-            or Boystown in Chicago) became desirable and expensive, the very
-            venues that gave them character were priced out. Commercial leases
-            have skyrocketed, making the low-margin business of selling drinks
-            untenable for many legacy establishments.
-          </p>
-          <p>
-            While major coastal cities maintain a density of venues, the decline
-            is felt acutely in the "middle" of the country and in states where
-            legal protections are fewer. However, surprisingly, some liberal
-            strongholds have also seen massive drops due to the high cost of
-            living.
-          </p>
-          <p>
-            Saw a massive numeric drop, driven by San Francisco and LA real
-            estate markets.
-          </p>
-          <p>
-            Retains a relatively high number of bars per capita compared to the
-            national average, often serving as critical sanctuaries in
-            conservative regions.
-          </p>
-          <h3>Top States by Listing Count (2019 Snapshot)</h3>
         </details>
       </section>
       <section class="next">

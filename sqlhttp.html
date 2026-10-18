@@ -11,7 +11,11 @@
     <title>Secure API calls with C# &amp; SQL — Andrew Schwegler</title>
     <link href="assets/site.css" rel="stylesheet" />
     <script src="assets/js/site.js" type="module"></script>
-    <script src="assets/js/sql-guide.js" type="module"></script>
+    <script
+      data-experiment=""
+      src="assets/js/sql-guide.js"
+      type="module"
+    ></script>
     <link href="https://infopages.pages.dev/sqlhttp.html" rel="canonical" />
     <meta content="website" property="og:type" />
     <meta
@@ -65,6 +69,10 @@
         <a href="#demo">Demo</a><a href="#permissions">Permissions</a
         ><a href="#reference">Code &amp; reference</a>
       </nav>
+      <p class="notice" id="experiment-status" role="status">
+        Interactive controls require the page scripts. If they do not appear,
+        reload this page. Static reference notes remain available below.
+      </p>
       <section class="project-intro experiment-lead">
         <p>
           A Starfleet-themed learning guide to C#, SQL Server and outbound HTTP.
@@ -141,35 +149,20 @@ Ready. Select a permission level, then run the demonstration.</pre>
         <details>
           <summary>Reference notes &amp; original examples</summary>
           <p class="source-note">
-            Retained project notes and examples. Demonstrations are
-            illustrative; check current platform documentation and original
-            research before relying on them.
+            Historical code examples retained from the Starfleet-themed guide.
+            They are reading material, not commands executed by this page or a
+            production deployment recipe. Verify platform support, trust,
+            authorization and outbound-network policy before using any example.
           </p>
-          <h2>A Starfleet Guide to Secure API Calls</h2>
+          <h2>A Starfleet guide to the integration boundary.</h2>
           <p>
-            Captain's Log, Stardate 99981.3. Our mission: to transmit a document
-            schematic (an HTML string) from the U.S.S. Enterprise's database to
-            a networked fabrication station. This station will generate a
-            Digital Document, place it in a subspace relay buffer, where
-            Starfleet Support Unit's Archival Team will retrieve and log it.
-            This complex, multi-stage operation requires the utmost precision.
+            The stored procedure supplies a document payload, the C# example
+            sends an HTTP request, and the remote service supplies a response.
+            The <a href="#demo">interactive console above</a> models permission
+            outcomes only: it never executes SQL, renders the payload or sends
+            the request.
           </p>
-          <p>
-            Every successful mission depends on its crew. This operation
-            requires a coordinated effort between several key personnel and
-            systems, each with a specific role.
-          </p>
-          <p>Issues the high-level command (You, the user).</p>
-          <p>Translates orders into specifics (The Stored Procedure).</p>
-          <p>The specialist who performs the action (C# CLR Assembly).</p>
-          <p>Operates the remote station (The API Endpoint).</p>
-          <p>Monitors the buffer and files the report (SSU FTP Process).</p>
-          <p>
-            The Chief Engineer has re-calibrated the transporter. The C# code
-            handles the `HTTP POST` request. Its sole responsibility is to
-            transmit the schematic and confirm the fabricator has received it
-            and created the Digital Document.
-          </p>
+          <h3>The C# example</h3>
           <pre>
 using System;
 using System.Data.SqlTypes;
@@ -217,13 +210,7 @@ public partial class DocumentFabricationProtocol
         }
     }
 }</pre>
-          <h3>From the Bridge: The T-SQL Command</h3>
-          <p>
-            The CLR function is the away team, but this stored procedure is the
-            Captain's command that gives them their orders. This is how you
-            execute the C# code from within SQL Server, passing the necessary
-            mission parameters.
-          </p>
+          <h3>The T-SQL command</h3>
           <pre>
 CREATE PROCEDURE dbo.usp_GenerateArchivedDocument
     @HtmlContent NVARCHAR(MAX)
@@ -257,12 +244,7 @@ BEGIN
         THROW;
     END CATCH
 END</pre>
-          <p>
-            Before the Stored Procedure can issue commands, the CLR assembly
-            must be beamed into the ship's computer and registered. These
-            commands load the compiled C# code and create the SQL Function that
-            links to it.
-          </p>
+          <h3>Assembly registration example</h3>
           <pre>
 -- Load the compiled .dll file into SQL Server.
 -- The DLL must be on a path accessible by the SQL Server service account.
@@ -281,21 +263,10 @@ RETURNS NVARCHAR(MAX)
 AS EXTERNAL NAME DocumentFabricationAssembly.[DocumentFabricationProtocol].CreateDocument;
 GO</pre>
           <p>
-            These are the preliminary system checks required before deploying
-            any CLR assembly. Execute them to ensure the ship's computer is
-            ready to accept our new protocols.
-          </p>
-          <p>
-            The `PERMISSION_SET` is like setting our shield strength. Even with
-            a complex mission, we must use the correct clearance.
-            `EXTERNAL_ACCESS` is required for any network communication. Select
-            a level to see the corresponding power allocation on the ship's
-            schematic.
-          </p>
-          <p>
-            The moment of truth. Enter the document schematic below and
-            authorize the transmission. The mission display will show the status
-            of the entire operation, from fabrication to archival.
+            <a href="#permissions">Read the permission-boundary notes</a> or
+            return to the <a href="#demo">local demonstration</a> to compare
+            SAFE, EXTERNAL_ACCESS and UNSAFE. There is no second transmission
+            form hidden in this reference section.
           </p>
         </details>
       </section>

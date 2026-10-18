@@ -221,3 +221,5 @@ if (q("#demographic")) {
   );
   q("#demographic").after(trendChart, trends);
 }
+
+q("#experiment-status")?.setAttribute("hidden", "");

@@ -155,73 +155,30 @@
         <details>
           <summary>Reference notes &amp; original examples</summary>
           <p class="source-note">
-            Retained project notes and examples. Demonstrations are
-            illustrative; check current platform documentation and original
-            research before relying on them.
+            This route documents a separate application. No account session or
+            social-graph request is started by this overview. Its architecture
+            describes the public source project; the application’s current
+            security behavior has not been independently audited here.
           </p>
+          <h2>Technical reading and source.</h2>
           <p>
-            A secure, client-side analysis tool built on the AT Protocol to scan
-            mutual follow connections, audit asymmetrical block relationships,
-            and detect top blockers across decentralized social graphs.
-          </p>
-          <p>
-            In decentralized social networks using the AT Protocol (such as
-            Bluesky), social graph operations like follows, mutes, and blocks
-            are stored as individual records in distributed user repositories
-            (PDS). Because timelines and feeds can suppress blocked posts
-            silently or produce disjointed reply trees, users frequently
-            experience unexplained interaction drops among their mutual
-            connections.
-          </p>
-          <p>
-            Bluesky Mutuals Block Checker provides a transparent, zero-install
-            web interface that authenticates directly with Bluesky, computes the
-            exact intersection of your follow graph ( A ∩ B ), and audits block
-            statuses and top blockers within your mutual circle in real time.
-          </p>
-          <p>
-            Fetches full follows and follower collections via cursor pagination
-            and calculates bidirectional mutuals.
-          </p>
-          <p>
-            Queries AT Protocol relationship endpoints to isolate incoming
-            blocks, outgoing blocks, and reciprocal block states.
-          </p>
-          <p>
-            Aggregates network block telemetry to identify third-party accounts
-            that hold the highest number of blocks among your mutuals.
-          </p>
-          <p>
-            Operates 100% in the client's browser. No database, no backend
-            server logging credentials, and no external tracking.
-          </p>
-          <p>
-            Batched XRPC requests with dynamic concurrency limits and
-            exponential backoff to respect Bluesky rate limits.
-          </p>
-          <p>
-            Quickly export full audit findings and account DID manifests to CSV
-            or JSON formats for offline review.
-          </p>
-          <p>
-            Because the application is hosted statically on Cloudflare Pages ,
-            communication occurs directly between the browser runtime and
-            Bluesky's AppView/PDS infrastructure via XRPC calls:
-          </p>
-          <h2>Technical Deep Dive &amp; Code Architecture</h2>
-          <p>
-            Uses @atproto/api to interface with XRPC endpoints. Key lexicons
-            utilized:
-          </p>
-          <p>
-            Continuous deployment hooked directly into GitHub (
-            schwegler/bsky-mutual-blocks ).
+            The original source excerpt computes mutual accounts from paginated
+            follow and follower collections. The complete application also
+            describes relationship auditing, rate limiting and export. Use its
+            actual interface for those features; this page does not contain an
+            unrendered account form or export result.
           </p>
           <pre>
 import { BskyAgent } from '@atproto/api' ; // 1. Compute Mutual Accounts from Follow &amp; Follower collections export async function getMutuals (agent: BskyAgent, actorDid: string ) { const follows = await fetchAllFollows (agent, actorDid); const followers = await fetchAllFollowers (agent, actorDid); const followerDidSet = new Set (followers.map(f =&gt; f.did)); return follows.filter(f =&gt; followerDidSet.has(f.did)); } // 2. Batch-Query Relationship Statuses to detect block flags export async function auditRelationships (agent: BskyAgent, mutualDids: string []) { const BATCH_SIZE = 30 ; const results = []; for ( let i = 0 ; i &lt; mutualDids.length; i += BATCH_SIZE) { const batch = mutualDids.slice(i, i + BATCH_SIZE); const res = await agent.app.bsky.graph.getRelationships({ actor: agent.session?.did!, others: batch }); results.push(...res.data.relationships); } return results; }</pre>
           <p>
-            Check out the live web tool or inspect the complete TypeScript
-            source repository.
+            <a href="https://bsky-mutual-blocks.pages.dev/"
+              >Launch the application</a
+            >
+            or
+            <a href="https://github.com/schwegler/bsky-mutual-blocks"
+              >inspect its public source</a
+            >. The <a href="#process">process overview</a> explains the stages
+            without starting an external session.
           </p>
         </details>
       </section>

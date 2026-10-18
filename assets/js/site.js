@@ -48,3 +48,20 @@ qa("[data-filter]").forEach((button) =>
     q(".filter-status").textContent = `${count} projects shown`;
   }),
 );
+
+const experimentStatus = q("#experiment-status");
+if (experimentStatus) {
+  const showExperimentFailure = () => {
+    experimentStatus.hidden = false;
+    experimentStatus.dataset.state = "error";
+    experimentStatus.textContent =
+      "The interactive script could not load or initialize. Reload this page to try again. The reference notes and static examples remain available below.";
+  };
+  q("script[data-experiment]")?.addEventListener(
+    "error",
+    showExperimentFailure,
+  );
+  window.addEventListener("error", (event) => {
+    if (event.filename?.includes("/assets/js/")) showExperimentFailure();
+  });
+}

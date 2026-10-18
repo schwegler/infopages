@@ -2068,3 +2068,90 @@ footer .support-links summary {
   align-items: center;
   min-height: 44px;
 }
+
+.reference-module {
+  margin-top: 28px;
+  border-top: 1px solid var(--line);
+  padding-top: 22px;
+}
+.reference-module h3 {
+  font-size: 26px;
+}
+.reference-module .dma-finding summary {
+  font:
+    16px/1.5 Arial,
+    sans-serif;
+}
+.reference-module .dma-finding p {
+  margin: 14px 0 0;
+  font-size: 14px;
+  max-width: 65ch;
+}
+.dependency-figure {
+  margin: 24px 0;
+}
+.dependency-figure svg {
+  width: 100%;
+  height: auto;
+}
+.dependency-figure rect {
+  fill: var(--light);
+  stroke: var(--violet);
+}
+.dependency-figure text {
+  fill: var(--ink);
+  font:
+    22px Arial,
+    sans-serif;
+  text-anchor: middle;
+}
+.dependency-edge {
+  stroke: #a9a6b3;
+  stroke-width: 3px;
+  fill: none;
+}
+.dependency-edge.selected {
+  stroke: var(--violet);
+  stroke-width: 5px;
+}
+.dependency-figure figcaption {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 12px;
+}
+#dependency-controls {
+  gap: 8px;
+  flex-wrap: wrap;
+}
+#dependency-controls[hidden] {
+  display: none;
+}
+#dependency-controls button {
+  white-space: normal;
+  min-height: 44px;
+}
+#dependency-result {
+  margin: 18px 0;
+  font-size: 14px;
+}
+.dependency-connections {
+  padding-left: 20px;
+  font-size: 13px;
+}
+.comparison-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+@media (max-width: 760px) {
+  .comparison-charts {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+.reference-module > p {
+  max-width: 70ch;
+}
+#security-guide {
+  scroll-margin-top: 100px;
+}
