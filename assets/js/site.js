@@ -24,8 +24,17 @@ if (menu && nav) {
     closeMenu(),
   );
   qa("#nav a").forEach((link) => {
-    const path = location.pathname.split("/").pop() || "index.html";
-    if (link.getAttribute("href").split("#")[0] === path && !link.hash)
+    const path = (location.pathname.split("/").pop() || "index.html").replace(
+      /\.html$/,
+      "",
+    );
+    if (
+      link
+        .getAttribute("href")
+        .split("#")[0]
+        .replace(/\.html$/, "") === path &&
+      !link.hash
+    )
       link.setAttribute("aria-current", "page");
     link.addEventListener("click", () => closeMenu());
   });
