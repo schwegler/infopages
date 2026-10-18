@@ -10,6 +10,7 @@
     />
     <title>Résumé — Andrew Schwegler</title>
     <link href="assets/site.css" rel="stylesheet" />
+    <link href="assets/showcase.css" rel="stylesheet" />
     <script src="assets/js/site.js" type="module"></script>
     <link href="https://infopages.pages.dev/" rel="canonical" />
     <meta content="website" property="og:type" />
@@ -52,8 +53,7 @@
       </button>
       <nav aria-label="Main navigation" id="nav">
         <a href="index.html#experience">Résumé</a
-        ><a href="work.html">Selected work</a
-        ><a href="notes.html">Notes &amp; experiments</a
+        ><a href="work.html">Projects &amp; experiments</a
         ><a href="index.html#contact">Contact</a>
       </nav>
     </header>
@@ -119,80 +119,30 @@
         T-SQL <span>/</span> Python <span>/</span> Ruby <span>/</span> Data
         visualization <span class="square"></span>
       </div>
-      <section id="projects">
+      <section id="projects" class="showcase-entrypoint">
         <div class="section-head">
           <div>
-            <p class="eyebrow marker">02 / Selected work</p>
-            <h2>Complex ideas.<br />Clearer paths.</h2>
+            <p class="eyebrow marker">02 / Projects &amp; experiments</p>
+            <h2>Useful things.<br />Curious detours.</h2>
           </div>
           <p>
-            Public projects that turn technical concepts into something people
-            can explore.
+            Browser tools, hands-on technical guides and interactive stories.
+            Explore them together in one place.
           </p>
         </div>
-        <a
-          class="project-row"
-          data-category="technical"
-          href="bsky_mutual_blocks.html"
-          ><span class="number">01</span>
-          <div>
-            <small>Software</small>
-            <h3>Bluesky Mutuals Block Checker</h3>
-          </div>
-          <p>
-            Client-side graph analysis, relationship auditing and export on the
-            AT Protocol.
-          </p>
-          <svg aria-hidden="true" class="arrow" fill="none" viewbox="0 0 24 24">
-            <path
-              d="M4 12h15m-6-6 6 6-6 6"
-              stroke="currentColor"
-              stroke-width="1.4"
-            ></path></svg></a
-        ><a class="project-row" data-category="technical" href="sqlhttp.html"
-          ><span class="number">02</span>
-          <div>
-            <small>Technical guide</small>
-            <h3>Secure API calls with C# &amp; SQL</h3>
-          </div>
-          <p>
-            A Starfleet-inspired guide to SQL CLR permissions, HTTPS and
-            application boundaries.
-          </p>
-          <svg aria-hidden="true" class="arrow" fill="none" viewbox="0 0 24 24">
-            <path
-              d="M4 12h15m-6-6 6 6-6 6"
-              stroke="currentColor"
-              stroke-width="1.4"
-            ></path></svg></a
-        ><a
-          class="project-row"
-          data-category="technical"
-          href="sqlmovebuffy.html"
-          ><span class="number">03</span>
-          <div>
-            <small>Technical guide</small>
-            <h3>The Slayer’s guide to SQL migration</h3>
-          </div>
-          <p>
-            Assessment, dependencies, security and cutover explained through an
-            interactive guide.
-          </p>
-          <svg aria-hidden="true" class="arrow" fill="none" viewbox="0 0 24 24">
-            <path
-              d="M4 12h15m-6-6 6 6-6 6"
-              stroke="currentColor"
-              stroke-width="1.4"
-            ></path></svg></a
-        ><a class="text-link more" href="work.html"
-          >Explore all six projects
-          <svg aria-hidden="true" class="arrow" fill="none" viewbox="0 0 24 24">
+        <a class="button" href="work.html"
+          >Explore projects &amp; experiments
+          <svg aria-hidden="true" class="arrow" fill="none" viewBox="0 0 24 24">
             <path
               d="M4 12h15m-6-6 6 6-6 6"
               stroke="currentColor"
               stroke-width="1.4"
             ></path></svg
         ></a>
+        <p class="entrypoint-note">
+          Start with the Bluesky graph tool, the SQL migration guide or a visit
+          to the 5 PM Cat Club.
+        </p>
       </section>
       <section class="experience" id="experience">
         <div class="section-head">
@@ -272,9 +222,9 @@
         <p class="eyebrow marker">04 / Beyond the résumé</p>
         <h2>A wider field of view.</h2>
         <div class="two-col">
-          <a href="notes.html"
+          <a href="work.html#experiments"
             ><h3>
-              Notes &amp; experiments
+              More to explore
               <svg
                 aria-hidden="true"
                 class="arrow"

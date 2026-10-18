@@ -1,0 +1,384 @@
+/* Historical experiment identities, scoped to the body of each project.
+   Shared header/footer retain the approved creator system and palette. */
+.experiment-page main {
+  padding-inline: clamp(16px, 3vw, 48px);
+  margin-block: 24px;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--project-radius, 0px);
+}
+.experiment-page main .project-hero {
+  border-bottom: 4px solid var(--violet);
+}
+.experiment-page main .project-hero h1 {
+  font-family: var(--project-heading, var(--sans));
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+.experiment-page main :is(h2, h3) {
+  font-family: var(--project-heading, var(--sans));
+}
+.experiment-page main .demo {
+  background: var(--light);
+  border: 1px solid var(--line);
+  border-radius: var(--project-radius, 0px);
+}
+.experiment-page main :is(button, .button)[aria-pressed="true"],
+.experiment-page main .button {
+  background: var(--violet);
+  color: var(--on-accent, white);
+}
+.experiment-page main :is(input, textarea, select) {
+  color: var(--ink);
+  background: var(--paper);
+  border-color: var(--muted);
+}
+.experiment-page main .experiment-nav {
+  column-gap: 20px;
+}
+.experiment-page main :is(.eyebrow, .back, .demo-head) {
+  color: var(--violet);
+}
+.experiment-page main .next {
+  border-top: 3px solid var(--violet);
+}
+.experiment-starfleet main {
+  --paper: #080e1c;
+  --ink: #edf1ff;
+  --muted: #b3bfd8;
+  --line: #53678e;
+  --light: #14213a;
+  --violet: #ffbd70;
+  --on-accent: #080e1c;
+  --project-heading: "Arial Black", "Trebuchet MS", sans-serif;
+  --project-radius: 24px;
+}
+.experiment-starfleet main .project-hero {
+  border-left: 14px solid #c8a4ee;
+  padding-left: 20px;
+}
+.experiment-starfleet main h1 {
+  text-transform: uppercase;
+  color: #ffbd70;
+}
+.experiment-starfleet main .experiment-nav {
+  border-bottom: 8px solid #9ebcff;
+}
+.experiment-starfleet main #console {
+  color: #edf1ff;
+  background: #080e1c;
+  border-left: 5px solid #ffbd70;
+}
+.experiment-hollyoaks main {
+  --paper: #fff9fd;
+  --ink: #30213a;
+  --muted: #6c526d;
+  --line: #dcb8d4;
+  --light: #f5e8f5;
+  --violet: #a11668;
+  --project-radius: 18px;
+  --project-heading: "Trebuchet MS", sans-serif;
+}
+.experiment-hollyoaks main .project-hero {
+  background: linear-gradient(120deg, #fbe3f3, #e0f5f0);
+  margin-inline: clamp(-48px, -3vw, -16px);
+  padding-inline: clamp(16px, 3vw, 48px);
+  border-radius: 18px 18px 0 0;
+}
+.experiment-hollyoaks main #families details {
+  border-left: 4px solid #087b79;
+  padding-left: 16px;
+}
+.experiment-hollyoaks main #timeline article {
+  border-left: 4px solid #a11668;
+  padding-left: 18px;
+}
+.experiment-ringside main {
+  --paper: #141414;
+  --ink: #fff7e1;
+  --muted: #cfc5b2;
+  --line: #706457;
+  --light: #262323;
+  --violet: #ffd66a;
+  --on-accent: #18120a;
+  --project-heading: Impact, "Arial Narrow", sans-serif;
+  border-top: 10px solid #b72835;
+}
+.experiment-ringside main :is(h1, h2, h3) {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.experiment-ringside main .project-hero {
+  background: repeating-linear-gradient(
+    135deg,
+    transparent 0 24px,
+    #ffffff04 24px 26px
+  );
+  border-bottom-color: #b72835;
+}
+.experiment-ringside main .ring {
+  border-color: #ffd66a;
+  background: #391c21;
+}
+.experiment-fading main {
+  --paper: #faf6ef;
+  --ink: #292c43;
+  --muted: #605d72;
+  --line: #c9c0cf;
+  --light: #ede8f5;
+  --violet: #493bad;
+  --project-heading: Georgia, serif;
+  border-top: 6px solid #493bad;
+}
+.experiment-fading main .big-stat {
+  color: #493bad;
+  font-family: Georgia, serif;
+}
+.experiment-fading main .data-feature {
+  border-left: 5px solid #493bad;
+  padding-left: 20px;
+}
+.experiment-bluesky main {
+  --paper: #0b1424;
+  --ink: #edf5ff;
+  --muted: #afc6df;
+  --line: #486480;
+  --light: #15283e;
+  --violet: #84c7ff;
+  --on-accent: #081829;
+  --project-heading: "Trebuchet MS", sans-serif;
+  --project-radius: 12px;
+  background-image: radial-gradient(
+    ellipse at top right,
+    #143c60,
+    transparent 55%
+  );
+}
+.experiment-bluesky main .project-hero h1 {
+  color: #84c7ff;
+}
+.experiment-bluesky main .process {
+  border-top: 3px solid #84c7ff;
+}
+@media (max-width: 600px) {
+  .experiment-page main {
+    width: calc(100% - 24px);
+    margin-block: 12px;
+  }
+  .experiment-starfleet main .project-hero {
+    border-left-width: 7px;
+    padding-left: 12px;
+  }
+  .experiment-page main .project-hero h1 {
+    font-size: clamp(30px, 8vw, 44px);
+    overflow-wrap: anywhere;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .experiment-page main *,
+  .experiment-page main *::before,
+  .experiment-page main *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* Keep mission controls in the first screenful despite the wider display face. */
+.experiment-starfleet main .project-hero h1 {
+  font-size: clamp(30px, 4vw, 54px);
+  max-width: 28ch;
+}
+.experiment-starfleet main .project-hero {
+  padding-bottom: 16px;
+}
+.experiment-starfleet main .experiment-lead {
+  padding-block: 16px;
+}
+/* Original chart series remain distinct on both light and dark project surfaces. */
+.experiment-page main .source-chart [stroke="#514287"] {
+  stroke: var(--violet);
+}
+.experiment-page main .source-chart [fill="#514287"] {
+  fill: var(--violet);
+}
+.experiment-ringside main .source-chart [stroke="#9a7694"] {
+  stroke: #ff9ea9;
+}
+.experiment-ringside main .source-chart [fill="#9a7694"] {
+  fill: #ff9ea9;
+}
+.experiment-ringside main .chart-legend span:nth-child(2)::before {
+  background: #ff9ea9;
+}
+.experiment-starfleet main .project-hero {
+  padding-top: 20px;
+}
+.experiment-ringside main .roster-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.experiment-ringside main .roster-cards details {
+  border: 2px solid #ffd66a;
+  background: #262323;
+  padding: 20px;
+  align-self: start;
+}
+.experiment-ringside main .roster-cards details:nth-child(2) {
+  border-color: #ff9ea9;
+}
+.experiment-ringside main .roster-cards details:nth-child(3) {
+  border-color: #8abaff;
+}
+.experiment-ringside main .roster-cards summary {
+  min-height: 80px;
+  font-weight: 700;
+}
+@media (max-width: 850px) {
+  .experiment-ringside main .roster-cards {
+    grid-template-columns: 1fr;
+  }
+}
+/* Restore the pre-#136 Slayer identity: Creepster, crimson, black and five chapters. */
+@font-face {
+  font-family: Creepster;
+  src: url("fonts/creepster.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+.experiment-slayer main {
+  --paper: #09090c;
+  --ink: #f1ece5;
+  --muted: #c5bdc8;
+  --line: #534452;
+  --light: #171720;
+  --violet: #ff9299;
+  --on-accent: #16090d;
+  --project-heading: Creepster, Georgia, serif;
+  font-family: Georgia, "Times New Roman", serif;
+  max-width: 1180px;
+  border: 0;
+  border-top: 4px solid #b91c1c;
+  border-bottom: 4px solid #b91c1c;
+  background:
+    radial-gradient(ellipse at 50% 0, #30121d 0, transparent 28%),
+    linear-gradient(#09090c, #11121a 50%, #09090c);
+}
+.experiment-slayer main .project-hero {
+  text-align: center;
+  border: 0;
+  padding-block: 40px 32px;
+}
+.experiment-slayer main .project-hero h1 {
+  font-family: Creepster, Georgia, serif;
+  font-weight: 400;
+  font-variant: normal;
+  font-size: clamp(50px, 7vw, 94px);
+  letter-spacing: 1px;
+  line-height: 1.03;
+  max-width: 16ch;
+  margin: 18px auto;
+  color: #f87880;
+  text-shadow:
+    0 2px 1px #000,
+    0 0 28px #b91c1c55;
+}
+.experiment-slayer main .project-hero .intro {
+  margin: 0 auto;
+  font-variant: small-caps;
+  color: #e0d5e1;
+}
+.experiment-slayer main .project-hero .back {
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.experiment-slayer main .experiment-nav {
+  background: #09090cf5;
+  border-block: 1px solid #86505d;
+}
+.experiment-slayer main .experiment-lead {
+  display: block;
+  max-width: 780px;
+  margin: auto;
+  text-align: center;
+}
+.experiment-slayer main .experiment-lead h2 {
+  font-size: 30px;
+  color: #ff9299;
+}
+.experiment-slayer main .experiment-lead p {
+  margin-inline: auto;
+}
+.experiment-slayer main h2[data-chapter] {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-family: Creepster, Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(32px, 4vw, 48px);
+  letter-spacing: 1px;
+  color: #f87880;
+}
+.experiment-slayer main h2[data-chapter]::before {
+  content: attr(data-chapter);
+  font:
+    400 clamp(40px, 6vw, 68px)/1 Georgia,
+    serif;
+  color: #f87880;
+  min-width: 1.4em;
+  text-align: center;
+  border-right: 1px solid #86505d;
+  padding-right: 16px;
+}
+.experiment-slayer
+  main
+  :is(.checklist, .reference-module, .dependency-figure, .armory) {
+  background: #15151dcc;
+  border: 1px solid #51404f;
+  padding: clamp(16px, 3vw, 28px);
+  box-shadow: inset 0 0 28px #0005;
+}
+.experiment-slayer main .demo {
+  border: 1px solid #86505d;
+  border-top: 3px solid #b91c1c;
+  background: #15151dcc;
+}
+.experiment-slayer main #dependencies .two-col {
+  display: block;
+}
+.experiment-slayer main #security {
+  max-width: 100%;
+}
+.experiment-slayer main h3 {
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #ff9299;
+}
+.experiment-slayer main .button {
+  background: #a32639;
+  color: #fff;
+  border: 1px solid #ff9299;
+  font-family: Georgia, serif;
+  font-weight: bold;
+}
+.experiment-slayer main :is(#assessment, #dependencies, #security-guide) {
+  border-bottom: 1px solid #534452;
+}
+@media (max-width: 600px) {
+  .experiment-slayer main .project-hero {
+    padding-block: 28px 20px;
+  }
+  .experiment-slayer main .project-hero h1 {
+    font-size: clamp(46px, 11vw, 64px);
+  }
+  .experiment-slayer main h2[data-chapter] {
+    gap: 12px;
+  }
+  .experiment-slayer main h2[data-chapter]::before {
+    padding-right: 10px;
+    min-width: 1.2em;
+  }
+}

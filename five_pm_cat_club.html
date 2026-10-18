@@ -1,0 +1,308 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <meta
+      content="Andrew Schwegler — databases, software and interactive explanations."
+      name="description"
+    />
+    <title>5 PM Cat Club — Andrew Schwegler</title>
+    <link href="assets/site.css" rel="stylesheet" />
+    <link href="assets/cat-club/style.css" rel="stylesheet" />
+    <script src="assets/js/site.js" type="module"></script>
+
+    <link
+      href="https://infopages.pages.dev/five_pm_cat_club.html"
+      rel="canonical"
+    />
+    <meta content="website" property="og:type" />
+    <meta content="5 PM Cat Club — Andrew Schwegler" property="og:title" />
+    <meta
+      content="https://infopages.pages.dev/five_pm_cat_club.html"
+      property="og:url"
+    />
+    <meta content="light" name="color-scheme" />
+    <meta content="#f7f7f2" name="theme-color" />
+    <link href="assets/favicon.svg" rel="icon" type="image/svg+xml" />
+  </head>
+  <body class="cat-club-page">
+    <a class="skip" href="#main">Skip to content</a>
+    <header>
+      <a class="brand" href="index.html" aria-label="Andrew Schwegler home"
+        ><img
+          alt="schweg.xyz"
+          class="wordmark"
+          height="52"
+          src="assets/brand/schweg-signature-ink.png"
+          width="176"
+        /><span class="brand-name">Andrew Schwegler</span></a
+      ><button aria-controls="nav" aria-expanded="false" class="menu" hidden="">
+        Menu <span>+</span>
+      </button>
+      <nav aria-label="Main navigation" id="nav">
+        <a href="index.html#experience">Résumé</a
+        ><a href="work.html">Projects &amp; experiments</a
+        ><a href="index.html#contact">Contact</a>
+      </nav>
+    </header>
+    <main id="main" tabindex="-1">
+      <div class="cat-club">
+        <div class="site-shell">
+          <header class="topbar">
+            <div class="brand">
+              <span class="brand-mark" aria-hidden="true">✦</span
+              ><span>THE 5 PM CAT CLUB</span>
+            </div>
+            <div class="top-date" id="today"></div>
+          </header>
+          <div class="club-content">
+            <section class="clock-hero" aria-labelledby="hero-title">
+              <img
+                src="assets/cat-club/clock-library.png"
+                alt="Three curious cats in a colorful library overlooking a golden sunset"
+                class="hero-art"
+              />
+              <div class="hero-shade"></div>
+              <div class="hero-content">
+                <p class="eyebrow" id="day-state">THE FINAL STRETCH</p>
+                <h1 id="hero-title">The clock is clocking.</h1>
+                <div class="countdown" id="countdown" aria-live="off">
+                  <div><strong id="hours">00</strong><span>HOURS</span></div>
+                  <b>:</b>
+                  <div>
+                    <strong id="minutes">00</strong><span>MINUTES</span>
+                  </div>
+                  <b>:</b>
+                  <div>
+                    <strong id="seconds">00</strong><span>SECONDS</span>
+                  </div>
+                </div>
+                <div class="clock-footer">
+                  <span id="clock-note">Until 5:00 PM</span
+                  ><span id="current-time"></span>
+                </div>
+                <div
+                  class="progress-track"
+                  role="progressbar"
+                  aria-label="Workday progress"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  aria-valuenow="0"
+                  id="progress"
+                >
+                  <span id="progress-fill"></span>
+                </div>
+              </div>
+            </section>
+            <section class="games" aria-labelledby="games-title">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow dark">THE DISTRACTION DESK</p>
+                  <h2 id="games-title">Pick a tiny detour.</h2>
+                </div>
+                <p>Three ways to make a few minutes disappear.</p>
+              </div>
+              <div class="game-layout">
+                <nav class="game-tabs" aria-label="Choose a game">
+                  <button
+                    class="game-tab active"
+                    data-game="blocks"
+                    aria-current="true"
+                  >
+                    <span class="tab-icon blocks-icon">▦</span
+                    ><span
+                      ><strong>Falling Blocks</strong
+                      ><small>One more line.</small></span
+                    ></button
+                  ><button class="game-tab" data-game="snake">
+                    <span class="tab-icon snake-icon">〰</span
+                    ><span
+                      ><strong>Snake</strong
+                      ><small>Follow the snacks.</small></span
+                    ></button
+                  ><button class="game-tab" data-game="sudoku">
+                    <span class="tab-icon sudoku-icon">#</span
+                    ><span
+                      ><strong>Sudoku</strong
+                      ><small>A quieter kind of chaos.</small></span
+                    >
+                  </button>
+                </nav>
+                <div class="play-card">
+                  <div class="play-heading">
+                    <div>
+                      <span class="overline" id="game-kicker"
+                        >THE ARCADE SHELF · 01</span
+                      >
+                      <h3 id="game-title">Falling Blocks</h3>
+                    </div>
+                    <button class="outline-button" id="new-game">
+                      New game
+                    </button>
+                  </div>
+                  <div id="blocks-panel" class="game-panel">
+                    <div class="arcade-area">
+                      <canvas
+                        id="blocks-board"
+                        width="240"
+                        height="480"
+                        aria-label="Falling Blocks board"
+                      ></canvas>
+                      <div class="arcade-side">
+                        <div class="stat">
+                          <span>SCORE</span><strong id="blocks-score">0</strong>
+                        </div>
+                        <div class="stat">
+                          <span>LINES</span><strong id="blocks-lines">0</strong>
+                        </div>
+                        <div class="stat">
+                          <span>NEXT</span
+                          ><canvas
+                            id="next-piece"
+                            width="100"
+                            height="100"
+                            aria-label="Next piece"
+                          ></canvas>
+                        </div>
+                        <p class="instructions">
+                          ← → move · ↑ rotate<br />↓ soft drop · Space hard
+                          drop<br />P pause
+                        </p>
+                        <button class="primary-button" id="blocks-toggle">
+                          Start playing
+                        </button>
+                      </div>
+                    </div>
+                    <div class="touch-controls" data-for="blocks">
+                      <button data-key="ArrowLeft" aria-label="Move left">
+                        ←</button
+                      ><button data-key="ArrowUp" aria-label="Rotate">↻</button
+                      ><button data-key="ArrowRight" aria-label="Move right">
+                        →</button
+                      ><button data-key="ArrowDown" aria-label="Drop one row">
+                        ↓</button
+                      ><button data-key="Space" aria-label="Hard drop">
+                        ⇣
+                      </button>
+                    </div>
+                  </div>
+                  <div id="snake-panel" class="game-panel" hidden>
+                    <div class="arcade-area">
+                      <canvas
+                        id="snake-board"
+                        width="400"
+                        height="400"
+                        aria-label="Snake board"
+                      ></canvas>
+                      <div class="arcade-side">
+                        <div class="stat">
+                          <span>SCORE</span><strong id="snake-score">0</strong>
+                        </div>
+                        <div class="stat">
+                          <span>BEST THIS VISIT</span
+                          ><strong id="snake-best">0</strong>
+                        </div>
+                        <p class="instructions">
+                          Arrow keys or WASD to steer.<br />Eat the golden
+                          squares. Avoid walls and your tail.
+                        </p>
+                        <button class="primary-button" id="snake-toggle">
+                          Start playing
+                        </button>
+                      </div>
+                    </div>
+                    <div class="touch-controls" data-for="snake">
+                      <button data-key="ArrowLeft" aria-label="Turn left">
+                        ←</button
+                      ><button data-key="ArrowUp" aria-label="Turn up">↑</button
+                      ><button data-key="ArrowDown" aria-label="Turn down">
+                        ↓</button
+                      ><button data-key="ArrowRight" aria-label="Turn right">
+                        →
+                      </button>
+                    </div>
+                  </div>
+                  <div id="sudoku-panel" class="game-panel" hidden>
+                    <div class="sudoku-area">
+                      <div>
+                        <div
+                          id="sudoku-board"
+                          class="sudoku-board"
+                          role="grid"
+                          aria-label="Sudoku puzzle"
+                        ></div>
+                        <div class="number-pad" id="number-pad"></div>
+                      </div>
+                      <div class="sudoku-side">
+                        <div class="stat">
+                          <span>FILLED</span
+                          ><strong id="sudoku-filled">0 / 81</strong>
+                        </div>
+                        <p class="instructions">
+                          Fill every row, column, and 3 × 3 box with 1 through
+                          9. Tap a square, then a number. Conflicts are marked
+                          in coral.
+                        </p>
+                        <button class="outline-button" id="sudoku-erase">
+                          Erase selected</button
+                        ><button class="primary-button" id="sudoku-check">
+                          Check puzzle
+                        </button>
+                        <p
+                          id="sudoku-message"
+                          class="game-message"
+                          aria-live="polite"
+                        ></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="club-footer">
+            Supervised by cats. The clock uses your device’s local time.
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="assets/cat-club/app.js" defer></script>
+    <footer>
+      <a
+        aria-label="A schweg.xyz project"
+        class="creator-credit"
+        href="https://schweg.xyz/"
+        ><span>a</span
+        ><img
+          alt="schweg.xyz"
+          decoding="async"
+          height="39"
+          loading="lazy"
+          src="assets/brand/schweg-signature-ink.png"
+          width="124"
+        /><span>project</span></a
+      >
+      <p>Databases, systems &amp; a curious mind.</p>
+      <div>
+        <a href="https://tacobout.online">tacobout.online</a
+        ><a href="https://trove.schweg.xyz">Trove</a><a href="tos.html">Terms</a
+        ><a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        <a
+          href="mailto:&#97;&#110;&#100;&#114;&#101;&#119;&#64;&#115;&#99;&#104;&#119;&#101;&#103;&#46;&#120;&#121;&#122;"
+          >Email Andrew</a
+        >
+        <details class="support-links">
+          <summary>Help with hosting</summary>
+          <span class="support-choices">
+            <a href="https://paypal.me/schwegler">PayPal</a>
+            <a href="https://venmo.com/u/Schwegler">Venmo</a>
+            <a href="https://cash.app/$schwg">Cash App</a>
+          </span>
+        </details>
+      </div>
+      <small>© <span data-year="">2026</span> Andrew Schwegler</small>
+    </footer>
+  </body>
+</html>

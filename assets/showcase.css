@@ -1,0 +1,177 @@
+.showcase-page main {
+  max-width: 1240px;
+}
+.showcase-page .showcase-hero {
+  padding-bottom: 44px;
+}
+.showcase-page .showcase-hero h1 {
+  font-size: clamp(50px, 7vw, 86px);
+  max-width: 12ch;
+}
+.showcase-page .showcase-hero .intro {
+  font-size: 19px;
+  max-width: 46em;
+  margin-bottom: 24px;
+}
+.showcase-page main > .showcase-featured {
+  padding: 0;
+}
+.showcase-feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+  padding: 44px 0;
+  border-top: 1px solid var(--line);
+}
+.showcase-feature picture {
+  display: block;
+  overflow: hidden;
+  background: #e4e2e9;
+}
+.showcase-feature img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 8/5;
+  object-fit: cover;
+  transition: transform 0.25s;
+}
+.showcase-feature:hover img {
+  transform: scale(1.015);
+}
+.showcase-number {
+  font: 12px/1 var(--sans);
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.showcase-kind {
+  font: 12px/1.5 var(--sans);
+  color: var(--muted);
+  margin: 18px 0 10px;
+}
+.showcase-feature h2 {
+  font: 400 clamp(28px, 3vw, 42px)/1.1 var(--serif);
+  letter-spacing: -0.035em;
+  margin: 0 0 20px;
+}
+.feature-copy > p:not(.showcase-kind) {
+  font: 15px/1.7 var(--sans);
+  color: var(--muted);
+  max-width: 44ch;
+}
+.showcase-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 14px;
+  margin-top: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--ink);
+}
+.showcase-action .arrow {
+  width: 24px;
+}
+.showcase-page .showcase-rest {
+  border-top: 1px solid var(--ink);
+  padding-top: 40px;
+}
+.showcase-rest > h2 {
+  font: 400 clamp(34px, 4vw, 52px)/1.1 var(--serif);
+  margin: 0 0 16px;
+}
+.showcase-description {
+  color: var(--muted);
+  font-size: 15px;
+  margin-bottom: 28px;
+}
+.showcase-link {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) 24px;
+  gap: 24px;
+  align-items: baseline;
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+}
+.showcase-link h3 {
+  font: 400 25px/1.2 var(--serif);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.showcase-link p {
+  font: 14px/1.6 var(--sans);
+  color: var(--muted);
+  margin: 8px 0 0;
+}
+.showcase-link .arrow {
+  width: 24px;
+  align-self: center;
+}
+.showcase-link:hover h3 {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.showcase-page #experiments {
+  scroll-margin-top: 30px;
+}
+.showcase-entrypoint .entrypoint-note {
+  color: var(--muted);
+  font: 14px/1.7 var(--sans);
+  max-width: 58ch;
+  margin-top: 24px;
+}
+@media (max-width: 900px) {
+  .showcase-feature {
+    gap: 24px;
+  }
+  .showcase-feature h2 {
+    font-size: 30px;
+  }
+}
+@media (max-width: 760px) {
+  .showcase-feature {
+    grid-template-columns: 1fr;
+    padding: 28px 0;
+    gap: 22px;
+  }
+  .showcase-feature h2 {
+    font-size: 32px;
+    max-width: 20ch;
+  }
+  .showcase-kind {
+    margin-top: 12px;
+  }
+  .showcase-feature .feature-copy > p {
+    max-width: none;
+  }
+  .showcase-feature h2 {
+    margin-bottom: 14px;
+  }
+  .showcase-action {
+    margin-top: 8px;
+  }
+  .showcase-page .showcase-hero .intro {
+    font-size: 17px;
+  }
+  .showcase-link {
+    gap: 14px;
+    padding: 22px 0;
+  }
+  .showcase-link h3 {
+    font-size: 24px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .showcase-feature img {
+    transition: none;
+  }
+  .showcase-feature:hover img {
+    transform: none;
+  }
+}
+.showcase-page .showcase-hero {
+  padding-top: 44px;
+}
+.showcase-page .showcase-hero h1 {
+  margin-top: 12px;
+}

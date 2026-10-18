@@ -122,3 +122,27 @@ def test_mascot_disclosures_are_native_and_use_approved_png(clean_page, site_url
         expect(image).to_be_visible()
         assert image.evaluate('async(el)=>{await el.decode();return el.naturalWidth===1145 && el.naturalHeight===1374}')
         assert image.bounding_box()['width']==96
+
+@pytest.mark.parametrize('route', EXPERIMENTS)
+@pytest.mark.parametrize('width,height',[(390,568),(768,600),(1440,600)])
+def test_experiment_short_viewports_and_theme(clean_page,site_url,route,width,height):
+    page=clean_page;page.set_viewport_size({'width':width,'height':height})
+    page.emulate_media(reduced_motion='reduce')
+    page.goto(f'{site_url}/{route}.html')
+    assert page.locator('h1').inner_text().strip()
+    assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
+    assert page.locator('main').evaluate('(e)=>getComputedStyle(e).backgroundColor') != page.locator('body').evaluate('(e)=>getComputedStyle(e).backgroundColor')
+    assert page.locator('header .wordmark').get_attribute('src')=='assets/brand/schweg-signature-ink.png'
+    button=page.locator('main button:visible').first
+    if button.count():
+        button.focus();expect(button).to_be_focused()
+
+@pytest.mark.parametrize('width',[390,768,1440])
+def test_original_tna_roster_cards(clean_page,site_url,width):
+    page=clean_page;page.set_viewport_size({'width':width,'height':600})
+    page.goto(f'{site_url}/tna_history.html')
+    for name,people in [('Top Stars',['Kurt Angle','Sting','AJ Styles','Samoa Joe','Jeff Jarrett']),('Knockouts',['Gail Kim','Awesome Kong','Taylor Wilde','The Beautiful People','ODB']),('Tag Teams',['Beer Money, Inc.','Motor City Machine Guns','Team 3D','LAX','Styles & Daniels'])]:
+        summary=page.locator('#figures summary').filter(has_text=name)
+        summary.focus();page.keyboard.press('Enter')
+        for person in people:expect(page.locator('#figures li').filter(has_text=person)).to_be_visible()
+    assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')

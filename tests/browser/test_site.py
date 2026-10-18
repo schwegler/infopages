@@ -3,7 +3,7 @@ import json
 import pytest
 from playwright.sync_api import expect
 
-ROUTES=['index.html','work.html','notes.html','resume.html','bsky_mutual_blocks.html','sqlhttp.html','sqlmovebuffy.html','hollyoaks_history.html','tna_history.html','gay_bar_closures.html','tos.html']
+ROUTES=['five_pm_cat_club.html','index.html','work.html','notes.html','resume.html','bsky_mutual_blocks.html','sqlhttp.html','sqlmovebuffy.html','hollyoaks_history.html','tna_history.html','gay_bar_closures.html','tos.html']
 @pytest.mark.parametrize('route',ROUTES)
 def test_pages_are_self_contained_and_responsive(clean_page,site_url,route):
     page=clean_page
@@ -30,12 +30,9 @@ def test_pages_are_self_contained_and_responsive(clean_page,site_url,route):
 
 def test_navigation_filter_and_mobile_keyboard(clean_page,site_url):
     page=clean_page;page.goto(f'{site_url}/work.html')
-    page.get_by_role('button',name='Software & systems').click()
-    expect(page.locator('.project-row:visible')).to_have_count(3)
-    page.get_by_role('button',name='Culture & data').click()
-    expect(page.locator('.project-row:visible')).to_have_count(3)
-    page.get_by_role('button',name='All work').click()
-    expect(page.locator('.project-row:visible')).to_have_count(6)
+    expect(page.locator('.showcase-feature')).to_have_count(3)
+    expect(page.locator('.showcase-link')).to_have_count(6)
+    assert page.locator('.showcase-entry').evaluate_all('(els)=>els.map(e=>Number(e.dataset.rank))') == list(range(1,10))
     page.set_viewport_size({'width':390,'height':844})
     menu=page.get_by_role('button',name='Menu')
     menu.click();expect(menu).to_have_attribute('aria-expanded','true')
@@ -49,8 +46,8 @@ def test_navigation_without_javascript(browser,site_url):
     context=browser.new_context(java_script_enabled=False,viewport={'width':390,'height':844})
     page=context.new_page();page.goto(f'{site_url}/index.html')
     expect(page.get_by_role('navigation')).to_be_visible()
-    page.get_by_role('navigation').get_by_role('link',name='Selected work',exact=True).click()
-    expect(page.locator('h1')).to_contain_text('Useful things')
+    page.get_by_role('navigation').get_by_role('link',name='Projects & experiments',exact=True).click()
+    expect(page.locator('h1')).to_contain_text('Projects &')
     context.close()
 
 
