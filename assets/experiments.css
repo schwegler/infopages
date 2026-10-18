@@ -242,3 +242,29 @@
 .experiment-starfleet main .project-hero {
   padding-top: 20px;
 }
+.experiment-ringside main .roster-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.experiment-ringside main .roster-cards details {
+  border: 2px solid #ffd66a;
+  background: #262323;
+  padding: 20px;
+  align-self: start;
+}
+.experiment-ringside main .roster-cards details:nth-child(2) {
+  border-color: #ff9ea9;
+}
+.experiment-ringside main .roster-cards details:nth-child(3) {
+  border-color: #8abaff;
+}
+.experiment-ringside main .roster-cards summary {
+  min-height: 80px;
+  font-weight: 700;
+}
+@media (max-width: 850px) {
+  .experiment-ringside main .roster-cards {
+    grid-template-columns: 1fr;
+  }
+}

@@ -136,3 +136,13 @@ def test_experiment_short_viewports_and_theme(clean_page,site_url,route,width,he
     button=page.locator('main button:visible').first
     if button.count():
         button.focus();expect(button).to_be_focused()
+
+@pytest.mark.parametrize('width',[390,768,1440])
+def test_original_tna_roster_cards(clean_page,site_url,width):
+    page=clean_page;page.set_viewport_size({'width':width,'height':600})
+    page.goto(f'{site_url}/tna_history.html')
+    for name,people in [('Top Stars',['Kurt Angle','Sting','AJ Styles','Samoa Joe','Jeff Jarrett']),('Knockouts',['Gail Kim','Awesome Kong','Taylor Wilde','The Beautiful People','ODB']),('Tag Teams',['Beer Money, Inc.','Motor City Machine Guns','Team 3D','LAX','Styles & Daniels'])]:
+        summary=page.locator('#figures summary').filter(has_text=name)
+        summary.focus();page.keyboard.press('Enter')
+        for person in people:expect(page.locator('#figures li').filter(has_text=person)).to_be_visible()
+    assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')

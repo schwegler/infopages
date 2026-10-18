@@ -11,7 +11,7 @@ Inspected all six original HTML files at pre-redesign commit `0b8fd6c`, immediat
 | SQL/API       | Starfleet / LCARS: dark bridge, orange controls, lavender rail, blue console divisions, technical display headings | Three permission simulations, payload, reset, code/reference                                                                |
 | SQL migration | Buffy / Slayer: dark grimoire, crimson accents, serif reading and chapter headings, framed teaching fixtures       | Four assessment checks/topics, comparison charts, dependency roles, four security topics, seven-step rehearsal/reset, Giles |
 | Hollyoaks     | Fuchsia / teal, rounded family cards and a bright explorer                                                         | 25-event timeline, year filter, families, dialogs/Escape/focus return, four thematic charts, data recovery                  |
-| TNA           | Black / red / gold arena, uppercase display typography and ring motif                                              | Three years, all chart types and adjacent accessible data tables                                                            |
+| TNA           | Black / red / gold arena, uppercase display typography and ring motif                                              | Three years, all chart types and adjacent accessible data tables; three original roster reveal cards and all 15 names       |
 | Fading Spaces | Warm neutral / indigo research story, prominent statistic and restrained reading layout                            | Demographics, causes, geography, trend, tables and original caveats                                                         |
 | Bluesky       | Dark navy / signature blue technical overview                                                                      | Original application/source actions, process, architecture, code/reference                                                  |
 
@@ -35,3 +35,14 @@ e18632a2bf121b8a397acf591a7662cb93ad82fb3e5b597dfc9f807f768be8cb app.js
 ```
 
 Imported at `five_pm_cat_club.html` and linked from Notes & experiments. The PNG is byte-identical to the public source. Original countdown logic (device-local weekdays, 5 PM completion, weekend off-duty), Falling Blocks, Snake and Sudoku are retained. Snake's best score is explicitly “this visit”; original source has no localStorage, cookies, server requests or analytics. No new persistence was added. Remote Google font import is removed for the existing self-hosted CSP, with system font fallbacks. Original game CSS is nested under `.cat-club`; shared header/footer added outside it. Narrow layouts constrain canvas/grid width. Keyboard shortcuts are scoped to the club, and Sudoku retains focus when its cells rerender. No paid services.
+
+## Validation
+
+The flow under test is: each experiment loads → a meaningful control is operated → the expected content/result is visible. Browser plugin unavailable; regular Playwright Chromium used with `PLAYWRIGHT_BROWSERS_PATH=/workspace/.cache/ms-playwright`.
+
+- `npm run build`: formatting, 12-route/link/sitemap validation, JavaScript syntax, all 6 unit tests pass.
+- `npm audit --audit-level=high`: zero vulnerabilities.
+- Cat Club: 9 tests pass at 320×568, 390×844, 768×600, 1440×900 and 1440×600; canvas mutation, soft-drop score, pause, Snake controls, Sudoku fill/erase/check/new-game, keyboard focus, touch emulation, reduced motion, UTC/Los Angeles/Tokyo 5 PM and weekend boundaries; no remote requests or uncaught/CSP errors.
+- Before/after rendering: all six experiments at 390×844, 768×600, 1440×900 and 1440×600 (48 paired captures), plus four Cat Club captures. Real headings, keyboard focus and absence of horizontal overflow checked. Existing browser tests exercise all repaired reference destinations, module/data failure recovery, chart/data states and original controls.
+
+Screenshots demonstrate Chrome rendering, not cross-browser or screen-reader certification. Touch checks use Chromium emulation rather than physical devices. Public Site archive identity remains unverified; downloaded public source hashes above provide the exact provenance used.
