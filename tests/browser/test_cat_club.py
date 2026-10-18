@@ -72,3 +72,24 @@ def test_cat_touch_controls_and_keyboard_scope(browser, site_url):
     page.keyboard.press('Backspace')
     expect(page.locator('#sudoku-board .selected')).to_have_text('')
     context.close()
+
+@pytest.mark.parametrize('zone',['UTC','America/Los_Angeles','Asia/Tokyo'])
+def test_countdown_uses_device_timezone(browser,site_url,zone):
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+    context=browser.new_context(timezone_id=zone)
+    page=context.new_page()
+    before=datetime(2026,10,19,16,59,50,tzinfo=ZoneInfo(zone))
+    frozen=datetime(2026,10,19,16,59,58,tzinfo=ZoneInfo(zone))
+    page.clock.install(time=before);page.clock.pause_at(frozen)
+    page.goto(f'{site_url}/five_pm_cat_club.html')
+    expect(page.locator('#hours')).to_have_text('00')
+    expect(page.locator('#minutes')).to_have_text('00')
+    expect(page.locator('#seconds')).to_have_text('02')
+    page.clock.run_for(2000)
+    expect(page.locator('#day-state')).to_have_text('YOU MADE IT')
+    page.clock.set_fixed_time(datetime(2026,10,24,12,0,tzinfo=ZoneInfo(zone)))
+    page.clock.run_for(1000)
+    expect(page.locator('#day-state')).to_have_text('THE CATS ARE OFF DUTY')
+    expect(page.locator('#clock-note')).to_have_text('Next countdown: Monday')
+    context.close()
