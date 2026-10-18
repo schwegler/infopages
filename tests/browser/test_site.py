@@ -78,7 +78,7 @@ def test_migration_complete_rehearsal_and_reset(clean_page,site_url):
     page.get_by_role('combobox',name='Security topic').select_option('ae')
     expect(page.locator('#security-text')).to_contain_text('keys controlled outside')
     for _ in range(7):page.locator('#cutover').click()
-    expect(page.get_by_role('status')).to_contain_text('7 of 7 steps rehearsed')
+    expect(page.locator('#cutover-status')).to_contain_text('7 of 7 steps rehearsed')
     page.get_by_role('button',name='Reset rehearsal').click()
     expect(page.locator('#cutover-list .done')).to_have_count(0)
     page.get_by_text('Ask Giles: what should I check?',exact=True).click()

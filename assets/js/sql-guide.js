@@ -25,3 +25,5 @@ q("#reset-mission")?.addEventListener("click", () => {
   q("#console").textContent =
     "Ready. Select a permission level, then run the demonstration.";
 });
+
+q("#experiment-status")?.setAttribute("hidden", "");

@@ -11,7 +11,11 @@
     <title>The Slayer’s guide to SQL migration — Andrew Schwegler</title>
     <link href="assets/site.css" rel="stylesheet" />
     <script src="assets/js/site.js" type="module"></script>
-    <script src="assets/js/migration.js" type="module"></script>
+    <script
+      data-experiment=""
+      src="assets/js/migration.js"
+      type="module"
+    ></script>
     <link
       href="https://infopages.pages.dev/sqlmovebuffy.html"
       rel="canonical"
@@ -70,6 +74,10 @@
         ><a href="#rehearsal">Rehearse</a><a href="#giles">Giles</a
         ><a href="#reference">Reference</a>
       </nav>
+      <p class="notice" id="experiment-status" role="status">
+        Interactive controls require the page scripts. If they do not appear,
+        reload this page. Static reference notes remain available below.
+      </p>
       <section class="project-intro experiment-lead">
         <h2>Check the plan.<br />Then make the move.</h2>
         <p>
@@ -113,6 +121,50 @@
         <p aria-live="polite" id="assessment-status">
           0 of 4 assessment steps complete
         </p>
+        <article class="reference-module" id="dma-findings">
+          <h3>The Tome of Prophecies</h3>
+          <p>
+            Four illustrative assessment topics from the original teaching
+            guide. These are example review prompts, not findings from an actual
+            database scan. No DMA report or private system data is loaded.
+          </p>
+          <details class="dma-finding">
+            <summary>Prophecy of Incompatibility</summary>
+            <p>
+              Review stored procedures and compatibility settings against the
+              intended target version. The original fixture concerns
+              compatibility; it does not establish that a real procedure is
+              incompatible.
+            </p>
+          </details>
+          <details class="dma-finding">
+            <summary>Curse of Breaking Change</summary>
+            <p>
+              The original fixture names <code>RAISERROR</code> as a review
+              topic. Compare actual application code with the target-version
+              documentation and test its error-handling behavior. This example
+              does not establish a breaking change.
+            </p>
+          </details>
+          <details class="dma-finding">
+            <summary>Glamour of Behavior Change</summary>
+            <p>
+              The original fixture names <code>COUNT</code> with an
+              <code>OVER</code> clause. Reconcile query results during workload
+              testing. No changed result or defect is asserted by this teaching
+              example.
+            </p>
+          </details>
+          <details class="dma-finding">
+            <summary>Whispers of Deprecation</summary>
+            <p>
+              The original fixture names <code>sp_dboption</code> as a
+              legacy-feature review topic. Inventory any actual usage and verify
+              its status for the intended target version before planning a
+              replacement.
+            </p>
+          </details>
+        </article>
       </section>
       <section class="demo" id="comparison">
         <div class="demo-head">
@@ -120,6 +172,11 @@
           <span>Illustrative data</span>
         </div>
         <h2>Test the workload, not just the move.</h2>
+        <p>
+          Willow’s testing spell compares the original illustrative source and
+          target workload. Reveal the results to inspect the category counts; no
+          workload is captured or replayed.
+        </p>
         <button
           aria-controls="compare-result"
           aria-expanded="false"
@@ -136,6 +193,7 @@
           </svg>
         </button>
         <div hidden="" id="compare-result">
+          <div class="comparison-charts" id="comparison-charts"></div>
           <div class="table-wrap">
             <table>
               <caption>
@@ -183,16 +241,67 @@
         <div class="two-col">
           <div>
             <h2>Map the connections.</h2>
-            <details>
-              <summary>Application → API → Database</summary>
-              <p>
-                Check connection strings, service accounts, firewall rules,
-                scheduled jobs and integration dependencies. Validate the
-                complete application path after migration.
-              </p>
-            </details>
+            <figure class="dependency-figure">
+              <svg
+                aria-labelledby="dependency-map-title"
+                role="img"
+                viewbox="0 0 600 235"
+              >
+                <title id="dependency-map-title">
+                  Illustrative dependency map: the web and SQL, API database and
+                  data database roles are interconnected
+                </title>
+                <path
+                  class="dependency-edge"
+                  d="M280 65L140 160"
+                  data-edge="web-api"
+                ></path>
+                <path
+                  class="dependency-edge"
+                  d="M320 65L460 160"
+                  data-edge="web-data"
+                ></path>
+                <path
+                  class="dependency-edge"
+                  d="M200 190H400"
+                  data-edge="api-data"
+                ></path>
+                <rect height="60" rx="3" width="180" x="210" y="5"></rect>
+                <text x="300" y="42">Web + SQL</text>
+                <rect height="60" rx="3" width="180" x="30" y="160"></rect>
+                <text x="120" y="197">API database</text>
+                <rect height="60" rx="3" width="180" x="390" y="160"></rect>
+                <text x="480" y="197">Data database</text>
+              </svg>
+              <figcaption>
+                The original three-role topology, with generic labels. It is an
+                illustrative teaching map, not an infrastructure inventory.
+              </figcaption>
+            </figure>
+            <div
+              aria-label="Explore dependency role"
+              class="filters"
+              hidden=""
+              id="dependency-controls"
+              role="group"
+            >
+              <button aria-pressed="true" data-role="web">Web + SQL</button
+              ><button aria-pressed="false" data-role="api">API database</button
+              ><button aria-pressed="false" data-role="data">
+                Data database
+              </button>
+            </div>
+            <p id="dependency-result" role="status">
+              All three roles are connected. Review each application path rather
+              than treating a database as an isolated move.
+            </p>
+            <ul class="dependency-connections">
+              <li>Web + SQL ↔ API database</li>
+              <li>Web + SQL ↔ Data database</li>
+              <li>API database ↔ Data database</li>
+            </ul>
           </div>
-          <div>
+          <div id="security-guide">
             <h2>Choose the protection.</h2>
             <select aria-label="Security topic" id="security">
               <option value="tde">Transparent Data Encryption</option>
@@ -245,28 +354,43 @@
         <details>
           <summary>Reference notes &amp; original examples</summary>
           <p class="source-note">
-            Retained project notes and examples. Demonstrations are
-            illustrative; check current platform documentation and original
-            research before relying on them.
+            The original Buffy-themed guide is organized into five phases below.
+            The examples are historical teaching material, not an assessment of
+            a real migration. All demonstrations on this page run locally.
           </p>
-          <h2>A Slayer's Guide to SQL Server Relocation</h2>
+          <h2>A Slayer’s guide, phase by phase.</h2>
           <h3>Phase One: Research at the Library</h3>
           <p>
-            Every battle starts with research. Before we move a single byte, we
-            need Giles to hit the books. Our "books" are the **Data Migration
-            Assistant (DMA)**, which will scan all 38 databases. We also need to
-            consult the forbidden texts on web server configuration to map out
-            the IIS dependencies. This is no longer a simple scan; it's a
-            full-scale intelligence operation.
+            Use the assessment checklist to plan the review, then expand each of
+            the four illustrative finding topics in
+            <a href="#dma-findings">the Tome of Prophecies</a>. The original
+            guide refers to Data Migration Assistant (DMA); no scan is performed
+            here.
           </p>
+          <h3>Phase Two: Willow’s Testing Spell</h3>
           <p>
-            DMA has returned from the stacks. Its findings are recorded below.
+            <a href="#comparison">Run the example workload comparison</a> to
+            reveal the original source/target counts and charts. Its values are
+            illustrative, not measured performance results.
           </p>
-          <p>Click a finding to read Giles's notes.</p>
-          <h3>Phase Two: Willow's Testing Spell</h3>
           <h3>Phase Three: The Evacuation Convoy</h3>
-          <p>Select a weapon to learn how it protects us.</p>
+          <p>
+            <a href="#dependencies">Explore the three-role dependency map</a>.
+            Select a role to highlight its connections; the accompanying list
+            exposes every connection as text.
+          </p>
+          <h3>Phase Four: Fortifying the New Home</h3>
+          <p>
+            <a href="#security-guide">Choose a security topic</a> to read about
+            encryption at rest, protected columns, HTTPS policy or auditing.
+            These explanations are review prompts, not a deployment checklist.
+          </p>
           <h3>Phase Five: Averting the Apocalypse</h3>
+          <p>
+            <a href="#rehearsal">Rehearse the seven cutover steps</a>, inspect
+            the progress status, then reset the walkthrough. No systems,
+            application traffic or DNS records are changed.
+          </p>
         </details>
       </section>
       <section class="next">

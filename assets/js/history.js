@@ -156,7 +156,7 @@ qa("[data-history-view]").forEach((button) =>
     });
   }),
 );
-qa(".experiment-nav a").forEach((link) =>
+qa('a[href^="#history-"]').forEach((link) =>
   link.addEventListener("click", () => {
     const id = link.hash.slice(1),
       button = q('[data-history-view="' + id + '"]');
@@ -170,3 +170,5 @@ const initialButton =
   q('[data-history-view="' + initialView + '"]') ||
   q('[data-history-view="history-timeline"]');
 initialButton.click();
+
+q("#experiment-status")?.setAttribute("hidden", "");
