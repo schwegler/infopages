@@ -2155,3 +2155,53 @@ footer .support-links summary {
 #security-guide {
   scroll-margin-top: 100px;
 }
+
+/* Approved PNG signature: one optical center for logo, name, divider and nav. */
+header .brand {
+  gap: 24px;
+  align-items: center;
+  min-height: 52px;
+  flex-shrink: 0;
+}
+.wordmark {
+  width: 176px;
+  height: auto;
+  aspect-ratio: 1945 / 576;
+  transform: translateY(-2px);
+}
+.brand-name {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding-left: 24px;
+  font: 12px/18px var(--sans);
+}
+#nav {
+  align-items: center;
+}
+.creator-credit {
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+}
+.creator-credit img {
+  width: 132px;
+  height: auto;
+  aspect-ratio: 1945 / 576;
+}
+@media (max-width: 1050px) {
+  .brand-name {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .wordmark {
+    width: 160px;
+  }
+  .creator-credit img {
+    width: 132px;
+  }
+  #nav {
+    align-items: flex-start;
+  }
+}

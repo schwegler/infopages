@@ -1,3 +1,5 @@
+> Superseded for active logo use: see [the approved PNG signature](approved-signature-logo.md). The SVG files described below are retained historical assets.
+
 # schweg.xyz · canonical shared wordmark v1
 
 Use these exact path-based SVGs; do not redraw or substitute a script font. No webfont is required.
