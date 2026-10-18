@@ -1,45 +1,52 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
     <meta
-      name="description"
       content="Andrew Schwegler — databases, software and interactive explanations."
+      name="description"
     />
     <title>Hollyoaks: the first 20 years — Andrew Schwegler</title>
-    <link rel="stylesheet" href="assets/site.css" />
-    <script type="module" src="assets/js/site.js"></script>
-    <script type="module" src="assets/js/history.js"></script>
+    <link href="assets/site.css" rel="stylesheet" />
+    <script src="assets/js/site.js" type="module"></script>
+    <script src="assets/js/history.js" type="module"></script>
     <link
-      rel="canonical"
       href="https://infopages.pages.dev/hollyoaks_history.html"
+      rel="canonical"
     />
-    <meta property="og:type" content="website" />
+    <meta content="website" property="og:type" />
     <meta
-      property="og:title"
       content="Hollyoaks: the first 20 years — Andrew Schwegler"
+      property="og:title"
     />
     <meta
-      property="og:url"
       content="https://infopages.pages.dev/hollyoaks_history.html"
+      property="og:url"
     />
-    <meta name="color-scheme" content="light" />
-    <meta name="theme-color" content="#f7f7f2" />
-    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <meta content="light" name="color-scheme" />
+    <meta content="#f7f7f2" name="theme-color" />
+    <link href="assets/favicon.svg" rel="icon" type="image/svg+xml" />
   </head>
-  <body>
+  <body class="experiment-page">
     <a class="skip" href="#main">Skip to content</a>
     <header>
       <a class="brand" href="index.html"
-        ><span class="monogram">As</span><span>Andrew Schwegler</span></a
-      ><button hidden class="menu" aria-expanded="false" aria-controls="nav">
+        ><img
+          alt="schweg.xyz"
+          class="wordmark"
+          height="52"
+          src="assets/brand/schweg-xyz-ink.svg"
+          width="164"
+        /><span class="brand-name">Andrew Schwegler</span></a
+      ><button aria-controls="nav" aria-expanded="false" class="menu" hidden="">
         Menu <span>+</span>
       </button>
-      <nav id="nav" aria-label="Main navigation">
+      <nav aria-label="Main navigation" id="nav">
         <a href="index.html#experience">Résumé</a
         ><a href="work.html">Selected work</a
-        ><a href="notes.html">Notes & experiments</a
+        ><a href="notes.html">Notes &amp; experiments</a
         ><a href="index.html#contact">Contact</a>
       </nav>
     </header>
@@ -57,15 +64,46 @@
         <h1>Hollyoaks: the first 20 years<span class="dot">.</span></h1>
         <p class="intro">People, families and twenty years of stories.</p>
       </section>
-      <section class="project-intro">
+      <nav aria-label="On this page" class="experiment-nav">
+        <a href="#history-timeline">Timeline</a
+        ><a href="#history-families">Families</a
+        ><a href="#history-themes">Themes</a><a href="#reference">Reference</a>
+      </nav>
+      <section class="project-intro experiment-lead">
         <h2>A village of<br />interconnected stories.</h2>
         <p>
-          Explore the original project’s character and timeline dataset. The
-          page title says “first 20 years”; the source data includes events
-          through 2016. That scope needs editorial reconciliation.
+          Choose a year to follow the stories, explore family connections, or
+          compare the original thematic counts. The retained dataset runs
+          through 2016; its scope is broader than the original “first 20 years”
+          title.
         </p>
       </section>
-      <section>
+      <div
+        aria-label="Choose history view"
+        class="history-views filters"
+        role="group"
+      >
+        <button
+          aria-controls="history-timeline"
+          aria-pressed="true"
+          data-history-view="history-timeline"
+        >
+          Timeline</button
+        ><button
+          aria-controls="history-families"
+          aria-pressed="false"
+          data-history-view="history-families"
+        >
+          Families</button
+        ><button
+          aria-controls="history-themes"
+          aria-pressed="false"
+          data-history-view="history-themes"
+        >
+          Themes
+        </button>
+      </div>
+      <section id="history-timeline">
         <div class="section-head">
           <h2>Follow the timeline.</h2>
           <label
@@ -89,15 +127,15 @@
             </select></label
           >
         </div>
-        <p id="timeline-count" aria-live="polite"></p>
-        <div id="timeline" class="timeline"></div>
+        <p aria-live="polite" id="timeline-count"></p>
+        <div class="timeline" id="timeline"></div>
       </section>
-      <section>
+      <section id="history-families">
         <p class="eyebrow marker">The families</p>
         <h2>Every connection has a story.</h2>
         <div id="families"></div>
       </section>
-      <section class="reading">
+      <section class="reading" id="history-themes">
         <h2>Changing themes</h2>
         <p>
           Counts from the original project’s thematic dataset. Categories
@@ -105,32 +143,32 @@
         </p>
         <div id="themes"></div>
       </section>
-      <section class="reading">
+      <section class="reading reference-section" id="reference">
         <details>
-          <summary>Original project: reading & technical detail</summary>
+          <summary>Reference notes &amp; original examples</summary>
           <p class="source-note">
-            Content retained from the existing public project. Technical
-            examples and historical claims should be reviewed before
-            publication.
+            Retained project notes and examples. Demonstrations are
+            illustrative; check current platform documentation and original
+            research before relying on them.
           </p>
           <p>An Interactive Journey Through Village Life (1996-2016)</p>
           <p>From teen tales to issue-led sagas</p>
           <p>Defining moments of Hollyoaks history</p>
           <h2>Thematic Evolution of Storylines</h2>
           <p>
-            This chart illustrates how Hollyoaks &#x27; narrative focus shifted
-            over two decades, moving from its teen-centric roots to embrace more
-            complex and hard-hitting themes. This visual represents the
-            show&#x27;s deliberate evolution to tackle more mature and socially
-            relevant issues, a key factor in its enduring popularity.
+            This chart illustrates how Hollyoaks ' narrative focus shifted over
+            two decades, moving from its teen-centric roots to embrace more
+            complex and hard-hitting themes. This visual represents the show's
+            deliberate evolution to tackle more mature and socially relevant
+            issues, a key factor in its enduring popularity.
           </p>
           <p>
             Explore the intricate relationships and individual stories of
-            Hollyoaks&#x27; core families. The family trees below are
-            interactive; click on any character&#x27;s name to see their
-            detailed history, key relationships, and most significant storylines
-            from the 1996-2016 period. This view is designed to help untangle
-            the complex web of connections that define life in Hollyoaks.
+            Hollyoaks' core families. The family trees below are interactive;
+            click on any character's name to see their detailed history, key
+            relationships, and most significant storylines from the 1996-2016
+            period. This view is designed to help untangle the complex web of
+            connections that define life in Hollyoaks.
           </p>
           <p>
             Discover the key events that rocked Hollyoaks village year by year.
@@ -146,31 +184,51 @@
           ><small>Next project</small>
           <h2>
             TNA: Cross the Line<svg
-              class="arrow"
-              viewBox="0 0 24 24"
-              fill="none"
               aria-hidden="true"
+              class="arrow"
+              fill="none"
+              viewbox="0 0 24 24"
             >
               <path
                 d="M4 12h15m-6-6 6 6-6 6"
                 stroke="currentColor"
                 stroke-width="1.4"
-              />
+              ></path>
             </svg></h2
         ></a>
       </section>
     </main>
     <footer>
-      <a class="brand" href="index.html"
-        >Andrew Schwegler<span class="dot">.</span></a
+      <a
+        aria-label="A schweg.xyz project"
+        class="creator-credit"
+        href="https://schweg.xyz/"
+        ><span>a</span
+        ><img
+          alt="schweg.xyz"
+          decoding="async"
+          height="39"
+          loading="lazy"
+          src="assets/brand/schweg-xyz-ink.svg"
+          width="124"
+        /><span>project</span></a
       >
-      <p>Databases, systems & a curious mind.</p>
+      <p>Databases, systems &amp; a curious mind.</p>
       <div>
         <a href="https://tacobout.online">tacobout.online</a
         ><a href="https://trove.schweg.xyz">Trove</a><a href="tos.html">Terms</a
         ><a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+        <a href="mailto:andrew@schweg.xyz">Email Andrew</a>
+        <details class="support-links">
+          <summary>Help with hosting</summary>
+          <span class="support-choices">
+            <a href="https://paypal.me/schwegler">PayPal</a>
+            <a href="https://venmo.com/u/Schwegler">Venmo</a>
+            <a href="https://cash.app/$schwg">Cash App</a>
+          </span>
+        </details>
       </div>
-      <small>© <span data-year>2026</span> Andrew Schwegler</small>
+      <small>© <span data-year="">2026</span> Andrew Schwegler</small>
     </footer>
   </body>
 </html>

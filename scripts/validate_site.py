@@ -42,7 +42,7 @@ def validate():
         for tag,ref in page.refs:
             url=urlsplit(ref)
             if url.scheme or url.netloc:
-                assert url.scheme=='https', f'{name}: insecure external URL {ref}'
+                assert url.scheme=='https' or (tag=='a' and ref=='mailto:andrew@schweg.xyz'), f'{name}: unexpected external URL {ref}'
                 assert tag not in ('script','img'), f'{name}: runtime remote asset {ref}'
                 # Public identity links are explicitly scoped; project/service destinations remain separate.
                 if '/profile/' in url.path or url.hostname in ('bsky.app','www.bsky.app'):

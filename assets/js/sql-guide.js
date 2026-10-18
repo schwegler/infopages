@@ -16,3 +16,12 @@ q("#run-mission").addEventListener("click", () => {
     q("#payload").value.length,
   );
 });
+q("#reset-mission")?.addEventListener("click", () => {
+  permission = "SAFE";
+  const safe = q('[data-permission="SAFE"]');
+  setPressed("[data-permission]", safe);
+  q("#permission-text").textContent = permissionCopy.SAFE;
+  q("#payload").value = "<p>Hello, world.</p>";
+  q("#console").textContent =
+    "Ready. Select a permission level, then run the demonstration.";
+});

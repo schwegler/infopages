@@ -81,16 +81,16 @@ header {
   letter-spacing: -9px;
   margin-right: 8px;
 }
-nav {
+#nav {
   display: flex;
   gap: 34px;
   font-size: 13px;
 }
-nav a {
+#nav a {
   padding: 14px 0;
   position: relative;
 }
-nav a:hover:after {
+#nav a:hover:after {
   content: "";
   height: 1px;
   background: var(--violet);
@@ -103,6 +103,8 @@ nav a:hover:after {
   display: none;
 }
 .skip {
+  opacity: 0;
+  pointer-events: none;
   position: fixed;
   top: -100px;
   left: 20px;
@@ -112,6 +114,8 @@ nav a:hover:after {
   padding: 10px 20px;
 }
 .skip:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
   top: 10px;
 }
 h1,
@@ -941,7 +945,7 @@ dialog button {
   footer {
     width: calc(100% - 72px);
   }
-  nav {
+  #nav {
     gap: 22px;
   }
   .brand {
@@ -1008,7 +1012,7 @@ dialog button {
     font-size: 23px;
     line-height: 1;
   }
-  nav {
+  #nav {
     display: none;
     width: 100%;
     padding: 15px 0 24px;
@@ -1016,10 +1020,10 @@ dialog button {
     gap: 0;
     border-top: 1px solid var(--line);
   }
-  nav.open {
+  #nav.open {
     display: flex;
   }
-  nav a {
+  #nav a {
     font-size: 18px;
     padding: 10px 0;
   }
@@ -1444,7 +1448,7 @@ ul.family-tree {
   font-size: 11px;
   color: var(--muted);
 }
-nav a[aria-current="page"] {
+#nav a[aria-current="page"] {
   color: var(--violet);
 }
 .payload-label {
@@ -1487,13 +1491,13 @@ textarea:focus-visible {
   text-decoration-thickness: 2px;
 }
 @media (max-width: 760px) {
-  nav {
+  #nav {
     display: flex;
   }
-  .js nav {
+  .js #nav {
     display: none;
   }
-  .js nav.open {
+  .js #nav.open {
     display: flex;
   }
   .menu:not([hidden]) {
@@ -1536,4 +1540,531 @@ textarea:focus-visible {
 }
 .ring svg {
   display: block;
+}
+/* Shared creator identity: canonical outlined lettering, no font download. */
+header .brand {
+  gap: 14px;
+  align-items: center;
+}
+.wordmark {
+  display: block;
+  width: 164px;
+  height: auto;
+}
+.brand-name {
+  font: 12px/1.4 var(--sans);
+  color: var(--muted);
+  border-left: 1px solid var(--line);
+  padding-left: 15px;
+}
+.creator-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  font: 12px/1.4 var(--sans);
+  width: max-content;
+}
+.creator-credit img {
+  width: 124px;
+  height: auto;
+  display: block;
+}
+.creator-credit:focus-visible {
+  outline: 3px solid var(--violet);
+  outline-offset: 6px;
+}
+/* Experiments have a reading/tool rhythm distinct from the résumé. */
+.experiment-page main {
+  max-width: 1180px;
+}
+.experiment-page .project-hero {
+  padding: 28px 0 30px;
+}
+.experiment-page .back {
+  margin-bottom: 23px;
+}
+.experiment-page .project-hero h1 {
+  font-size: clamp(38px, 5vw, 68px);
+  max-width: 23ch;
+  margin: 14px 0 18px;
+  line-height: 1.07;
+}
+.experiment-page .project-hero .intro {
+  font-size: 23px;
+  max-width: 36em;
+}
+.experiment-page main > section:not(.project-hero) {
+  padding: 30px 0;
+}
+.experiment-page .experiment-lead {
+  gap: 40px;
+  align-items: start;
+}
+.experiment-page .experiment-lead h2 {
+  font-size: 30px;
+  line-height: 1.14;
+}
+.experiment-page .experiment-lead p {
+  font-size: 15px;
+  max-width: 60ch;
+}
+.experiment-page main > section.demo {
+  padding: 28px !important;
+  margin: 14px 0 25px !important;
+}
+.experiment-page .demo h2 {
+  font-size: 34px;
+  line-height: 1.14;
+  margin-bottom: 23px;
+}
+.experiment-page .demo-head {
+  margin-bottom: 22px;
+}
+.experiment-page .section-head {
+  gap: 30px;
+  margin-bottom: 22px;
+}
+.experiment-page main > section h2 {
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.16;
+}
+.experiment-page .reading {
+  max-width: 780px;
+}
+.experiment-page .reading h2 {
+  font-size: 28px;
+  margin-top: 25px;
+}
+.experiment-page .reading h3 {
+  font-size: 23px;
+  line-height: 1.2;
+}
+.experiment-page .reading p {
+  line-height: 1.7;
+}
+.experiment-page .section-description {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 15px 0;
+}
+.experiment-page .process {
+  margin-top: 22px;
+}
+.experiment-page .process h3 {
+  margin: 15px 0;
+  font-size: 25px;
+}
+.experiment-page .reference-section {
+  padding: 10px 0 25px !important;
+  max-width: 780px;
+}
+.experiment-page .next h2 {
+  font-size: 30px;
+}
+.experiment-nav {
+  flex-direction: row;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  gap: 6px 24px;
+  flex-wrap: wrap;
+  padding: 13px 0;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+}
+.experiment-nav a {
+  padding: 7px 0;
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 5px;
+}
+.experiment-nav a:hover {
+  text-decoration-color: var(--violet);
+}
+.experiment-page section[id] {
+  scroll-margin-top: 100px;
+}
+.experiment-page .ring {
+  width: 150px;
+}
+.experiment-page .data-feature {
+  gap: 35px;
+}
+.experiment-page .big-stat {
+  font-size: 130px;
+}
+.experiment-page .data-feature h2 {
+  margin: 15px 0;
+}
+.experiment-page .filters {
+  margin: 20px 0;
+  gap: 8px;
+}
+.experiment-page .filters button {
+  font-size: 13px;
+}
+.experiment-page .factor-links button {
+  font-size: 21px;
+}
+.experiment-page .checklist label {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  column-gap: 14px;
+  row-gap: 7px;
+}
+.checklist label small {
+  grid-column: 2;
+  color: var(--muted);
+  font-size: 12px;
+}
+.history-views {
+  padding: 0 0 5px;
+  border-bottom: 1px solid var(--line);
+}
+#reset-mission {
+  margin-left: 22px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--ink);
+  color: var(--ink);
+}
+#console {
+  margin-bottom: 0;
+}
+.source-chart {
+  margin: 25px 0;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+.source-chart figcaption {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 15px;
+}
+.source-chart svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 320px;
+  overflow: visible;
+}
+.source-chart text {
+  font: 12px var(--sans);
+  fill: var(--ink);
+}
+.source-chart .series-a {
+  fill: var(--violet);
+  stroke: var(--violet);
+}
+.source-chart .series-b {
+  fill: #9a7694;
+  stroke: #9a7694;
+}
+.source-chart .chart-grid {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.chart-legend {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  margin-top: 12px;
+}
+.chart-legend span:before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: var(--violet);
+  margin-right: 7px;
+}
+.chart-legend span:nth-child(2):before {
+  background: #9a7694;
+}
+.experiment-page .two-col {
+  gap: 35px;
+}
+.experiment-page .table-wrap {
+  margin: 20px 0;
+}
+.experiment-page table {
+  font-size: 13px;
+}
+.experiment-page th,
+.experiment-page td {
+  padding: 12px 12px 12px 0;
+}
+.experiment-page pre {
+  color: var(--ink);
+  border: 1px solid var(--line);
+  padding: 18px;
+  background: var(--light);
+  font-size: 12px;
+  line-height: 1.65;
+}
+.experiment-page details {
+  padding: 15px 0;
+}
+.experiment-page summary {
+  font-size: 20px;
+  line-height: 1.4;
+}
+@media (max-width: 1050px) {
+  .experiment-page .experiment-lead {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  .experiment-page main {
+    width: calc(100% - 56px);
+  }
+  .experiment-page .two-col {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .experiment-page .project-hero {
+    padding-top: 24px;
+  }
+  .experiment-page .project-hero h1 {
+    font-size: 48px;
+  }
+  .experiment-page .process {
+    grid-template-columns: 1fr 1fr;
+  }
+  .brand-name {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .wordmark {
+    width: 145px;
+  }
+  .creator-credit img {
+    width: 116px;
+  }
+  .experiment-page main {
+    width: calc(100% - 40px);
+  }
+  .experiment-page .project-hero h1 {
+    font-size: 37px;
+    letter-spacing: -0.045em;
+  }
+  .experiment-page .project-hero .intro {
+    font-size: 21px;
+  }
+  .experiment-page main > section:not(.project-hero) {
+    padding: 24px 0;
+  }
+  .experiment-page main > section.demo {
+    padding: 22px !important;
+    margin: 8px 0 22px !important;
+  }
+  .experiment-page .demo h2 {
+    font-size: 29px;
+  }
+  .experiment-page .demo-head {
+    padding-bottom: 14px;
+  }
+  .experiment-nav {
+    gap: 4px 18px;
+    padding: 8px 0;
+    font-size: 11px;
+  }
+  .experiment-page .experiment-lead h2 {
+    font-size: 27px;
+  }
+  .experiment-page .section-head {
+    display: block;
+  }
+  .experiment-page .section-head label {
+    margin-top: 15px;
+  }
+  .experiment-page .section-head select {
+    margin-left: 10px;
+  }
+  .experiment-page .ring {
+    width: 110px;
+    float: right;
+    margin: 0 0 12px 15px;
+    max-width: 30%;
+  }
+  .experiment-page .data-feature {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .experiment-page .big-stat {
+    font-size: 100px;
+  }
+  .experiment-page .demo .filters button {
+    padding: 10px 12px;
+  }
+  .experiment-page .source-chart text {
+    font-size: 12px;
+  }
+  .experiment-page .next h2 {
+    font-size: 27px;
+  }
+  .experiment-page .family-tree {
+    padding-left: 15px;
+  }
+  .experiment-page .family-tree li:before {
+    left: -15px;
+    width: 10px;
+  }
+  .experiment-page #families button {
+    font-size: 18px;
+    line-height: 1.4;
+  }
+  .experiment-page .history-views button {
+    padding: 10px 15px;
+  }
+  .experiment-page .data-feature p {
+    font-size: 14px;
+  }
+  .experiment-page .data-feature h2 {
+    margin: 10px 0;
+  }
+}
+@media print {
+  .experiment-nav,
+  .history-views,
+  .creator-credit {
+    display: none !important;
+  }
+}
+.chart-row {
+  margin: 15px 0;
+}
+.chart-row p {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.chart-row strong {
+  font-weight: 500;
+  white-space: nowrap;
+}
+.chart-row meter {
+  display: block;
+  width: 100%;
+  height: 11px;
+  margin-top: 7px;
+  appearance: none;
+}
+.chart-row meter::-webkit-meter-bar {
+  height: 11px;
+  background: var(--line);
+  border: 0;
+  border-radius: 0;
+}
+.chart-row meter::-webkit-meter-optimum-value {
+  background: var(--violet);
+}
+.chart-row meter::-moz-meter-bar {
+  background: var(--violet);
+}
+.line-frame {
+  position: relative;
+  padding-left: 25px;
+}
+.chart-scale {
+  position: absolute;
+  left: 0;
+  top: 10%;
+  bottom: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--muted);
+}
+.chart-axis {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 45px;
+  margin-right: 20px;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.chart-axis span {
+  min-width: 0;
+}
+.line-chart .chart-legend {
+  margin-left: 25px;
+}
+.source-chart .line-frame svg {
+  max-height: none;
+}
+
+.experiment-lead:not(:has(h2)) {
+  display: block;
+}
+
+.mascot-note {
+  max-width: 780px;
+  padding: 25px 0;
+}
+.mascot-note summary {
+  font-size: 15px;
+}
+.mascot-signature {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin: 24px 0;
+}
+.mascot-signature img {
+  width: 96px;
+  height: auto;
+  flex: 0 0 96px;
+}
+.mascot-signature figcaption {
+  max-width: 28ch;
+  font-size: 14px;
+  color: var(--muted);
+}
+@media print {
+  .mascot-note {
+    display: none;
+  }
+}
+
+.experiment-page #console {
+  background: var(--ink);
+  color: #f7f7f2;
+}
+.experiment-nav a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+}
+
+/* Optional hosting support stays secondary to the creator credit. */
+footer .support-links {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+footer .support-links summary {
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.support-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 16px;
+  margin-top: 8px;
+}
+.support-choices a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }

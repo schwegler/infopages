@@ -1,3 +1,4 @@
+import { barChart } from "./charts.js";
 import { q, qa, element } from "./dom.js";
 import { filterEvents, relatedEvents } from "./model.js";
 const status = q("#timeline-count");
@@ -95,13 +96,15 @@ function renderThemes() {
   q("#themes").replaceChildren();
   historyData.thematicChart.labels.forEach((label, index) => {
     const row = element("div", undefined, "theme-line");
+    row.append(element("h3", label));
     row.append(
-      element("h3", label),
-      element(
-        "p",
-        historyData.thematicChart.datasets
-          .map((series) => `${series.label}: ${series.data[index]}`)
-          .join(" · "),
+      barChart(
+        historyData.thematicChart.datasets.map((series) => [
+          series.label,
+          series.data[index],
+        ]),
+        "Original thematic event counts · " + label,
+        20,
       ),
     );
     q("#themes").append(row);
@@ -144,3 +147,26 @@ async function load() {
 }
 year.addEventListener("change", renderTimeline);
 load();
+qa("[data-history-view]").forEach((button) =>
+  button.addEventListener("click", () => {
+    qa("[data-history-view]").forEach((other) => {
+      const selected = other === button;
+      other.setAttribute("aria-pressed", String(selected));
+      q("#" + other.dataset.historyView).hidden = !selected;
+    });
+  }),
+);
+qa(".experiment-nav a").forEach((link) =>
+  link.addEventListener("click", () => {
+    const id = link.hash.slice(1),
+      button = q('[data-history-view="' + id + '"]');
+    if (button) button.click();
+  }),
+);
+
+// Keep the reading sections available without JavaScript.
+const initialView = location.hash.slice(1);
+const initialButton =
+  q('[data-history-view="' + initialView + '"]') ||
+  q('[data-history-view="history-timeline"]');
+initialButton.click();

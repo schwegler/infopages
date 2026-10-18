@@ -21,3 +21,11 @@ Fading Spaces retains the source's 37% headline, demographic values (37/52/60), 
 The root LICENSE and previous README identify CC BY 4.0, package.json identifies ISC, and the existing terms restrict copying/modification. The terms' seven sections are retained without substantive edits. The inconsistency is an open owner decision.
 
 The canonical `https://infopages.pages.dev/` comes from the existing sitemap and terms. Hosting dashboard build/branch rules were not verified. GitHub metadata also reports Pages enabled; no assumption is made that this is the canonical host. The implementation adds no deployment workflow and does not merge or deploy.
+
+## Public contact update
+
+The user explicitly supplied `andrew@schweg.xyz` as the public iCloud+ contact address on 2026-10-18. It replaces the public contact path, including print résumé and Person JSON-LD. This is a content change only; no authentication, DNS or mail settings are modified.
+
+## Public hosting support
+
+The user supplied `https://paypal.me/schwegler` as their public support destination. Every route includes a discreet native “Help with hosting” disclosure alongside creator attribution and contact. Its clearly labeled options use the exact user-supplied URLs: PayPal `https://paypal.me/schwegler`, Venmo `https://venmo.com/u/Schwegler`, and Cash App `https://cash.app/$schwg`. It is an ordinary link, with no payment initiated, account setup, popup, paywall or charity/tax claim. The professional print résumé hides the footer as before.
