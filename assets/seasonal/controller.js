@@ -3,19 +3,24 @@
   const base = new URL(".", document.currentScript.src);
   const config = window.SchwegSeasonalConfig;
   if (config?.schemaVersion !== 2) return;
-  const now = new Date();
-  const date = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  const date = new Date().toISOString().slice(0, 10);
   const season = config.seasons.find(
     (s) =>
       s.enabled !== false &&
-      (!s.window ||
-        ((!s.window.from || date >= s.window.from) &&
-          (!s.window.until || date < s.window.until))),
+      typeof s.asset === "string" &&
+      /\.png(?:[?#]|$)/i.test(s.asset) &&
+      (!config.activeSeason || config.activeSeason === s.id) &&
+      s.window?.from &&
+      s.window?.until &&
+      date >= s.window.from &&
+      date < s.window.until &&
+      Number.isFinite(Date.parse(`${s.window.until}T00:00:00Z`)),
   );
   if (!season) return;
   const root = document.documentElement;
   const themeKey = "seasonal-theme:v1",
     motionKey = "seasonal-motion:v1",
+    effectsKey = "seasonal-atmosphere:v1",
     promptKey = `seasonal-prompt:v1:${season.id}`;
   const read = (key, session = false) => {
     try {
@@ -40,13 +45,34 @@
       return;
     let choice = read(themeKey),
       paused = read(motionKey) === "paused",
+      hiddenEffects = read(effectsKey) === "hidden",
       dismissed = read(promptKey, true) === "dismissed",
       invited = false,
       timer,
       frame;
-    let lastPosition = null;
+    let lastPosition = null,
+      expired = false,
+      deadlineTimer,
+      sizeObserver;
+    const events = new AbortController();
+    const listen = (target, name, handler, options = {}) =>
+      target?.addEventListener(name, handler, {
+        ...(typeof options === "boolean" ? { capture: options } : options),
+        signal: events.signal,
+      });
+    const snapshot = Object.fromEntries(
+      [
+        "data-season",
+        "data-season-id",
+        "data-season-motion",
+        "data-seasonal-profile",
+      ].map((key) => [key, root.getAttribute(key)]),
+    );
+    const restoreAttribute = (key) =>
+      snapshot[key] === null
+        ? root.removeAttribute(key)
+        : root.setAttribute(key, snapshot[key]);
     const reduce = matchMedia("(prefers-reduced-motion: reduce)");
-    root.dataset.seasonalProfile = config.profile.id;
     const el = (tag, className, text) => {
       const n = document.createElement(tag);
       if (className) n.className = className;
@@ -75,7 +101,11 @@
     character.append(flight);
     const dismiss = button("×", "seasonal-dismiss");
     dismiss.setAttribute("aria-label", `Dismiss ${season.label} character`);
-    const notice = el("span", "seasonal-notice", "well. it’s haunted now.");
+    const notice = el(
+      "span",
+      "seasonal-notice",
+      season.notice || `${season.label} on`,
+    );
     notice.hidden = true;
     const actions = el("div", "seasonal-overlay-actions");
     actions.hidden = true;
@@ -88,16 +118,7 @@
     const atmosphere = el("div", "seasonal-atmosphere");
     atmosphere.setAttribute("aria-hidden", "true");
     atmosphere.hidden = true;
-    for (const name of [
-      "moon",
-      "moon-stars",
-      "pumpkin pumpkin-one",
-      "pumpkin pumpkin-two",
-      "wisp wisp-one",
-      "wisp wisp-two",
-      "sparkles sparkles-one",
-      "sparkles sparkles-two",
-    ])
+    for (const name of season.decorations || [])
       atmosphere.append(el("span", `seasonal-${name}`));
     document.body.prepend(atmosphere);
     const originals = (selector) =>
@@ -137,11 +158,12 @@
     controls.setAttribute("aria-label", "Seasonal appearance");
     const toggle = button(`${season.label} appearance`),
       motion = button("Pause seasonal animations"),
+      effects = button("Hide atmosphere"),
       reset = button("Reset appearance");
     const status = el("span", "seasonal-status");
     status.setAttribute("role", "status");
     status.setAttribute("aria-label", "Seasonal appearance status");
-    controls.append(toggle, motion, reset, status);
+    controls.append(toggle, motion, effects, reset, status);
     const footer = document.querySelector("footer");
     if (footer) footer.before(controls);
     else document.body.append(controls);
@@ -177,7 +199,12 @@
       const left = offsetX + pad + safe("left"),
         right = offsetX + width - pad - safe("right") - box.width,
         top = offsetY + pad + safe("top"),
-        bottom = offsetY + height - pad - safe("bottom") - box.height;
+        bottom =
+          offsetY +
+          height -
+          (width <= 600 ? 64 : 16) -
+          safe("bottom") -
+          box.height;
       const protectedRects = [
         ...document.querySelectorAll(
           'header,nav,[role="alert"],[role="status"],[role="dialog"],dialog[open],button,a,input,select,textarea,summary,[role="button"],.notice,[data-seasonal-avoid]',
@@ -244,11 +271,16 @@
       overlay.style.top = `${point.y}px`;
     };
     const queue = () => {
+      if (expired) return;
       if (!frame) frame = requestAnimationFrame(position);
     };
     const updateMotion = () => {
       const stopped = paused || reduce.matches;
-      root.dataset.seasonMotion = stopped ? "paused" : "auto";
+      const state = stopped ? "paused" : "auto";
+      overlay.dataset.seasonMotion = state;
+      atmosphere.dataset.seasonMotion = state;
+      if (active()) root.dataset.seasonMotion = state;
+      else restoreAttribute("data-season-motion");
       pause.textContent = paused ? "Resume" : "Pause";
       pause.setAttribute(
         "aria-label",
@@ -269,7 +301,9 @@
       dismiss.hidden = on && dismissed;
       actions.hidden = !on;
       notice.hidden = !on;
-      character.title = on ? "Undo" : "make it weird";
+      character.title = on
+        ? "Undo"
+        : season.tooltip || "Change seasonal appearance";
       character.setAttribute(
         "aria-label",
         on ? `Turn off ${season.label} mode` : `Turn on ${season.label} mode`,
@@ -282,11 +316,20 @@
       if (on) {
         root.dataset.season = season.theme;
         root.dataset.seasonId = season.id;
+        root.dataset.seasonalProfile = config.profile.id;
       } else {
-        delete root.dataset.season;
-        delete root.dataset.seasonId;
+        [
+          "data-season",
+          "data-season-id",
+          "data-seasonal-profile",
+          "data-season-motion",
+        ].forEach(restoreAttribute);
       }
-      atmosphere.hidden = !on;
+      atmosphere.hidden = !on || hiddenEffects;
+      effects.textContent = hiddenEffects
+        ? "Show atmosphere"
+        : "Hide atmosphere";
+      effects.setAttribute("aria-pressed", String(hiddenEffects));
       portraits.forEach((record) => {
         if (on) {
           const { image, ratio } = record;
@@ -299,7 +342,7 @@
         } else restore(record);
       });
       marks.forEach((record) => {
-        if (on) {
+        if (on && season.scheme !== "light") {
           record.image.src = record.attributes.src.replace(
             "schweg-signature-ink.png",
             "schweg-signature-light.png",
@@ -319,7 +362,7 @@
             seasonId: season.id,
             theme: season.theme,
             active: on,
-            motion: root.dataset.seasonMotion,
+            motion: paused || reduce.matches ? "paused" : "auto",
             source,
           },
         }),
@@ -368,57 +411,101 @@
     };
     pause.addEventListener("click", changeMotion);
     motion.addEventListener("click", changeMotion);
+    effects.addEventListener("click", () => {
+      hiddenEffects = !hiddenEffects;
+      save(effectsKey, hiddenEffects ? "hidden" : "auto");
+      apply("atmosphere");
+    });
     toggle.addEventListener("click", () =>
       choose(active() ? "off" : season.theme, "toggle"),
     );
     reset.addEventListener("click", () => {
       choice = null;
       paused = false;
+      hiddenEffects = false;
       dismissed = false;
       invited = false;
       save(themeKey, null);
       save(motionKey, null);
+      save(effectsKey, null);
       save(promptKey, null, true);
       apply("reset");
       schedule();
     });
-    window.addEventListener("storage", (event) => {
-      if ([themeKey, motionKey, null].includes(event.key)) {
+    listen(window, "storage", (event) => {
+      if ([themeKey, motionKey, effectsKey, null].includes(event.key)) {
         choice = read(themeKey);
         paused = read(motionKey) === "paused";
+        hiddenEffects = read(effectsKey) === "hidden";
         apply("storage");
         schedule();
       }
     });
-    reduce.addEventListener("change", () => {
+    listen(reduce, "change", () => {
       updateMotion();
       queue();
     });
-    window.addEventListener("resize", queue, { passive: true });
-    document.addEventListener("scroll", queue, {
-      passive: true,
-      capture: true,
-    });
-    document.addEventListener("click", queue, true);
-    document.addEventListener("focusin", queue);
-    document.addEventListener("close", queue, true);
-    document.addEventListener("toggle", queue, true);
-    document.addEventListener("keydown", (event) => {
+    listen(window, "resize", queue, { passive: true });
+    listen(document, "scroll", queue, { passive: true, capture: true });
+    listen(document, "click", queue, true);
+    listen(document, "focusin", queue);
+    listen(document, "close", queue, true);
+    listen(document, "toggle", queue, true);
+    listen(document, "keydown", (event) => {
       if (event.key === "Escape" && overlay.contains(document.activeElement)) {
         dismissMascot();
         event.preventDefault();
       } else if (event.key === "Escape" || event.key === "Tab") queue();
     });
-    window.visualViewport?.addEventListener("resize", queue, { passive: true });
-    window.visualViewport?.addEventListener("scroll", queue, { passive: true });
+    listen(window.visualViewport, "resize", queue, { passive: true });
+    listen(window.visualViewport, "scroll", queue, { passive: true });
     if (typeof ResizeObserver !== "undefined") {
-      const observer = new ResizeObserver(queue);
+      sizeObserver = new ResizeObserver(queue);
       document
         .querySelectorAll("main,header,footer")
-        .forEach((node) => observer.observe(node));
+        .forEach((node) => sizeObserver.observe(node));
     }
+    const boundary = season.window?.until
+      ? Date.parse(`${season.window.until}T00:00:00Z`)
+      : NaN;
+    const expire = () => {
+      expired = true;
+      clearTimeout(timer);
+      if (frame) cancelAnimationFrame(frame);
+      events.abort();
+      sizeObserver?.disconnect();
+      portraits.forEach(restore);
+      marks.forEach(restore);
+      Object.keys(snapshot).forEach(restoreAttribute);
+      if (overlay.contains(document.activeElement)) focusContent();
+      overlay.remove();
+      atmosphere.remove();
+      controls.remove();
+      window.dispatchEvent(
+        new CustomEvent("schweg:seasonal-change", {
+          detail: {
+            schemaVersion: 2,
+            seasonId: season.id,
+            theme: season.theme,
+            active: false,
+            motion: snapshot["data-season-motion"] || "auto",
+            source: "expired",
+          },
+        }),
+      );
+    };
+    const armBoundary = () => {
+      const remaining = boundary - Date.now();
+      if (remaining <= 0) expire();
+      else
+        deadlineTimer = setTimeout(
+          armBoundary,
+          Math.min(remaining, 2147483647),
+        );
+    };
     apply();
     schedule();
+    if (Number.isFinite(boundary)) armBoundary();
   };
   if (document.readyState === "loading")
     document.addEventListener("DOMContentLoaded", mount, { once: true });

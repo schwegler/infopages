@@ -81,3 +81,40 @@ def test_seasonal_choice_syncs_between_tabs(clean_page, site_url):
     other.get_by_role('button', name='Reset appearance', exact=True).click()
     assert page.locator('html').get_attribute('data-season') is None
     other.close()
+
+
+def test_seasonal_restores_exact_root_attributes(clean_page, site_url):
+    page = clean_page
+    def seed_original_attributes(route):
+        response = route.fetch()
+        html = response.text().replace('<html lang="en">', '<html lang="en" data-season="original" data-season-motion="original-motion" data-seasonal-profile="original-profile">')
+        route.fulfill(response=response, body=html)
+    page.route('**/resume.html', seed_original_attributes)
+    page.goto(site_url + '/resume.html')
+    page.get_by_role('button', name='Halloween appearance', exact=True).click()
+    expect(page.locator('html')).to_have_attribute('data-season', 'halloween')
+    page.get_by_role('button', name='Hide atmosphere', exact=True).click()
+    expect(page.locator('.seasonal-atmosphere')).to_be_hidden()
+    expect(page.locator('html')).to_have_attribute('data-season', 'halloween')
+    page.get_by_role('button', name='Show atmosphere', exact=True).click()
+    page.get_by_role('button', name='Halloween appearance', exact=True).click()
+    expect(page.locator('html')).to_have_attribute('data-season', 'original')
+    expect(page.locator('html')).to_have_attribute('data-season-motion', 'original-motion')
+    expect(page.locator('html')).to_have_attribute('data-seasonal-profile', 'original-profile')
+    assert page.locator('html').get_attribute('data-season-id') is None
+
+
+def test_seasonal_expires_at_exclusive_utc_boundary(clean_page, site_url):
+    from datetime import datetime, timezone
+    page = clean_page
+    page.clock.install(time=datetime(2026, 10, 31, 23, 59, 50, tzinfo=timezone.utc))
+    page.clock.pause_at(datetime(2026, 10, 31, 23, 59, 55, tzinfo=timezone.utc))
+    page.goto(site_url + '/resume.html')
+    page.get_by_role('button', name='Halloween appearance', exact=True).click()
+    expect(page.locator('html')).to_have_attribute('data-season', 'halloween')
+    page.clock.run_for(6000)
+    assert page.locator('html').get_attribute('data-season') is None
+    assert page.locator('html').get_attribute('data-season-motion') is None
+    expect(page.locator('.seasonal-overlay')).to_have_count(0)
+    expect(page.locator('[data-seasonal-controls]')).to_have_count(0)
+    expect(page.locator('.seasonal-atmosphere')).to_have_count(0)
