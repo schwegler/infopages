@@ -1,224 +1,203 @@
-/* Shared interaction layout. Halloween is one configurable seasonal pack. */
-.seasonal-stage {
-  box-sizing: border-box;
-  max-width: 1160px;
-  margin: 0 auto 28px;
-  position: relative;
-  clear: both;
+/* Small floating mascot. The transparent wrapper never intercepts page input. */
+.seasonal-overlay {
+  --seasonal-safe-top: env(safe-area-inset-top, 0px);
+  --seasonal-safe-right: env(safe-area-inset-right, 0px);
+  --seasonal-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --seasonal-safe-left: env(safe-area-inset-left, 0px);
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 90;
+  display: grid;
+  grid-template-columns: 104px 44px;
+  gap: 4px;
+  align-items: start;
+  pointer-events: none;
+  width: max-content;
+  max-width: calc(100vw - 24px);
+  font:
+    12px/1.4 system-ui,
+    sans-serif;
+  contain: layout style;
 }
-.seasonal-stage:has(> [hidden]):not(:has(> :not([hidden]))) {
-  margin-bottom: 0;
-}
-.seasonal-stage.seasonal-awaiting {
-  min-height: 178px;
-  margin-bottom: 28px;
-}
-.seasonal-invitation[hidden],
-.seasonal-scene[hidden],
+.seasonal-overlay[hidden],
+.seasonal-overlay [hidden],
 .seasonal-atmosphere[hidden] {
   display: none !important;
 }
-.seasonal-invitation,
-.seasonal-scene {
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  border: 1px solid #c7bdcf;
-  border-radius: 16px;
-  padding: 22px 28px;
-  color: #33213b;
-  background: #f6f1fa;
-  font-family: system-ui, sans-serif;
-  position: relative;
-  isolation: isolate;
-}
-.seasonal-invitation {
-  animation: seasonal-arrive 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
-  min-height: 178px;
-}
-.seasonal-invite-copy,
-.seasonal-scene-copy {
-  min-width: 0;
-  flex: 1;
-}
-.seasonal-stage p {
-  margin: 0;
-}
-.seasonal-stage .seasonal-kicker {
-  font:
-    700 10px/1.5 system-ui,
-    sans-serif;
-  letter-spacing: 0.18em;
-  color: #755276;
-}
-.seasonal-stage .seasonal-title {
-  font:
-    clamp(24px, 3vw, 37px)/1.15 Georgia,
-    serif;
-  margin: 8px 0;
-  color: inherit;
-}
-.seasonal-stage .seasonal-detail {
-  font:
-    14px/1.6 system-ui,
-    sans-serif;
-  max-width: 54ch;
-  color: #65556b;
-}
-.seasonal-stage button,
-.seasonal-controls button {
-  font:
-    600 12px/1.5 system-ui,
-    sans-serif;
-  min-height: 44px;
-  padding: 10px 14px;
-  border: 1px solid #9b809d;
-  border-radius: 8px;
-  background: #fffaf2;
-  color: #45243b;
-  cursor: pointer;
-  touch-action: manipulation;
-}
-.seasonal-stage button:focus-visible,
-.seasonal-controls button:focus-visible {
-  outline: 3px solid #8d2b09;
-  outline-offset: 4px;
-}
-.seasonal-stage .seasonal-character {
-  background: transparent;
-  border: 0;
-  padding: 0 8px;
-  display: grid;
-  justify-items: center;
-  align-self: center;
-  flex: 0 0 144px;
-}
-.seasonal-character img {
-  width: 112px;
-  height: 136px;
-  object-fit: contain;
-  display: block;
-  animation: seasonal-hover 4.8s ease-in-out infinite;
-}
-.seasonal-character-caption {
-  display: block;
-  font-size: 11px;
-  margin-top: 5px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.seasonal-stage .seasonal-dismiss {
-  padding: 0;
-  min-width: 44px;
-  min-height: 44px;
-  align-self: flex-start;
-  font:
-    26px/1 system-ui,
-    sans-serif;
-  background: transparent;
-  border-color: transparent;
-}
-.seasonal-dismiss:hover {
-  background: #e9deec;
-}
-.seasonal-scene {
-  justify-content: space-between;
-  background: #ffe0a8;
-  border: 2px solid #b65b20;
-  border-bottom: 8px solid #59213d;
-  overflow: hidden;
-  min-height: 220px;
-}
-.seasonal-scene::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(circle at 92% 16%, #ffefb9 0 28px, transparent 29px),
-    repeating-linear-gradient(135deg, #e66b1610 0 13px, transparent 13px 28px);
+.seasonal-overlay[data-obscured] {
+  visibility: hidden;
   pointer-events: none;
 }
-.seasonal-scene .seasonal-kicker {
-  color: #7c310e;
+.seasonal-overlay button {
+  box-sizing: border-box;
+  font:
+    600 12px/1.4 system-ui,
+    sans-serif;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+  pointer-events: auto;
 }
-.seasonal-scene .seasonal-detail {
-  color: #603b38;
+.seasonal-overlay button:focus-visible,
+.seasonal-controls button:focus-visible {
+  outline: 3px solid #ff9d45;
+  outline-offset: 3px;
 }
-.seasonal-hero-art {
-  flex: 0 0 160px;
-  align-self: center;
+.seasonal-overlay .seasonal-character {
+  width: 104px;
+  height: 132px;
+  background: transparent;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
 }
-.seasonal-hero-art img {
+.seasonal-flight {
   display: block;
+  width: 104px;
+  height: 132px;
+  animation: seasonal-arrive 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+  pointer-events: none;
+}
+.seasonal-character img {
+  display: block;
+  width: 104px;
+  height: 132px;
   object-fit: contain;
-  width: 160px;
-  height: 184px;
-  animation: seasonal-hover 6s ease-in-out infinite;
+  pointer-events: none;
+  animation: seasonal-hover 5s ease-in-out infinite;
+  filter: drop-shadow(0 5px 5px #0005);
 }
-.seasonal-scene-actions {
+.seasonal-overlay .seasonal-dismiss {
+  color: #eee0f2;
+  background: #211728d9;
+  border: 1px solid #bca9bd66;
+  border-radius: 50%;
+  font:
+    24px/1 system-ui,
+    sans-serif;
+  width: 44px;
+  height: 44px;
+  align-self: start;
+}
+.seasonal-overlay-actions {
+  grid-column: 1/-1;
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 16px;
+  gap: 6px;
+  justify-content: center;
+  pointer-events: none;
 }
-.seasonal-scene-actions button {
-  background: #fff6e5;
-  border-color: #a75b28;
+.seasonal-overlay-actions button {
+  background: #221725eb;
+  border: 1px solid #b97642;
+  color: #ffe7ca;
+  padding: 8px 12px;
+  border-radius: 6px;
+  min-height: 44px;
 }
-.seasonal-scene-actions button:first-child {
-  background: #59213d;
-  color: #fff8e7;
-  border-color: #59213d;
+.seasonal-overlay button:disabled {
+  opacity: 0.7;
+  cursor: default;
 }
 .seasonal-controls {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 8px 14px;
-  padding: 20px 16px;
+  padding: 18px 16px;
+  border-top: 1px solid #8c809844;
   font:
-    13px/1.5 system-ui,
+    12px/1.5 system-ui,
     sans-serif;
   color: inherit;
-  border-top: 1px solid #8c809844;
 }
 .seasonal-controls button {
+  font: inherit;
+  min-height: 44px;
+  padding: 9px 12px;
+  border: 1px solid #8c809866;
   background: transparent;
   color: inherit;
-  border-color: #8c809866;
+  border-radius: 6px;
+  cursor: pointer;
 }
 .seasonal-controls button[aria-pressed="true"] {
-  background: #59213d;
-  color: #fff6e5;
-  border-color: #59213d;
+  border-color: #c47a40;
 }
-.seasonal-controls button:disabled,
-.seasonal-stage button:disabled {
+.seasonal-controls button:disabled {
   cursor: default;
-  opacity: 0.75;
+  opacity: 0.7;
 }
 .seasonal-status {
-  font-size: 12px;
+  font-size: 11px;
 }
-/* Atmosphere stays behind all content and never captures input. Only transforms/opacity animate. */
+/* Dark Halloween pack. No changes to layout, type scale or existing experiment identities. */
+html[data-season="halloween"],
+html[data-season="halloween"][data-theme],
+html[data-season="halloween"] body {
+  --paper: #18121d;
+  --ink: #f4e8db;
+  --muted: #c2adb8;
+  --violet: #ffae6b;
+  --line: #60404d;
+  --light: #302230;
+  --canvas: #18121d;
+  --pale: #34232d;
+  --amber: #ffd395;
+  --amber-bg: #39291d;
+  --taco-bg: #18121d;
+  --taco-fg: #f4e8db;
+  --taco-muted: #c2adb8;
+  --taco-accent: #ffae6b;
+  --taco-accent-2: #ffd09a;
+  --taco-accent-fill: #97451d;
+  --taco-accent-fill-hover: #b85b2a;
+  --taco-surface: #251b2b;
+  --taco-surface-2: #34232d;
+  --taco-border: #60404d;
+  --taco-callout: #251b2b;
+  --taco-callout-border: #60404d;
+}
 html[data-season="halloween"] body {
   isolation: isolate;
-  background-color: #ffe5bb;
-  background-image: repeating-linear-gradient(
-    135deg,
-    #e28d3512 0 2px,
-    transparent 2px 16px
-  );
+  background-color: #18121d;
+  background-image:
+    radial-gradient(ellipse at 0 5%, #73302033, transparent 42%),
+    radial-gradient(ellipse at 100% 70%, #5e25412b, transparent 45%);
+  color: var(--ink);
+}
+html[data-season="halloween"] header {
+  border-color: #60404d;
+}
+html[data-season="halloween"][data-seasonal-profile="moots"] header {
+  background: #1e1523;
+}
+html[data-season="halloween"][data-seasonal-profile="moots"]
+  nav
+  button[aria-current="page"] {
+  color: #ffd09a;
+}
+html[data-season="halloween"][data-seasonal-profile="moots"] nav button:hover {
+  background: #34232d;
+}
+html[data-season="halloween"][data-seasonal-profile="moots"] .primary {
+  color: #24151b;
+}
+html[data-season="halloween"] .seasonal-controls {
+  color: #e5cbb8;
+  border-color: #60404d;
+  background: #18121d;
 }
 .seasonal-atmosphere {
   position: fixed;
   inset: 0;
   z-index: -1;
-  overflow: hidden;
   pointer-events: none;
+  overflow: hidden;
   contain: strict;
 }
 .seasonal-atmosphere > span {
@@ -226,75 +205,80 @@ html[data-season="halloween"] body {
   display: block;
 }
 .seasonal-moon {
-  width: 112px;
-  height: 112px;
+  width: 110px;
+  height: 110px;
   right: 1.5%;
   top: 16%;
   border-radius: 50%;
-  background: #ffcf70;
-  box-shadow: inset -25px -8px 0 #e6a246;
-  border: 2px solid #9b5624;
+  background: #eaa050;
+  box-shadow:
+    inset -27px -8px 0 #9a512d,
+    0 0 55px #e6983226;
+  border: 1px solid #ffcf91;
+  opacity: 0.75;
   animation: seasonal-hover 14s ease-in-out infinite;
 }
 .seasonal-moon::after {
   content: "✦";
-  color: #59213d;
+  color: #ffbe80;
   font:
-    48px/1 Georgia,
+    42px/1 Georgia,
     serif;
   position: absolute;
-  right: -9px;
-  top: -20px;
+  right: -14px;
+  top: -24px;
 }
 .seasonal-moon-stars {
   left: 1%;
   top: 15%;
-  width: 50px;
-  height: 100px;
-  background: radial-gradient(circle, #8e3e19 0 2px, transparent 3px) 0 0/22px
-    28px;
-  opacity: 0.5;
+  width: 55px;
+  height: 110px;
+  background: radial-gradient(circle, #eab898 0 1px, transparent 2px) 0 0/23px
+    29px;
   animation: seasonal-twinkle 8s ease-in-out infinite;
 }
 .seasonal-pumpkin {
-  width: 75px;
-  height: 64px;
+  width: 65px;
+  height: 56px;
   border-radius: 45%;
   background: repeating-linear-gradient(
     90deg,
-    #f49735 0 18px,
-    #e97b23 19px 24px
+    #bd611f 0 16px,
+    #923f18 17px 21px
   );
-  border: 2px solid #a64e20;
-  box-shadow: inset 7px 0 0 #ffc362;
+  border: 1px solid #e99f59;
+  box-shadow:
+    inset 5px 0 0 #e7a151,
+    0 0 30px #d77c191c;
   animation: seasonal-sway 11s ease-in-out infinite;
   transform-origin: bottom;
+  opacity: 0.7;
 }
 .seasonal-pumpkin::before {
   content: "";
   position: absolute;
-  width: 13px;
-  height: 19px;
-  background: #67542e;
-  left: 31px;
-  top: -16px;
+  width: 10px;
+  height: 16px;
+  background: #75623f;
+  left: 28px;
+  top: -13px;
   transform: rotate(12deg);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 .seasonal-pumpkin::after {
   content: "▴ ▴";
   position: absolute;
-  left: 10px;
+  left: 9px;
   right: 6px;
-  top: 13px;
+  top: 12px;
   text-align: center;
   font:
-    20px/1 Georgia,
+    17px/1 Georgia,
     serif;
-  color: #59213d;
-  border-bottom: 6px solid #59213d;
+  color: #ffd489;
+  border-bottom: 5px solid #ffd489;
   border-radius: 0 0 50% 50%;
-  padding-bottom: 8px;
+  padding-bottom: 7px;
 }
 .pumpkin-one {
   left: 1.2%;
@@ -303,15 +287,14 @@ html[data-season="halloween"] body {
 .pumpkin-two {
   right: -12px;
   top: 82%;
-  transform: scale(0.8);
   animation-delay: -4s;
 }
 .seasonal-wisp {
-  width: 57px;
-  height: 82px;
+  width: 48px;
+  height: 70px;
   border-radius: 50% 50% 12% 12%;
-  background: #fff7e6;
-  border: 2px solid #bd8d9a;
+  background: #cdb9db;
+  border: 1px solid #dbc6d0;
   clip-path: polygon(
     0 0,
     100% 0,
@@ -322,35 +305,33 @@ html[data-season="halloween"] body {
     0 100%
   );
   animation: seasonal-ghost 16s ease-in-out infinite;
+  opacity: 0.16;
 }
 .seasonal-wisp::before {
   content: "• •";
-  color: #59213d;
+  color: #38223e;
   position: absolute;
-  left: 9px;
-  top: 20px;
+  left: 8px;
+  top: 17px;
   font:
-    22px/1 Georgia,
+    18px/1 Georgia,
     serif;
   white-space: pre;
 }
 .wisp-one {
   left: 1%;
   top: 36%;
-  opacity: 0.7;
 }
 .wisp-two {
   right: 2%;
   top: 48%;
-  opacity: 0.65;
   animation-delay: -8s;
 }
 .seasonal-sparkles {
-  width: 90px;
+  width: 75px;
   height: 110px;
-  background: radial-gradient(circle, #8c3d52 0 2px, transparent 3px) 0 0/27px
+  background: radial-gradient(circle, #c68767 0 1px, transparent 2px) 0 0/27px
     35px;
-  opacity: 0.4;
   animation: seasonal-twinkle 10s ease-in-out infinite;
 }
 .sparkles-one {
@@ -362,101 +343,23 @@ html[data-season="halloween"] body {
   top: 34%;
   animation-delay: -5s;
 }
-/* Readable orange colourways; original tokens return simply by removing data-season. */
-html[data-season="halloween"] {
-  --paper: #fff0d8;
-  --ink: #332035;
-  --muted: #705553;
-  --violet: #9a3b15;
-  --line: #d6b190;
-  --light: #ffdfad;
-  --canvas: #fff0d8;
-  --pale: #ffdfad;
-  --amber: #73310c;
-  --amber-bg: #fff1d4;
-  --taco-bg: #ffe5bb;
-  --taco-fg: #332035;
-  --taco-muted: #705553;
-  --taco-accent: #9a3b15;
-  --taco-accent-2: #7a2c12;
-  --taco-accent-fill: #9a3b15;
-  --taco-accent-fill-hover: #7a2c12;
-  --taco-surface: #fff7e9;
-  --taco-surface-2: #ffe0ac;
-  --taco-border: #d6b190;
-  --taco-callout: #fff0d8;
-  --taco-callout-border: #d6b190;
-}
-html[data-season="halloween"] main {
-  background: #fff4e5ed;
-  border-radius: 12px;
-}
-html[data-season="halloween"][data-seasonal-profile="andrew"] main {
-  background: #fff3dfed;
-}
-html[data-season="halloween"][data-seasonal-profile="moots"] header {
-  background: #ffe2b5;
-}
-html[data-season="halloween"][data-seasonal-profile="moots"] aside {
-  background: #ffedd9ed;
-}
-html[data-season="halloween"][data-seasonal-profile="moots"] .brand svg {
-  color: #9a3b15;
-}
-html[data-season="halloween"][data-seasonal-profile="moots"]
-  nav
-  button[aria-current="page"] {
-  color: #7d3214;
-}
-html[data-season="halloween"] .seasonal-controls {
-  background: #ffedcf;
-  border-color: #bd854b;
-  color: #45243b;
-}
-html[data-season="halloween"][data-theme="dark"] {
-  --taco-bg: #241726;
-  --taco-fg: #fff1dc;
-  --taco-muted: #e0bfa6;
-  --taco-accent: #ffb767;
-  --taco-accent-2: #ffd199;
-  --taco-accent-fill: #9a3b15;
-  --taco-surface: #352335;
-  --taco-surface-2: #4a2d36;
-  --taco-border: #7b5147;
-  --taco-callout: #352335;
-}
-html[data-season="halloween"][data-theme="dark"] main {
-  background: #291a2aef;
-}
-html[data-season="halloween"][data-theme="dark"] body {
-  background-color: #241726;
-}
-html[data-season-motion="paused"]
-  :is(
-    .seasonal-invitation,
-    .seasonal-character img,
-    .seasonal-hero-art img,
-    .seasonal-atmosphere > span
-  ) {
-  animation-play-state: paused !important;
-}
 @keyframes seasonal-arrive {
   from {
     opacity: 0;
-    transform: translateY(-12px) translateX(28px);
+    transform: translateX(38px) translateY(12px) rotate(8deg);
   }
   to {
     opacity: 1;
-    transform: translate(0);
+    transform: translate(0) rotate(0);
   }
 }
 @keyframes seasonal-hover {
   0%,
   100% {
-    transform: translateY(0) rotate(-2deg);
+    transform: translateY(0) rotate(-3deg);
   }
   50% {
-    transform: translateY(-9px) rotate(2deg);
+    transform: translateY(-8px) rotate(3deg);
   }
 }
 @keyframes seasonal-sway {
@@ -474,74 +377,38 @@ html[data-season-motion="paused"]
     transform: translateY(0) rotate(-5deg);
   }
   50% {
-    transform: translateY(-25px) rotate(6deg);
+    transform: translateY(-22px) rotate(6deg);
   }
 }
 @keyframes seasonal-twinkle {
   0%,
   100% {
-    opacity: 0.25;
+    opacity: 0.12;
   }
   50% {
-    opacity: 0.65;
+    opacity: 0.42;
   }
 }
+html[data-season-motion="paused"]
+  :is(.seasonal-character img, .seasonal-atmosphere > span) {
+  animation-play-state: paused !important;
+}
+html[data-season-motion="paused"] .seasonal-flight {
+  animation: none !important;
+}
 @media (max-width: 600px) {
-  .seasonal-stage {
-    margin-bottom: 20px;
+  .seasonal-overlay {
+    grid-template-columns: 76px 44px;
   }
-  .seasonal-stage.seasonal-awaiting {
-    min-height: 180px;
-  }
-  .seasonal-invitation,
-  .seasonal-scene {
-    gap: 10px;
-    padding: 18px 14px;
-    border-radius: 12px;
-  }
-  .seasonal-stage .seasonal-title {
-    font-size: 26px;
-  }
-  .seasonal-stage .seasonal-detail {
-    font-size: 12px;
-  }
-  .seasonal-stage .seasonal-character {
-    flex-basis: 88px;
-    padding: 0;
-  }
+  .seasonal-overlay .seasonal-character,
+  .seasonal-flight,
   .seasonal-character img {
-    width: 82px;
-    height: 110px;
+    width: 76px;
+    height: 100px;
   }
-  .seasonal-character-caption {
-    font-size: 10px;
-    max-width: 88px;
-  }
-  .seasonal-invitation .seasonal-dismiss {
-    min-width: 44px;
-    flex: 0 0 44px;
-    margin-right: -7px;
-  }
-  .seasonal-invite-copy .seasonal-kicker {
-    font-size: 9px;
-    letter-spacing: 0.08em;
-  }
-  .seasonal-invite-copy .seasonal-title {
-    font-size: 22px;
-  }
-  .seasonal-hero-art {
-    flex: 0 0 84px;
-  }
-  .seasonal-hero-art img {
-    width: 84px;
-    height: 120px;
-  }
-  .seasonal-scene-actions {
-    gap: 6px;
-  }
-  .seasonal-scene-actions button {
+  .seasonal-overlay-actions button {
     font-size: 11px;
-    padding: 9px 10px;
+    padding: 8px 10px;
   }
   .seasonal-controls {
     justify-content: flex-start;
@@ -550,45 +417,100 @@ html[data-season-motion="paused"]
     flex-basis: 100%;
   }
   .seasonal-moon {
-    right: -35px;
+    right: -38px;
     width: 85px;
     height: 85px;
   }
   .pumpkin-one {
-    left: -34px;
+    left: -32px;
   }
   .pumpkin-two {
-    right: -28px;
+    right: -25px;
   }
   .wisp-one {
-    left: -25px;
+    left: -23px;
   }
   .wisp-two {
-    right: -25px;
+    right: -23px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .seasonal-invitation,
+  .seasonal-flight,
   .seasonal-character img,
-  .seasonal-hero-art img,
   .seasonal-atmosphere > span {
     animation: none !important;
     transition: none !important;
   }
 }
 @media print {
-  .seasonal-stage,
+  .seasonal-overlay,
   .seasonal-atmosphere,
   .seasonal-controls {
     display: none !important;
   }
-  html[data-season] body,
-  html[data-season] main {
+  html[data-season],
+  html[data-season] body {
+    --paper: white;
+    --ink: #242330;
+    --muted: #62616b;
+    --violet: #514287;
+    --line: #d1d0d3;
+    --taco-bg: white;
+    --taco-fg: #242330;
+    --taco-muted: #62616b;
+    --taco-accent: #514287;
+    --taco-border: #d1d0d3;
     background: white !important;
     color: #242330 !important;
   }
+  .seasonal-light-mark {
+    filter: brightness(0) !important;
+  }
 }
 
-html[data-season-motion="paused"] .seasonal-invitation {
-  animation: none !important;
+.seasonal-notice {
+  grid-column: 1/-1;
+  max-width: 152px;
+  color: #f4dfc7;
+  font:
+    11px/1.3 system-ui,
+    sans-serif;
+  text-align: center;
+  text-shadow: 0 1px 3px #000;
+  pointer-events: none;
+}
+
+html[data-season="halloween"],
+html[data-season="halloween"] body {
+  --wp--preset--color--base: #18121d;
+  --wp--preset--color--contrast: #f4e8db;
+  --wp--preset--color--accent: #ffae6b;
+  --wp--preset--color--accent-2: #ffd09a;
+  --wp--preset--color--muted: #c2adb8;
+}
+@media print {
+  html[data-season],
+  html[data-season] body {
+    --wp--preset--color--base: white;
+    --wp--preset--color--contrast: #242330;
+    --wp--preset--color--accent: #514287;
+  }
+}
+
+html[data-season="halloween"][data-seasonal-profile="andrew"]
+  body:not(.experiment-page)
+  :is(
+    .button,
+    .filters button[aria-pressed="true"],
+    .factor-links button[aria-pressed="true"]
+  ) {
+  background: #96451d;
+  color: #fff3e6;
+  border-color: #d18042;
+}
+html[data-season="halloween"][data-seasonal-profile="andrew"]
+  body:not(.experiment-page)
+  .button:hover {
+  background: #a24b20;
+  color: #fff3e6;
 }
