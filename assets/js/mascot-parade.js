@@ -1,6 +1,5 @@
 /* Original PNG pixels, articulated with clipped layers rather than body warps. */
 const asset = (name) => new URL(`../parade/${name}`, import.meta.url).href;
-const brand = (name) => new URL(`../brand/${name}`, import.meta.url).href;
 export const START_DELAY = 2000;
 export const PREFERENCE_KEY = "schweg-mascot-parade:v1";
 export function chooseLane(bottom, height, rects, maxLift) {
@@ -33,27 +32,28 @@ export const mascots = [
     name: "Telly",
     app: "taco ’bout it",
     url: "https://tacobout.online/",
-    image: asset("telly.png"),
+    image: asset("telly-facet-approved.png"),
     logo: asset("tacobout-logo.png"),
-    width: 508,
-    height: 599,
-    body: "polygon(0 0,100% 0,100% 82.5%,0 82.5%)",
+    width: 680,
+    height: 915,
+    crop: [175, 45, 680, 915],
+    body: "polygon(0.000% 0.000%,100.000% 0.000%,100.000% 76.721%,0.000% 76.721%)",
     legs: [
       {
-        hip: "38% 82.4%",
-        knee: "38% 88%",
+        hip: "38.235% 76.393%",
+        knee: "34.265% 83.388%",
         upper:
-          "polygon(33.661% 81.970%,43.898% 81.970%,43.898% 86.144%,45.669% 86.477%,45.669% 89.149%,32.480% 89.149%)",
+          "polygon(32.206% 75.738%,45.000% 76.284%,40.000% 85.902%,29.853% 85.355%)",
         lower:
-          "polygon(30.315% 87.646%,45.669% 87.646%,49.213% 90.484%,50.984% 92.654%,50.984% 95.326%,50.000% 96.828%,48.622% 98.497%,28.543% 98.497%)",
+          "polygon(13.382% 82.077%,44.853% 82.077%,44.853% 99.344%,13.382% 99.344%)",
       },
       {
-        hip: "55% 82.4%",
-        knee: "55% 87%",
+        hip: "57.500% 75.847%",
+        knee: "56.618% 83.388%",
         upper:
-          "polygon(50.787% 81.970%,60.236% 81.970%,60.236% 85.643%,62.598% 86.311%,62.598% 88.147%,50.000% 88.147%)",
+          "polygon(52.059% 75.847%,62.647% 75.301%,61.765% 86.011%,51.176% 86.557%)",
         lower:
-          "polygon(49.803% 86.477%,70.866% 86.477%,70.866% 97.329%,50.787% 97.329%,50.787% 92.154%,48.819% 90.150%)",
+          "polygon(46.765% 82.077%,79.118% 82.077%,79.118% 99.344%,46.765% 99.344%)",
       },
     ],
   },
@@ -62,23 +62,28 @@ export const mascots = [
     name: "Facet",
     app: "Trove",
     url: "https://trove.schweg.xyz/",
-    image: asset("facet.png"),
+    image: asset("telly-facet-approved.png"),
     logo: asset("trove-logo.png"),
-    width: 369,
-    height: 641,
-    body: "polygon(0 0,100% 0,100% 84%,0 84%)",
+    width: 493,
+    height: 880,
+    crop: [883, 80, 493, 880],
+    body: "polygon(0.000% 0.000%,100.000% 0.000%,100.000% 79.886%,0.000% 79.886%)",
     legs: [
       {
-        hip: "40% 84%",
-        knee: "40% 89%",
-        upper: "polygon(33% 83%,47% 83%,47% 90%,31% 90%)",
-        lower: "polygon(20% 89%,49% 89%,49% 100%,20% 100%)",
+        hip: "34.077% 79.318%",
+        knee: "34.686% 84.886%",
+        upper:
+          "polygon(26.572% 78.636%,39.959% 79.545%,41.785% 86.932%,27.181% 87.386%)",
+        lower:
+          "polygon(5.274% 82.045%,46.856% 82.045%,46.856% 99.205%,5.274% 99.205%)",
       },
       {
-        hip: "60% 83%",
-        knee: "62% 89%",
-        upper: "polygon(53% 83%,68% 83%,68% 90%,53% 90%)",
-        lower: "polygon(51% 89%,78% 89%,78% 100%,51% 100%)",
+        hip: "58.418% 79.432%",
+        knee: "63.286% 85.341%",
+        upper:
+          "polygon(50.710% 79.432%,66.531% 79.091%,70.994% 86.932%,57.606% 87.386%)",
+        lower:
+          "polygon(51.521% 82.045%,92.292% 82.045%,92.292% 99.205%,51.521% 99.205%)",
       },
     ],
   },
@@ -112,31 +117,6 @@ export const mascots = [
       },
     ],
   },
-  {
-    id: "andrew",
-    name: "Andrew",
-    app: "schweg.xyz",
-    url: "https://schweg.xyz/",
-    image: brand("andrew-pencil-mascot.png"),
-    logo: brand("schweg-signature-ink.png"),
-    width: 1145,
-    height: 1374,
-    body: "polygon(0 0,100% 0,100% 67%,0 67%)",
-    legs: [
-      {
-        hip: "42% 66%",
-        knee: "38% 81%",
-        upper: "polygon(36% 65%,52% 65%,50% 73%,46% 83%,31% 83%)",
-        lower: "polygon(30% 80%,46% 80%,48% 100%,20% 100%)",
-      },
-      {
-        hip: "56% 66%",
-        knee: "61% 81%",
-        upper: "polygon(51% 65%,63% 65%,69% 83%,54% 83%,49% 73%)",
-        lower: "polygon(54% 80%,69% 80%,85% 100%,54% 100%)",
-      },
-    ],
-  },
 ];
 
 const el = (tag, className, text) => {
@@ -166,8 +146,18 @@ export function createRig(mascot) {
   const part = (className, clip) => {
     const node = el("span", `parade-part ${className}`);
     const art = image(mascot.image, mascot.width, mascot.height);
-    art.style.clipPath = clip;
-    node.append(art);
+    const pixels = el("span", "parade-pixels");
+    pixels.style.clipPath = clip;
+    if (mascot.crop) {
+      const [x, y, width, height] = mascot.crop;
+      art.style.width = `${(1536 / width) * 100}%`;
+      art.style.height = `${(1024 / height) * 100}%`;
+      art.style.left = `${(-x / width) * 100}%`;
+      art.style.top = `${(-y / height) * 100}%`;
+      art.style.objectFit = "fill";
+    }
+    pixels.append(art);
+    node.append(pixels);
     return node;
   };
   mascot.legs.forEach((leg, i) => {
@@ -208,7 +198,8 @@ export function mountParade() {
     timer,
     frame,
     previous;
-  let distance = 0;
+  let distance = 0,
+    activeIndex = 0;
   let protectedRects = [],
     layoutDirty = true;
   const pauses = new Set();
@@ -371,11 +362,9 @@ export function mountParade() {
       parseFloat(style.getPropertyValue("--parade-safe-bottom")) || 0;
     const lift = parseFloat(style.getPropertyValue("--parade-lane-lift")) || 0;
     const size = width <= 600 ? 88 : 116;
-    const gap = width <= 600 ? 160 : 198;
     return {
       width,
       size,
-      gap,
       safeLeft,
       safeRight,
       baseBottom: innerHeight - 10 - safeBottom,
@@ -387,7 +376,6 @@ export function mountParade() {
     const {
       width,
       size,
-      gap,
       safeLeft,
       safeRight,
       speed,
@@ -443,8 +431,19 @@ export function mountParade() {
     if (previous !== undefined && !pauses.size)
       distance += ((now - previous) * speed) / 1000;
     previous = now;
+    // A padded exit accounts for the articulated shoes extending beyond the link.
+    // Reset only after the current character has completely left the viewport.
+    if (distance > width + size * 2) {
+      activeIndex += 1;
+      distance = 0;
+    }
+    if (activeIndex >= links.length) {
+      stop();
+      return;
+    }
     links.forEach((link, i) => {
-      let x = distance - size - i * gap;
+      const active = i === activeIndex;
+      let x = active ? distance - size : -size * 2;
       if (link === document.activeElement)
         x = Math.max(safeLeft + 8, Math.min(x, width - size - safeRight - 8));
       link.style.setProperty("--parade-x", `${x}px`);
@@ -456,7 +455,7 @@ export function mountParade() {
           bottom - linkHeight < rect.bottom + 4,
       );
       // Only fully visible links enter the keyboard order.
-      const ready = link.dataset.artReady === "true";
+      const ready = active && link.dataset.artReady === "true";
       const visible =
         ready &&
         x >= safeLeft + 8 &&
@@ -473,10 +472,6 @@ export function mountParade() {
       );
       link.style.setProperty("--label-shift", `${center - (x + size / 2)}px`);
     });
-    if (distance > width + size + (links.length - 1) * gap) {
-      stop();
-      return;
-    }
     frame = requestAnimationFrame(tick);
   };
   const staticMode = () => {

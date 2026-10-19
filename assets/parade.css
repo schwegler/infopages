@@ -52,11 +52,15 @@
   animation: parade-step var(--gait) ease-in-out infinite;
 }
 .parade-part,
+.parade-pixels,
 .parade-part img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+}
+.parade-pixels {
+  overflow: hidden;
 }
 .parade-part img {
   max-width: none;
@@ -76,43 +80,6 @@
 }
 .parade-rig--hitch {
   --gait: calc(550ms * var(--gait-scale, 1));
-}
-.parade-rig--andrew {
-  --gait: calc(810ms * var(--gait-scale, 1));
-}
-.parade-rig--andrew .parade-leg {
-  animation-name: parade-long-stride;
-}
-.parade-rig--andrew .parade-shin {
-  animation-name: parade-long-knee;
-}
-@keyframes parade-long-stride {
-  0%,
-  100% {
-    transform: rotate(-22deg);
-  }
-  50% {
-    transform: rotate(22deg);
-  }
-  65% {
-    transform: rotate(24deg);
-  }
-  85% {
-    transform: rotate(-20deg);
-  }
-}
-@keyframes parade-long-knee {
-  0%,
-  50%,
-  100% {
-    transform: rotate(0);
-  }
-  70% {
-    transform: rotate(17deg);
-  }
-  88% {
-    transform: rotate(6deg);
-  }
 }
 @keyframes parade-arm {
   0%,
@@ -196,16 +163,6 @@
   height: 30px;
   object-fit: contain;
 }
-.parade-mascot[data-mascot="andrew"] .parade-label img {
-  width: 64px;
-}
-html[data-theme="dark"] .parade-mascot[data-mascot="andrew"] .parade-label img,
-html[data-season="halloween"]
-  .parade-mascot[data-mascot="andrew"]
-  .parade-label
-  img {
-  content: url("brand/schweg-signature-light.png");
-}
 /* Give the passing cast the corner; the existing seasonal control returns afterwards. */
 html[data-mascot-parade="walking"] .seasonal-overlay {
   visibility: hidden;
@@ -274,7 +231,7 @@ html[data-mascot-parade="walking"] .seasonal-overlay {
 }
 .parade-static .parade-cast {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
 .parade-static .parade-mascot {

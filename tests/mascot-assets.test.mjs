@@ -15,11 +15,4 @@ test("parade ships the approved PNG pixels and verified logo copies unchanged", 
       file,
     );
   }
-  const andrew = readFileSync(
-    new URL("../assets/brand/andrew-pencil-mascot.png", import.meta.url),
-  );
-  assert.equal(
-    createHash("sha256").update(andrew).digest("hex"),
-    provenance.reusedAndrewSha256,
-  );
 });

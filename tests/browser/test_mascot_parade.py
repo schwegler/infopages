@@ -50,7 +50,7 @@ def test_waits_two_seconds_after_load_not_dom_ready(clean_page, site_url):
     assert all(link.evaluate('(e) => e.inert') for link in links.all())
 
 
-def test_stagger_pause_hover_focus_and_one_pass(clean_page, site_url):
+def test_sequential_pause_hover_focus_and_one_pass(clean_page, site_url):
     page = clean_page
     freeze(page)
     page.set_viewport_size({'width': 1440, 'height': 900})
@@ -58,11 +58,14 @@ def test_stagger_pause_hover_focus_and_one_pass(clean_page, site_url):
     page.clock.run_for(4500)
     telly = page.locator('[data-mascot="telly"]')
     facet = page.locator('[data-mascot="facet"]')
-    assert x(telly) > x(facet) + 190
+    expect(facet).to_be_hidden()
+    assert page.locator('.parade-mascot[data-visible="true"]').count() == 1
     rect = telly.bounding_box()
     page.mouse.move(rect['x'] + 50, rect['y'] + 50)
     before = x(telly)
-    page.clock.run_for(1000)
+    page.clock.fast_forward(30000)
+    expect(facet).to_be_hidden()
+    assert page.locator('.parade-mascot[data-visible="true"]').count() == 1
     assert abs(x(telly) - before) < 1
     expect(telly.locator('.parade-label')).to_be_visible()
     assert telly.locator('.parade-leg').first.evaluate('(e) => getComputedStyle(e).animationPlayState') == 'paused'
@@ -71,15 +74,18 @@ def test_stagger_pause_hover_focus_and_one_pass(clean_page, site_url):
     assert x(telly) > before + 20
     telly.focus()
     before = x(telly)
-    page.clock.run_for(1000)
+    page.clock.fast_forward(30000)
     expect(telly).to_be_focused()
+    expect(facet).to_be_hidden()
+    assert page.locator('.parade-mascot[data-visible="true"]').count() == 1
     assert abs(x(telly) - before) < 1
     page.keyboard.press('Tab')
     expect(page.get_by_role('button', name='Dismiss mascot parade')).to_be_focused()
     page.get_by_role('button', name='Appearance', exact=True).focus()
-    page.clock.run_for(40000)
+    for _ in range(4):
+        page.clock.fast_forward(30000)
     expect(page.locator('.mascot-parade')).to_be_hidden()
-    page.clock.run_for(40000)
+    page.clock.fast_forward(95000)
     expect(page.locator('.mascot-parade')).to_be_hidden()
     assert page.locator('html').get_attribute('data-mascot-parade') is None
 
@@ -92,7 +98,6 @@ def test_all_actual_destinations_logos_and_new_tabs(clean_page, site_url):
         'telly': ('https://tacobout.online/', 'taco ’bout it'),
         'facet': ('https://trove.schweg.xyz/', 'Trove'),
         'hitch': ('https://moots.schweg.xyz/', 'Moots'),
-        'andrew': ('https://schweg.xyz/', 'schweg.xyz'),
     }
     for identity, (url, name) in expected.items():
         link = page.locator(f'[data-mascot="{identity}"]')
@@ -109,19 +114,9 @@ def test_all_actual_destinations_logos_and_new_tabs(clean_page, site_url):
         popup.value.wait_for_load_state()
         assert popup.value.url == url
         popup.value.close()
+    assert page.locator('.parade-mascot').count() == 3
+    assert page.locator('[data-mascot="andrew"]').count() == 0
     assert page.locator('.mascot-parade img').evaluate_all('(images) => images.every(e => e.alt === "")')
-
-
-def test_approved_signature_remains_legible_in_dark_mode(clean_page, site_url):
-    page = clean_page
-    page.emulate_media(color_scheme='dark')
-    page.goto(site_url + '/')
-    static_cast(page)
-    logo = page.locator('[data-mascot="andrew"] .parade-label img')
-    assert 'schweg-signature-light.png' in logo.evaluate('(e) => getComputedStyle(e).content')
-    page.emulate_media(color_scheme='light')
-    expect(page.locator('html')).to_have_attribute('data-theme', 'light')
-    assert logo.evaluate('(e) => getComputedStyle(e).content') == 'normal'
 
 
 @pytest.mark.parametrize('keyboard', [False, True])
@@ -184,12 +179,20 @@ def test_responsive_visible_cast_and_clamped_labels(clean_page, site_url, width,
     page.goto(site_url + '/')
     page.clock.run_for(2000)
     seen = set()
-    for _ in range(22):
-        page.clock.run_for(1000)
-        for link in page.locator('.parade-mascot[data-visible="true"]').all():
+    order = []
+    # Seed the next animation frame after focus releases, then sample each second.
+    for _ in range(90):
+        page.clock.run_for(34)
+        page.clock.fast_forward(1000)
+        visible = page.locator('.parade-mascot[data-visible="true"]')
+        assert visible.count() <= 1
+        for link in visible.all():
             if link.evaluate('(e) => e.inert'):
                 continue
-            seen.add(link.get_attribute('data-mascot'))
+            identity = link.get_attribute('data-mascot')
+            if identity not in seen:
+                order.append(identity)
+            seen.add(identity)
             rect = link.bounding_box()
             assert rect['x'] >= 0 and rect['x'] + rect['width'] <= width
             assert rect['y'] >= 0 and rect['y'] + rect['height'] <= height
@@ -198,7 +201,8 @@ def test_responsive_visible_cast_and_clamped_labels(clean_page, site_url, width,
             assert label['x'] >= 0 and label['x'] + label['width'] <= width
             page.get_by_role('button', name='Appearance', exact=True).focus()
         assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
-    assert seen == {'telly', 'facet', 'hitch', 'andrew'}
+    assert seen == {'telly', 'facet', 'hitch'}
+    assert order == ['telly', 'facet', 'hitch']
 
 
 @pytest.mark.parametrize('width', [320, 820, 1440])
@@ -306,14 +310,17 @@ def test_full_width_bottom_controls_leave_a_visible_lane(clean_page, site_url, w
     }''')
     page.clock.run_for(2000)
     seen=set()
-    for _ in range(48):
-        page.clock.run_for(500)
-        for link in page.locator('.parade-mascot[data-visible="true"]').all():
+    for _ in range(180):
+        page.clock.run_for(34)
+        page.clock.fast_forward(500)
+        visible = page.locator('.parade-mascot[data-visible="true"]')
+        assert visible.count() <= 1
+        for link in visible.all():
             if link.evaluate('(e)=>e.inert'):continue
             seen.add(link.get_attribute('data-mascot'))
             box=link.bounding_box()
             assert box['y']+box['height'] < height-100
-    assert seen == {'telly','facet','hitch','andrew'}
+    assert seen == {'telly','facet','hitch'}
     page.get_by_role('button',name='Bottom navigation',exact=True).click()
 
 
