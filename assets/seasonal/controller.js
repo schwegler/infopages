@@ -460,6 +460,10 @@
       choose(active() ? "off" : season.theme, "toggle"),
     );
     restoreInvite.addEventListener("click", () => {
+      if (!active()) {
+        choice = null;
+        save(themeKey, null);
+      }
       dismissed = false;
       invited = true;
       save(promptKey, null, true);

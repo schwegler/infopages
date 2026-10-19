@@ -167,3 +167,13 @@ def test_active_dismiss_leaves_theme_and_no_floating_controls(clean_page, site_u
     page.get_by_role('button', name='Appearance', exact=True).click()
     page.get_by_role('button', name='Restore original appearance', exact=True).click()
     assert page.locator('html').get_attribute('data-season') is None
+
+
+def test_show_character_restores_saved_off_invitation(clean_page, site_url):
+    page = clean_page
+    page.add_init_script("localStorage.setItem('seasonal-theme:v1','off')")
+    page.goto(site_url + '/resume.html')
+    page.get_by_role('button', name='Appearance', exact=True).click()
+    page.get_by_role('button', name='Show Halloween character', exact=True).click()
+    expect(page.get_by_role('button', name='Turn on Halloween mode', exact=True)).to_be_visible()
+    assert page.locator('html').get_attribute('data-season') is None
