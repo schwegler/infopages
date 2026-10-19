@@ -643,3 +643,15 @@ html[data-theme="dark"] .seasonal-appearance-panel {
     display: none !important;
   }
 }
+
+@media (max-width: 600px) {
+  .seasonal-appearance-panel {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: var(--appearance-top, 80px);
+    width: auto;
+    max-width: none;
+    max-height: calc(100dvh - var(--appearance-top, 80px) - 12px);
+  }
+}

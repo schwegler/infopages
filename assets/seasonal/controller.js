@@ -107,12 +107,8 @@
       season.notice || `${season.label} on`,
     );
     notice.hidden = true;
-    const actions = el("div", "seasonal-overlay-actions");
-    actions.hidden = true;
     const undo = button("Undo", "seasonal-undo");
     undo.setAttribute("aria-label", "Restore original appearance");
-    const pause = button("Pause", "seasonal-pause");
-    actions.append(undo, pause);
     overlay.append(character, dismiss);
     document.body.append(overlay);
     const atmosphere = el("div", "seasonal-atmosphere");
@@ -194,7 +190,15 @@
       panel.hidden = true;
       disclosure.setAttribute("aria-expanded", "false");
     };
+    const placeMenu = () => {
+      controls.style.setProperty(
+        "--appearance-top",
+        `${Math.max(8, Math.min(disclosure.getBoundingClientRect().bottom + 8, innerHeight - 260))}px`,
+      );
+    };
+    listen(window, "resize", placeMenu, { passive: true });
     disclosure.addEventListener("click", () => {
+      placeMenu();
       panel.hidden = !panel.hidden;
       disclosure.setAttribute("aria-expanded", String(!panel.hidden));
     });
@@ -325,13 +329,6 @@
       atmosphere.dataset.seasonMotion = state;
       if (active()) root.dataset.seasonMotion = state;
       else restoreAttribute("data-season-motion");
-      pause.textContent = paused ? "Resume" : "Pause";
-      pause.setAttribute(
-        "aria-label",
-        `${paused ? "Resume" : "Pause"} ${season.label} animations`,
-      );
-      pause.setAttribute("aria-pressed", String(stopped));
-      pause.disabled = reduce.matches;
       motion.textContent = reduce.matches
         ? "Motion reduced by device"
         : `${paused ? "Resume" : "Pause"} seasonal animations`;
@@ -453,7 +450,6 @@
       save(motionKey, paused ? "paused" : "auto");
       apply("motion");
     };
-    pause.addEventListener("click", changeMotion);
     motion.addEventListener("click", changeMotion);
     effects.addEventListener("click", () => {
       hiddenEffects = !hiddenEffects;
