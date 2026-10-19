@@ -364,13 +364,18 @@
   }
   .sudoku-area {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     gap: 28px;
     align-items: start;
   }
+  .sudoku-puzzle {
+    width: min(100%, 432px);
+  }
   .sudoku-board {
     display: grid;
-    grid-template-columns: repeat(9, 1fr);
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    grid-template-rows: repeat(9, minmax(0, 1fr));
     width: min(100%, 432px);
     aspect-ratio: 1;
     border: 3px solid #173e51;
@@ -381,11 +386,13 @@
     border: 0;
     border-radius: 0;
     min-width: 0;
+    min-height: 0;
     padding: 0;
     background: #fff;
     color: #18394a;
     font-size: clamp(16px, 2vw, 24px);
     font-weight: 600;
+    line-height: 1;
   }
   .sudoku-board button:nth-child(3n):not(:nth-child(9n)) {
     border-right: 2px solid #173e51;
