@@ -1,23 +1,39 @@
-# Seasonal appearance
+# Seasonal appearance · shared contract v2
 
-Halloween 2026 is an optional, local appearance. It starts off; the accessible toggle saves `halloween` or `off` in `seasonal-theme:v1` on this origin. Reset deletes that preference and returns to off. Storage denial gracefully leaves a session-only choice; storage events synchronize other tabs. No calendar activation, analytics, network service, floating trigger, or motion is used. Print hides both the costume panel and controls.
+A fresh visitor sees the costumed character arrive after about one second in a dedicated area above the content. The character gently hovers; keyboard/touch activation turns the page into a pumpkin-orange Halloween scene with moons, jack-o’-lanterns, friendly wisps and twinkling dots. The 44px close button dismisses the invitation for this tab and season. Nothing transforms until the visitor chooses it.
 
-The controller owns preference and rendering, the stylesheet owns the self-contained decoration, and `mascot.png` owns the costume artwork. The three sites use the same behavior contract with distinct copy and illustration. Future seasons should extend an explicit allowlist and profile/assets after review, rather than adding speculative packs. Existing experiments, content palettes, navigation and footer branding are deliberately preserved.
+The active scene provides **Restore original appearance** and **Pause scene animations**. Footer controls also provide on/off, motion pause and reset. Explicit saved on/off choices are respected; reset returns to standard appearance and makes the invitation available again. No control is covered by a fixed character overlay.
 
-Review: enable using “Halloween appearance” near the footer; turn it off using the same toggle, or choose “Reset appearance”. No production activation or publishing is part of this change.
+## Configuration and the next season
 
-## Costume artwork
+`assets/seasonal/season-config.js` defines `window.SchwegSeasonalConfig` with `schemaVersion: 2`, `invitationDelayMs`, a site `profile` (`id`, `character`, `placement`), and a `seasons` array. Entries contain `id`, `theme`, `label`, `enabled`, optional `window.from` / exclusive `window.until` local dates, `asset`, `kicker`, `title`, `detail` and `prompt`.
 
-Built-in image generation produced the transparent PNG; alpha was verified, transparent margins trimmed, and the image resized to at most 480 × 600 for delivery. Original source: `assets/brand/andrew-pencil-mascot.png`.
+The controller selects the first enabled entry whose date window contains today. Halloween 2026 currently runs October 1 through October 31. A reviewed Christmas entry can start **November 1** using the same controller, preference contract and UI. Add its approved PNG, copy and CSS pack before enabling it; this change does not invent Christmas artwork or silently reuse Halloween costumes. If no entry applies, the controller mounts no seasonal UI.
 
-Prompt specification: Andrew as a friendly plum-cloaked wizard, keeping his purple hair, blue eyes, smile and pencil wand. Polished restrained cartoon cutout, full body, genuine transparent PNG, no background, text, or watermark. Preserve existing character identity and illustration style.
+## Preferences and events
 
-Existing Telly/Andrew image placements change to the costume while enabled; original sources, responsive attributes and alt text return when switched off.
+- `localStorage['seasonal-theme:v1']`: active theme name (currently `halloween`) or `off`. The existing key is preserved. Unknown past-season values allow the current season’s invitation; explicit `off` suppresses invitations until reset.
+- `localStorage['seasonal-motion:v1']`: `paused` or `auto`. Device reduced motion always wins.
+- `sessionStorage['seasonal-prompt:v1:<season-id>']`: `dismissed`, scoped to this tab and season.
+- Root attributes: `data-season`, `data-season-id`, `data-season-motion` and `data-seasonal-profile`.
+- `window` event `schweg:seasonal-change`: detail `{schemaVersion:2, seasonId, theme, active, motion, source}`.
 
-## Rendered review evidence
+Storage failures leave usable in-page choices. Storage events synchronize appearance and motion between tabs. This contract is shared with the separate Trove implementation; Facet’s bat costume remains owned there.
 
-- [Desktop, 1440 × 1050](screenshots/seasonal/halloween-desktop.png)
-- [Mobile, 390 × 844](screenshots/seasonal/halloween-mobile.png)
-- [Interaction results](screenshots/seasonal/browser-results.json)
+## Motion, accessibility and restoration
 
-Headless Chromium exercised default off, toggle on, reload persistence, saved off, reset, print hiding, empty decorative alt text and horizontal overflow. All routes using the shared résumé script were also visited with the seasonal panel enabled. Browser plugin was not available; the installed Playwright runtime and Chromium were used.
+One cancellable `setTimeout` schedules the invitation. There is no polling, canvas, animation loop, external service, filter/blur animation or pointer interception. Eight decorative spans plus the PNG use compositor-friendly transform/opacity animations. Pausing freezes seasonal motion; reduced motion renders a static invitation, static character and static background. All decoration has empty alt text or is hidden from accessibility APIs. Print hides seasonal controls and decoration.
+
+The character lives in normal flow, with space reserved during the short arrival delay. Main content keeps readable cream/plum surfaces. Orange tokens apply only while `data-season=halloween` is present. Removing that attribute restores original tokens; existing Telly/Andrew placements restore their exact original src/srcset/sizes/alt attributes. Navigation/footer logos, contact encoding, support links and experiment behavior remain intact.
+
+## Artwork provenance
+
+The existing costume PNG is unchanged from the previous draft. Reference: `assets/brand/andrew-pencil-mascot.png`. Andrew’s wizard and Telly’s vampire host were produced by built-in imagegen editing their respective transparent character references, preserving identity and illustration style. Moots’ paired sheet ghosts were newly generated to echo its overlapping-circle brand. Alpha was verified; transparent margins were trimmed and delivery sizes limited to 480 × 600. No mascot SVG substitute was used.
+
+## Genuine rendered previews
+
+- [Invitation desktop](screenshots/seasonal/invitation-desktop.png) · [Invitation mobile](screenshots/seasonal/invitation-mobile.png)
+- [Active Halloween desktop](screenshots/seasonal/halloween-desktop.png) · [Active Halloween mobile](screenshots/seasonal/halloween-mobile.png)
+- [Browser interaction results](screenshots/seasonal/browser-results.json)
+
+Desktop is 1440 × 1050; mobile is 390 × 844. The interaction harness also checks 320px width, keyboard activation, delayed arrival, dismissal, saved off, restoration, pause persistence, reduced motion, decorative alt text and print hiding. Browser plugin was unavailable; installed Playwright/Chromium was used. Blog previews render captured current WordPress HTML with local seasonal assets and exclude remote WordPress scripts. PHP tests cover integration; this is not a complete local WordPress installation.

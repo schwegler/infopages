@@ -1,9 +1,183 @@
+/* Shared interaction layout. Halloween is one configurable seasonal pack. */
+.seasonal-stage {
+  box-sizing: border-box;
+  max-width: 1160px;
+  margin: 0 auto 28px;
+  position: relative;
+  clear: both;
+}
+.seasonal-stage:has(> [hidden]):not(:has(> :not([hidden]))) {
+  margin-bottom: 0;
+}
+.seasonal-stage.seasonal-awaiting {
+  min-height: 178px;
+  margin-bottom: 28px;
+}
+.seasonal-invitation[hidden],
+.seasonal-scene[hidden],
+.seasonal-atmosphere[hidden] {
+  display: none !important;
+}
+.seasonal-invitation,
+.seasonal-scene {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  border: 1px solid #c7bdcf;
+  border-radius: 16px;
+  padding: 22px 28px;
+  color: #33213b;
+  background: #f6f1fa;
+  font-family: system-ui, sans-serif;
+  position: relative;
+  isolation: isolate;
+}
+.seasonal-invitation {
+  animation: seasonal-arrive 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+  min-height: 178px;
+}
+.seasonal-invite-copy,
+.seasonal-scene-copy {
+  min-width: 0;
+  flex: 1;
+}
+.seasonal-stage p {
+  margin: 0;
+}
+.seasonal-stage .seasonal-kicker {
+  font:
+    700 10px/1.5 system-ui,
+    sans-serif;
+  letter-spacing: 0.18em;
+  color: #755276;
+}
+.seasonal-stage .seasonal-title {
+  font:
+    clamp(24px, 3vw, 37px)/1.15 Georgia,
+    serif;
+  margin: 8px 0;
+  color: inherit;
+}
+.seasonal-stage .seasonal-detail {
+  font:
+    14px/1.6 system-ui,
+    sans-serif;
+  max-width: 54ch;
+  color: #65556b;
+}
+.seasonal-stage button,
+.seasonal-controls button {
+  font:
+    600 12px/1.5 system-ui,
+    sans-serif;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #9b809d;
+  border-radius: 8px;
+  background: #fffaf2;
+  color: #45243b;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.seasonal-stage button:focus-visible,
+.seasonal-controls button:focus-visible {
+  outline: 3px solid #8d2b09;
+  outline-offset: 4px;
+}
+.seasonal-stage .seasonal-character {
+  background: transparent;
+  border: 0;
+  padding: 0 8px;
+  display: grid;
+  justify-items: center;
+  align-self: center;
+  flex: 0 0 144px;
+}
+.seasonal-character img {
+  width: 112px;
+  height: 136px;
+  object-fit: contain;
+  display: block;
+  animation: seasonal-hover 4.8s ease-in-out infinite;
+}
+.seasonal-character-caption {
+  display: block;
+  font-size: 11px;
+  margin-top: 5px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.seasonal-stage .seasonal-dismiss {
+  padding: 0;
+  min-width: 44px;
+  min-height: 44px;
+  align-self: flex-start;
+  font:
+    26px/1 system-ui,
+    sans-serif;
+  background: transparent;
+  border-color: transparent;
+}
+.seasonal-dismiss:hover {
+  background: #e9deec;
+}
+.seasonal-scene {
+  justify-content: space-between;
+  background: #ffe0a8;
+  border: 2px solid #b65b20;
+  border-bottom: 8px solid #59213d;
+  overflow: hidden;
+  min-height: 220px;
+}
+.seasonal-scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 92% 16%, #ffefb9 0 28px, transparent 29px),
+    repeating-linear-gradient(135deg, #e66b1610 0 13px, transparent 13px 28px);
+  pointer-events: none;
+}
+.seasonal-scene .seasonal-kicker {
+  color: #7c310e;
+}
+.seasonal-scene .seasonal-detail {
+  color: #603b38;
+}
+.seasonal-hero-art {
+  flex: 0 0 160px;
+  align-self: center;
+}
+.seasonal-hero-art img {
+  display: block;
+  object-fit: contain;
+  width: 160px;
+  height: 184px;
+  animation: seasonal-hover 6s ease-in-out infinite;
+}
+.seasonal-scene-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+.seasonal-scene-actions button {
+  background: #fff6e5;
+  border-color: #a75b28;
+}
+.seasonal-scene-actions button:first-child {
+  background: #59213d;
+  color: #fff8e7;
+  border-color: #59213d;
+}
 .seasonal-controls {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 8px 16px;
+  gap: 8px 14px;
   padding: 20px 16px;
   font:
     13px/1.5 system-ui,
@@ -12,112 +186,362 @@
   border-top: 1px solid #8c809844;
 }
 .seasonal-controls button {
-  font: inherit;
-  min-height: 44px;
-  padding: 10px 14px;
-  color: inherit;
   background: transparent;
-  border: 1px solid #8c809866;
-  border-radius: 8px;
-  cursor: pointer;
+  color: inherit;
+  border-color: #8c809866;
 }
 .seasonal-controls button[aria-pressed="true"] {
-  background: #533365;
-  color: #fff;
-  border-color: #533365;
+  background: #59213d;
+  color: #fff6e5;
+  border-color: #59213d;
 }
-.seasonal-controls button:focus-visible {
-  outline: 3px solid #9b6423;
-  outline-offset: 3px;
+.seasonal-controls button:disabled,
+.seasonal-stage button:disabled {
+  cursor: default;
+  opacity: 0.75;
 }
 .seasonal-status {
   font-size: 12px;
 }
-.seasonal-scene[hidden] {
-  display: none !important;
+/* Atmosphere stays behind all content and never captures input. Only transforms/opacity animate. */
+html[data-season="halloween"] body {
+  isolation: isolate;
+  background-color: #ffe5bb;
+  background-image: repeating-linear-gradient(
+    135deg,
+    #e28d3512 0 2px,
+    transparent 2px 16px
+  );
 }
-.seasonal-scene {
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  margin: 0 auto 32px;
-  padding: 24px 32px;
-  max-width: 1160px;
-  border: 1px solid #bca6c4;
-  border-radius: 14px;
-  background: #f3edf6;
-  color: #342540;
+.seasonal-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
   overflow: hidden;
+  pointer-events: none;
+  contain: strict;
 }
-.seasonal-scene img {
+.seasonal-atmosphere > span {
+  position: absolute;
   display: block;
+}
+.seasonal-moon {
   width: 112px;
-  height: 140px;
-  object-fit: contain;
-  flex: 0 0 auto;
+  height: 112px;
+  right: 1.5%;
+  top: 16%;
+  border-radius: 50%;
+  background: #ffcf70;
+  box-shadow: inset -25px -8px 0 #e6a246;
+  border: 2px solid #9b5624;
+  animation: seasonal-hover 14s ease-in-out infinite;
 }
-.seasonal-scene p {
-  margin: 0;
-}
-.seasonal-scene .seasonal-kicker {
+.seasonal-moon::after {
+  content: "✦";
+  color: #59213d;
   font:
-    600 10px/1.5 system-ui,
-    sans-serif;
-  letter-spacing: 0.18em;
-  color: #705276;
-}
-.seasonal-scene .seasonal-title {
-  font:
-    clamp(24px, 3vw, 36px)/1.2 Georgia,
+    48px/1 Georgia,
     serif;
-  margin: 8px 0;
+  position: absolute;
+  right: -9px;
+  top: -20px;
 }
-.seasonal-scene .seasonal-detail {
+.seasonal-moon-stars {
+  left: 1%;
+  top: 15%;
+  width: 50px;
+  height: 100px;
+  background: radial-gradient(circle, #8e3e19 0 2px, transparent 3px) 0 0/22px
+    28px;
+  opacity: 0.5;
+  animation: seasonal-twinkle 8s ease-in-out infinite;
+}
+.seasonal-pumpkin {
+  width: 75px;
+  height: 64px;
+  border-radius: 45%;
+  background: repeating-linear-gradient(
+    90deg,
+    #f49735 0 18px,
+    #e97b23 19px 24px
+  );
+  border: 2px solid #a64e20;
+  box-shadow: inset 7px 0 0 #ffc362;
+  animation: seasonal-sway 11s ease-in-out infinite;
+  transform-origin: bottom;
+}
+.seasonal-pumpkin::before {
+  content: "";
+  position: absolute;
+  width: 13px;
+  height: 19px;
+  background: #67542e;
+  left: 31px;
+  top: -16px;
+  transform: rotate(12deg);
+  border-radius: 4px;
+}
+.seasonal-pumpkin::after {
+  content: "▴ ▴";
+  position: absolute;
+  left: 10px;
+  right: 6px;
+  top: 13px;
+  text-align: center;
   font:
-    14px/1.6 system-ui,
-    sans-serif;
-  max-width: 48ch;
-  color: #5d4d64;
+    20px/1 Georgia,
+    serif;
+  color: #59213d;
+  border-bottom: 6px solid #59213d;
+  border-radius: 0 0 50% 50%;
+  padding-bottom: 8px;
 }
-.seasonal-telly {
-  background: #211d32;
-  color: #faf2e5;
-  border-color: #554363;
+.pumpkin-one {
+  left: 1.2%;
+  top: 65%;
 }
-.seasonal-telly .seasonal-kicker {
-  color: #e6b584;
+.pumpkin-two {
+  right: -12px;
+  top: 82%;
+  transform: scale(0.8);
+  animation-delay: -4s;
 }
-.seasonal-telly .seasonal-detail {
-  color: #e0d4e6;
+.seasonal-wisp {
+  width: 57px;
+  height: 82px;
+  border-radius: 50% 50% 12% 12%;
+  background: #fff7e6;
+  border: 2px solid #bd8d9a;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    75% 90%,
+    50% 100%,
+    25% 90%,
+    0 100%
+  );
+  animation: seasonal-ghost 16s ease-in-out infinite;
 }
-.seasonal-moots {
-  background: #f4eee5;
-  border-color: #c9b9a3;
+.seasonal-wisp::before {
+  content: "• •";
+  color: #59213d;
+  position: absolute;
+  left: 9px;
+  top: 20px;
+  font:
+    22px/1 Georgia,
+    serif;
+  white-space: pre;
 }
-.seasonal-moots .seasonal-kicker {
-  color: #78531f;
+.wisp-one {
+  left: 1%;
+  top: 36%;
+  opacity: 0.7;
 }
+.wisp-two {
+  right: 2%;
+  top: 48%;
+  opacity: 0.65;
+  animation-delay: -8s;
+}
+.seasonal-sparkles {
+  width: 90px;
+  height: 110px;
+  background: radial-gradient(circle, #8c3d52 0 2px, transparent 3px) 0 0/27px
+    35px;
+  opacity: 0.4;
+  animation: seasonal-twinkle 10s ease-in-out infinite;
+}
+.sparkles-one {
+  left: -8px;
+  top: 84%;
+}
+.sparkles-two {
+  right: -20px;
+  top: 34%;
+  animation-delay: -5s;
+}
+/* Readable orange colourways; original tokens return simply by removing data-season. */
 html[data-season="halloween"] {
-  --seasonal-accent: #78452a;
+  --paper: #fff0d8;
+  --ink: #332035;
+  --muted: #705553;
+  --violet: #9a3b15;
+  --line: #d6b190;
+  --light: #ffdfad;
+  --canvas: #fff0d8;
+  --pale: #ffdfad;
+  --amber: #73310c;
+  --amber-bg: #fff1d4;
+  --taco-bg: #ffe5bb;
+  --taco-fg: #332035;
+  --taco-muted: #705553;
+  --taco-accent: #9a3b15;
+  --taco-accent-2: #7a2c12;
+  --taco-accent-fill: #9a3b15;
+  --taco-accent-fill-hover: #7a2c12;
+  --taco-surface: #fff7e9;
+  --taco-surface-2: #ffe0ac;
+  --taco-border: #d6b190;
+  --taco-callout: #fff0d8;
+  --taco-callout-border: #d6b190;
+}
+html[data-season="halloween"] main {
+  background: #fff4e5ed;
+  border-radius: 12px;
+}
+html[data-season="halloween"][data-seasonal-profile="andrew"] main {
+  background: #fff3dfed;
+}
+html[data-season="halloween"][data-seasonal-profile="moots"] header {
+  background: #ffe2b5;
+}
+html[data-season="halloween"][data-seasonal-profile="moots"] aside {
+  background: #ffedd9ed;
+}
+html[data-season="halloween"][data-seasonal-profile="moots"] .brand svg {
+  color: #9a3b15;
+}
+html[data-season="halloween"][data-seasonal-profile="moots"]
+  nav
+  button[aria-current="page"] {
+  color: #7d3214;
 }
 html[data-season="halloween"] .seasonal-controls {
-  border-top-color: #b98d5766;
+  background: #ffedcf;
+  border-color: #bd854b;
+  color: #45243b;
+}
+html[data-season="halloween"][data-theme="dark"] {
+  --taco-bg: #241726;
+  --taco-fg: #fff1dc;
+  --taco-muted: #e0bfa6;
+  --taco-accent: #ffb767;
+  --taco-accent-2: #ffd199;
+  --taco-accent-fill: #9a3b15;
+  --taco-surface: #352335;
+  --taco-surface-2: #4a2d36;
+  --taco-border: #7b5147;
+  --taco-callout: #352335;
+}
+html[data-season="halloween"][data-theme="dark"] main {
+  background: #291a2aef;
+}
+html[data-season="halloween"][data-theme="dark"] body {
+  background-color: #241726;
+}
+html[data-season-motion="paused"]
+  :is(
+    .seasonal-invitation,
+    .seasonal-character img,
+    .seasonal-hero-art img,
+    .seasonal-atmosphere > span
+  ) {
+  animation-play-state: paused !important;
+}
+@keyframes seasonal-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+@keyframes seasonal-hover {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-9px) rotate(2deg);
+  }
+}
+@keyframes seasonal-sway {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+@keyframes seasonal-ghost {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(-25px) rotate(6deg);
+  }
+}
+@keyframes seasonal-twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.65;
+  }
 }
 @media (max-width: 600px) {
+  .seasonal-stage {
+    margin-bottom: 20px;
+  }
+  .seasonal-stage.seasonal-awaiting {
+    min-height: 180px;
+  }
+  .seasonal-invitation,
   .seasonal-scene {
-    gap: 12px;
-    padding: 20px 16px;
-    margin-bottom: 24px;
-    border-radius: 10px;
+    gap: 10px;
+    padding: 18px 14px;
+    border-radius: 12px;
   }
-  .seasonal-scene img {
-    width: 80px;
-    height: 112px;
+  .seasonal-stage .seasonal-title {
+    font-size: 26px;
   }
-  .seasonal-scene .seasonal-detail {
+  .seasonal-stage .seasonal-detail {
     font-size: 12px;
+  }
+  .seasonal-stage .seasonal-character {
+    flex-basis: 88px;
+    padding: 0;
+  }
+  .seasonal-character img {
+    width: 82px;
+    height: 110px;
+  }
+  .seasonal-character-caption {
+    font-size: 10px;
+    max-width: 88px;
+  }
+  .seasonal-invitation .seasonal-dismiss {
+    min-width: 44px;
+    flex: 0 0 44px;
+    margin-right: -7px;
+  }
+  .seasonal-invite-copy .seasonal-kicker {
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
+  .seasonal-invite-copy .seasonal-title {
+    font-size: 22px;
+  }
+  .seasonal-hero-art {
+    flex: 0 0 84px;
+  }
+  .seasonal-hero-art img {
+    width: 84px;
+    height: 120px;
+  }
+  .seasonal-scene-actions {
+    gap: 6px;
+  }
+  .seasonal-scene-actions button {
+    font-size: 11px;
+    padding: 9px 10px;
   }
   .seasonal-controls {
     justify-content: flex-start;
@@ -125,17 +549,46 @@ html[data-season="halloween"] .seasonal-controls {
   .seasonal-status {
     flex-basis: 100%;
   }
-}
-@media print {
-  .seasonal-scene,
-  .seasonal-controls {
-    display: none !important;
+  .seasonal-moon {
+    right: -35px;
+    width: 85px;
+    height: 85px;
+  }
+  .pumpkin-one {
+    left: -34px;
+  }
+  .pumpkin-two {
+    right: -28px;
+  }
+  .wisp-one {
+    left: -25px;
+  }
+  .wisp-two {
+    right: -25px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .seasonal-scene,
-  .seasonal-controls {
+  .seasonal-invitation,
+  .seasonal-character img,
+  .seasonal-hero-art img,
+  .seasonal-atmosphere > span {
     animation: none !important;
     transition: none !important;
   }
+}
+@media print {
+  .seasonal-stage,
+  .seasonal-atmosphere,
+  .seasonal-controls {
+    display: none !important;
+  }
+  html[data-season] body,
+  html[data-season] main {
+    background: white !important;
+    color: #242330 !important;
+  }
+}
+
+html[data-season-motion="paused"] .seasonal-invitation {
+  animation: none !important;
 }
