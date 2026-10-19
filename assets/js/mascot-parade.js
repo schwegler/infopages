@@ -291,12 +291,17 @@ export function mountParade() {
   };
   const dismiss = () => {
     dismissed = true;
-    if (region.contains(document.activeElement)) {
-      window.SchwegAppearance?.disclosure.focus({
-        preventScroll: !region.classList.contains("parade-static"),
-      });
-    }
+    const wasStatic = region.classList.contains("parade-static");
+    const returnFocus = wasStatic || region.contains(document.activeElement);
     stop();
+    if (returnFocus) {
+      window.SchwegAppearance?.disclosure.focus({ preventScroll: true });
+      if (wasStatic)
+        window.SchwegAppearance?.disclosure.scrollIntoView({
+          block: "nearest",
+          behavior: "instant",
+        });
+    }
   };
   close.addEventListener("click", dismiss);
   region.addEventListener("keydown", (event) => {

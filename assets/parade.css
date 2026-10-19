@@ -300,6 +300,7 @@ html[data-mascot-parade="walking"] .seasonal-overlay {
   opacity: 1;
   background: none;
   font-size: 12px;
+  min-width: 0;
 }
 .parade-static .parade-rig,
 .parade-static .parade-part {
@@ -335,6 +336,23 @@ html[data-mascot-parade="walking"] .seasonal-overlay {
   .parade-static .parade-label img {
     width: 24px;
     height: 24px;
+  }
+}
+@media (max-width: 360px) {
+  .parade-static .parade-label {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    gap: 6px 4px;
+  }
+  .parade-static .parade-label img {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+  .parade-static .parade-label span {
+    overflow-wrap: anywhere;
   }
 }
 @media (prefers-reduced-motion: reduce) {

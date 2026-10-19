@@ -86,6 +86,9 @@ viewport; an 820 × 1180 window becomes 410 × 590. All four mascots, label
 bounds, keyboard access, the static list, and dismissal were checked with no
 horizontal overflow or CSP errors. Closing the static list scrolls its returned
 Appearance focus into view.
+On narrow phones, the static labels put the logo above the app name so WebKit's
+font metrics cannot force horizontal overflow. Dismissal restores focus after
+hiding the list, including WebKit pointer clicks that do not focus buttons.
 
 Sixteen walking phases were inspected at 300px character height against the
 original PNGs. Cropped shoe outlines in Telly, Facet, and Hitch were corrected,
