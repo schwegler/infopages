@@ -36,6 +36,7 @@ The costume PNGs are unchanged. Reference: `assets/brand/andrew-pencil-mascot.pn
 - [Short actual animation (GIF)](screenshots/seasonal/overlay-demo.gif) · [Original browser recording (WebM)](screenshots/seasonal/overlay-demo.webm)
 - [Floating invitation desktop](screenshots/seasonal/invitation-desktop.png) · [Floating invitation mobile](screenshots/seasonal/invitation-mobile.png)
 - [Dark Halloween desktop](screenshots/seasonal/halloween-desktop.png) · [Dark Halloween mobile](screenshots/seasonal/halloween-mobile.png)
+- [Appearance menu desktop](screenshots/seasonal/appearance-desktop.png) · [Appearance menu mobile](screenshots/seasonal/appearance-mobile.png)
 - [Browser results](screenshots/seasonal/browser-results.json)
 
 Videos show a real browser’s arrival, activation, moving background, pause and undo; the GIF is converted from that recording, not fabricated from design mockups. Stills are 1440 × 1050 and 390 × 844; the harness also checks 320px, zero main-layout movement, actual animated movement, keyboard activation, dismissal, persistence, motion pause, reduced motion, print hiding and protected controls. The Browser plugin was unavailable; installed Playwright/Chromium was used.
