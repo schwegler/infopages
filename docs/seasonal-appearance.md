@@ -2,7 +2,7 @@
 
 After about one second, the small costumed PNG itself arrives and hovers above the existing page. There is no hero, explanatory panel, reserved space or insertion into main content. Hover tooltip: **make it weird**. Accessible character label: **Turn on Halloween mode**. The discreet X has a 44px hit area and label **Dismiss Halloween character**.
 
-Clicking the character applies dark plum/charcoal colourways, orange accents and animated camp atmosphere. The only new visible phrase is **well. it’s haunted now.**, followed by plain **Undo** and **Pause** controls. Clicking the active character also turns the theme off. The footer retains on/off, motion, Hide atmosphere and reset controls. Dismissing an active character hides the sprite but leaves its compact Undo/Pause controls available.
+Clicking the character applies dark plum/charcoal colours, orange accents and optional animated atmosphere. A collapsed **Appearance** disclosure in the header contains Halloween on/off, Undo, motion, atmosphere, Show Halloween character and reset. The blog’s existing light/dark control remains inside this menu and retains its original saved preference. The other two sites keep their supported standard appearance. No footer settings or floating action panel remains. Dismissing the character hides the entire overlay and preserves the selected theme; Undo remains available in Appearance. Escape closes the menu and returns focus to its disclosure; clicking outside or tabbing away closes it too.
 
 ## Shared configuration and state
 
@@ -25,7 +25,7 @@ The transparent fixed wrapper has `pointer-events:none`; only character/control 
 
 One cancellable timeout schedules the invitation. Position reads are coalesced by a single animation frame only after show, scroll, resize, click/focus or dialog events; a ResizeObserver handles content-size changes. There is no polling, continuously running JavaScript animation loop, canvas or pointer-follow handler. Character and background motion use CSS transforms/opacity. Static shadows are not animated. Paused motion stays paused across reloads; reduced motion gives a static character and background. No focus is stolen on arrival. Keyboard Enter/Space activates the button, Escape dismisses when focus is in the overlay, and Undo restores the original appearance.
 
-All artwork is decorative (`alt=""` or hidden from accessibility APIs). Print suppresses overlays and seasonal decoration. Dark mode uses the existing approved light signature PNG where necessary and restores the exact original source attributes on undo. Existing character images preserve their original aspect ratio, responsive sources and alt text. Existing `data-theme` and its saved preference are never changed. No main-content element is inserted or resized by the invitation.
+All artwork is decorative (`alt=""` or hidden from accessibility APIs). Print suppresses overlays and seasonal decoration. Dark mode uses the existing approved light signature PNG where necessary and restores the exact original source attributes on undo. Existing character images remain unchanged; costumes are confined to the overlay. Existing `data-theme` and its saved preference are never changed. No main-content element is inserted or resized by the invitation.
 
 ## Costume provenance
 

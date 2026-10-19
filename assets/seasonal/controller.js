@@ -113,7 +113,7 @@
     undo.setAttribute("aria-label", "Restore original appearance");
     const pause = button("Pause", "seasonal-pause");
     actions.append(undo, pause);
-    overlay.append(character, dismiss, notice, actions);
+    overlay.append(character, dismiss);
     document.body.append(overlay);
     const atmosphere = el("div", "seasonal-atmosphere");
     atmosphere.setAttribute("aria-hidden", "true");
@@ -139,9 +139,7 @@
               ? `${image.getAttribute("width")}/${image.getAttribute("height")}`
               : null,
       }));
-    const portraits = originals(
-      'img[src*="/telly_"],img[src*="/duo_left_telly_host_transparent"],img[src*="/andrew-pencil-mascot"]',
-    );
+    const portraits = [];
     const marks = originals('img[src*="/schweg-signature-ink.png"]');
     const restore = ({ image, attributes, aspect, fit }) => {
       Object.entries(attributes).forEach(([key, value]) =>
@@ -153,20 +151,66 @@
       image.style.objectFit = fit;
       image.classList.remove("seasonal-light-mark");
     };
-    const controls = el("section", "seasonal-controls");
+    const controls = el("div", "seasonal-controls");
     controls.dataset.seasonalControls = "";
-    controls.setAttribute("aria-label", "Seasonal appearance");
+    const disclosure = button("Appearance", "seasonal-appearance-toggle");
+    disclosure.setAttribute("aria-expanded", "false");
+    disclosure.setAttribute("aria-controls", "seasonal-appearance-panel");
+    const panel = el("div", "seasonal-appearance-panel");
+    panel.id = "seasonal-appearance-panel";
+    panel.hidden = true;
+    panel.setAttribute("role", "group");
+    panel.setAttribute("aria-label", "Appearance settings");
     const toggle = button(`${season.label} appearance`),
       motion = button("Pause seasonal animations"),
       effects = button("Hide atmosphere"),
-      reset = button("Reset appearance");
+      reset = button("Reset appearance"),
+      restoreInvite = button("Show Halloween character");
     const status = el("span", "seasonal-status");
     status.setAttribute("role", "status");
     status.setAttribute("aria-label", "Seasonal appearance status");
-    controls.append(toggle, motion, effects, reset, status);
-    const footer = document.querySelector("footer");
-    if (footer) footer.before(controls);
-    else document.body.append(controls);
+    const existingMode = document.querySelector(".tacobout-theme-control");
+    if (existingMode) {
+      existingMode.before(controls);
+      panel.append(existingMode);
+    } else {
+      (
+        document.querySelector("header .header-right") ||
+        document.querySelector("header")
+      ).append(controls);
+    }
+    panel.append(
+      toggle,
+      undo,
+      motion,
+      effects,
+      restoreInvite,
+      reset,
+      notice,
+      status,
+    );
+    controls.append(disclosure, panel);
+    const closeMenu = () => {
+      panel.hidden = true;
+      disclosure.setAttribute("aria-expanded", "false");
+    };
+    disclosure.addEventListener("click", () => {
+      panel.hidden = !panel.hidden;
+      disclosure.setAttribute("aria-expanded", String(!panel.hidden));
+    });
+    listen(document, "click", (event) => {
+      if (!controls.contains(event.target)) closeMenu();
+    });
+    listen(document, "keydown", (event) => {
+      if (event.key === "Escape" && controls.contains(document.activeElement)) {
+        closeMenu();
+        disclosure.focus();
+        event.preventDefault();
+      }
+    });
+    listen(document, "focusin", (event) => {
+      if (!controls.contains(event.target)) closeMenu();
+    });
     const active = () => choice === season.theme;
     // Layout reads happen only in response to page events. Keep a safe current position when possible.
     const position = () => {
@@ -296,10 +340,11 @@
     };
     const renderOverlay = () => {
       const on = active();
-      overlay.hidden = !(on || (!dismissed && invited && choice !== "off"));
-      character.hidden = on && dismissed;
-      dismiss.hidden = on && dismissed;
-      actions.hidden = !on;
+      overlay.hidden =
+        dismissed || !(on || (!dismissed && invited && choice !== "off"));
+      character.hidden = false;
+      dismiss.hidden = false;
+      undo.hidden = !on;
       notice.hidden = !on;
       character.title = on
         ? "Undo"
@@ -400,8 +445,7 @@
       save(promptKey, "dismissed", true);
       clearTimeout(timer);
       renderOverlay();
-      if (active()) undo.focus({ preventScroll: true });
-      else focusContent();
+      disclosure.focus({ preventScroll: true });
     };
     dismiss.addEventListener("click", dismissMascot);
     const changeMotion = () => {
@@ -419,6 +463,13 @@
     toggle.addEventListener("click", () =>
       choose(active() ? "off" : season.theme, "toggle"),
     );
+    restoreInvite.addEventListener("click", () => {
+      dismissed = false;
+      invited = true;
+      save(promptKey, null, true);
+      renderOverlay();
+      closeMenu();
+    });
     reset.addEventListener("click", () => {
       choice = null;
       paused = false;
@@ -480,6 +531,7 @@
       if (overlay.contains(document.activeElement)) focusContent();
       overlay.remove();
       atmosphere.remove();
+      if (existingMode) controls.before(existingMode);
       controls.remove();
       window.dispatchEvent(
         new CustomEvent("schweg:seasonal-change", {

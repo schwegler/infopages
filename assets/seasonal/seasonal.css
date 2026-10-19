@@ -569,3 +569,77 @@ html[data-season="halloween"][data-seasonal-profile="moots"] .error-notice {
   color: #ffcfcd;
   border-color: #a7656c;
 }
+
+/* Appearance stays at the header; only the PNG and its dismiss hitbox float. */
+.seasonal-controls {
+  position: relative;
+  display: inline-flex;
+  padding: 0;
+  border: 0;
+  margin-left: 8px;
+  flex: none;
+  z-index: 110;
+  color: inherit;
+}
+.seasonal-controls > .seasonal-appearance-toggle {
+  min-height: 44px;
+  font:
+    600 12px/1.4 system-ui,
+    sans-serif;
+  padding: 8px 10px;
+}
+.seasonal-appearance-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 250px;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100dvh - 100px);
+  overflow: auto;
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  background: #fffaf4;
+  color: #211b26;
+  border: 1px solid #8c809866;
+  border-radius: 12px;
+  box-shadow: 0 12px 36px #0003;
+  text-align: left;
+}
+.seasonal-appearance-panel[hidden],
+.seasonal-appearance-panel [hidden] {
+  display: none !important;
+}
+.seasonal-appearance-panel button {
+  width: 100%;
+  text-align: left;
+  margin: 0;
+}
+.seasonal-appearance-panel .seasonal-notice {
+  grid-column: auto;
+  color: inherit;
+  padding: 4px;
+}
+.seasonal-appearance-panel .seasonal-status {
+  padding: 4px;
+}
+html[data-season="halloween"] .seasonal-appearance-panel,
+html[data-theme="dark"] .seasonal-appearance-panel {
+  background: #241d29;
+  color: #fff0df;
+}
+@media (max-width: 600px) {
+  .seasonal-controls {
+    padding: 0;
+    margin-left: 4px;
+  }
+  .seasonal-controls > .seasonal-appearance-toggle {
+    padding: 8px 6px;
+    font-size: 11px;
+  }
+}
+@media print {
+  .seasonal-controls {
+    display: none !important;
+  }
+}
