@@ -23,8 +23,9 @@ jobs:
       - run: npm run build
       - run: npm audit --audit-level=high
       - run: python -m pip install -r requirements.txt
-      - run: playwright install --with-deps chromium
+      - run: playwright install --with-deps chromium webkit
       - run: python -m pytest tests/browser -q
+      - run: python -m pytest tests/browser/test_appearance.py -q --browser webkit
       - uses: actions/upload-artifact@v4
         if: always()
         with:

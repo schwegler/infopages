@@ -36,7 +36,8 @@ def site_url():
 @pytest.fixture(scope='session')
 def browser_type_launch_args(browser_type_launch_args):
     channel=os.environ.get('INFO_PAGES_BROWSER_CHANNEL')
-    return {**browser_type_launch_args,**({'channel':channel} if channel else {})}
+    executable=os.environ.get('INFO_PAGES_BROWSER_EXECUTABLE')
+    return {**browser_type_launch_args,**({'channel':channel} if channel else {}),**({'executable_path':executable} if executable else {})}
 
 @pytest.fixture
 def clean_page(page):
