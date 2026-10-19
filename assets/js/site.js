@@ -1,4 +1,10 @@
 import { q, qa, setPressed } from "./dom.js";
+import { mountParade } from "./mascot-parade.js";
+if (document.readyState !== "complete") {
+  document.addEventListener("DOMContentLoaded", mountParade, { once: true });
+} else {
+  mountParade();
+}
 const menu = q(".menu");
 const nav = q("#nav");
 function closeMenu(returnFocus = false) {

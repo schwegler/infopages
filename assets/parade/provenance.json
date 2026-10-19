@@ -1,0 +1,30 @@
+{
+  "treatment": "Approved detailed Telly/Facet Library PNG copied byte-for-byte (libfile_71921a5f1ae8819181b5bd2ed0efbd07), cropped only at display time. Hitch PNG unchanged. Clipped original pixels rotate at hip and knee; faces, props and bodies never warp.",
+  "assets": [
+    {
+      "file": "hitch.png",
+      "bytes": 185906,
+      "sha256": "4b97b3026cd6f88c5d82009951a0b61078b5afe3d35c26038ba3e21e8d485447"
+    },
+    {
+      "file": "moots-logo.svg",
+      "bytes": 194,
+      "sha256": "008597638a3b0b0cc07a67986879390e188d1cdd7cfbcb8db726e275de9c8479"
+    },
+    {
+      "file": "tacobout-logo.png",
+      "bytes": 73996,
+      "sha256": "c9b0036953e2ce3b57bd0e45adb16eb7390087940515c3dd1225880a71fe8bfc"
+    },
+    {
+      "file": "telly-facet-approved.png",
+      "bytes": 1604937,
+      "sha256": "ec097a8f74f8f48a44440ee3cab56156dd0cdc7d5ae46f6b90a6d101cb1a2dff"
+    },
+    {
+      "file": "trove-logo.png",
+      "bytes": 60910,
+      "sha256": "d347be56a1beaf0d51d8d88acd02e0d82c1a06603c5baa637f01da01513331a6"
+    }
+  ]
+}

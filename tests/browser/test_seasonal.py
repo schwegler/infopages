@@ -1,4 +1,11 @@
 from playwright.sync_api import expect
+import pytest
+
+
+@pytest.fixture(autouse=True)
+def isolate_seasonal_flow(page):
+    # Seasonal controls get an isolated visit; parade coexistence has its own test.
+    page.add_init_script("try { localStorage.setItem('schweg-mascot-parade:v1', 'off') } catch {}")
 
 
 def test_seasonal_overlay_activation_motion_and_undo(clean_page, site_url):

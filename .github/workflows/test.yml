@@ -29,10 +29,10 @@ jobs:
       - run: npm install --prefix /tmp/infopages-webkit --no-save playwright@1.62.1
       - run: /tmp/infopages-webkit/node_modules/.bin/playwright install --with-deps webkit
       - run: python -m pytest tests/browser -q
-      - name: Check Appearance with the established WebKit engine
+      - name: Check Appearance and mascot parade with the established WebKit engine
         run: |
           export INFO_PAGES_BROWSER_EXECUTABLE="$(node -e "console.log(require('/tmp/infopages-webkit/node_modules/playwright').webkit.executablePath())")"
-          python -m pytest tests/browser/test_appearance.py -q --browser webkit
+          python -m pytest tests/browser/test_appearance.py tests/browser/test_mascot_parade.py -q --browser webkit
       - uses: actions/upload-artifact@v4
         if: always()
         with:
