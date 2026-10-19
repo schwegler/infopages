@@ -122,3 +122,14 @@ def test_base_menu_remains_after_season_expires(clean_page, site_url):
     expect(page.get_by_role('group', name='Color mode', exact=True)).to_be_visible()
     expect(page.locator('html')).to_have_attribute('data-theme', 'dark')
     expect(page.get_by_role('button', name='Appearance', exact=True)).to_be_focused()
+
+
+@pytest.mark.parametrize('route', ['/sqlmovebuffy.html', '/hollyoaks_history.html'])
+@pytest.mark.parametrize('scheme', ['light', 'dark'])
+def test_native_dropdowns_keep_working_in_both_palettes(clean_page, site_url, route, scheme):
+    page = clean_page
+    page.emulate_media(color_scheme=scheme)
+    page.goto(site_url + route)
+    control = page.get_by_role('combobox')
+    control.select_option('audit' if 'sqlmovebuffy' in route else '2008')
+    expect(control).to_have_value('audit' if 'sqlmovebuffy' in route else '2008')

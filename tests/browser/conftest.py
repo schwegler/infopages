@@ -42,8 +42,9 @@ def browser_type_launch_args(browser_type_launch_args):
 @pytest.fixture
 def clean_page(page):
     errors=[]
-    page.add_init_script("window.__policyViolations=[];document.addEventListener('securitypolicyviolation',e=>window.__policyViolations.push(e.violatedDirective))")
+    page.add_init_script("window.__policyViolations=[];document.addEventListener('securitypolicyviolation',e=>window.__policyViolations.push({directive:e.violatedDirective,blockedURI:e.blockedURI,sourceFile:e.sourceFile,line:e.lineNumber,sample:e.sample,target:e.target?.outerHTML}))")
     page.on('pageerror',lambda error:errors.append(str(error)))
     yield page
     assert not errors, f'Uncaught browser errors: {errors}'
-    assert not page.evaluate('window.__policyViolations || []'), 'Content Security Policy violation'
+    violations=page.evaluate('window.__policyViolations || []')
+    assert not violations, f'Content Security Policy violation: {violations}'
