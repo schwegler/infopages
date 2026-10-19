@@ -55,14 +55,14 @@ def test_sql_simulation_cannot_execute_payload(clean_page,site_url):
     page=clean_page;page.goto(f'{site_url}/sqlhttp.html')
     page.get_by_role('textbox',name='Document payload').fill('<script>window.payloadExecuted=true</script>')
     page.get_by_role('button',name='Run demonstration').click()
-    expect(page.get_by_role('status')).to_contain_text('blocked')
+    expect(page.locator('#console')).to_contain_text('blocked')
     assert page.evaluate('window.payloadExecuted') is None
     page.get_by_role('button',name='EXTERNAL_ACCESS',exact=True).click()
     page.get_by_role('button',name='Run demonstration').click()
-    expect(page.get_by_role('status')).to_contain_text('No network request was sent')
+    expect(page.locator('#console')).to_contain_text('No network request was sent')
     page.get_by_role('button',name='UNSAFE',exact=True).click()
     page.get_by_role('button',name='Run demonstration').click()
-    expect(page.get_by_role('status')).to_contain_text('Review required')
+    expect(page.locator('#console')).to_contain_text('Review required')
 
 
 def test_migration_complete_rehearsal_and_reset(clean_page,site_url):

@@ -1,0 +1,18 @@
+{
+  "site": "info",
+  "invitationDelay": true,
+  "keyboardActivation": true,
+  "orangeBody": "rgb(255, 229, 187)",
+  "animationPause": true,
+  "persistence": true,
+  "undo": true,
+  "dismiss": true,
+  "reducedMotion": true,
+  "print": true,
+  "widths": [
+    1440,
+    390,
+    320
+  ],
+  "errors": []
+}
