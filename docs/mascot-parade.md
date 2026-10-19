@@ -69,4 +69,33 @@ established WebKit runtime described in `appearance-webkit-qa.md`.
 
 Browser plugin unavailable in this environment; isolated headless Playwright
 processes avoid interfering with other Mac browser tasks. Physical iPhone/iPad
-touch and browser zoom remain manual follow-up checks.
+touch remains a manual follow-up check.
+
+## Follow-up QA
+
+The first Linux CI run found that the cast could stay hidden at 320 × 568 when
+page controls occupied the bottom lane. The lane now tries a compact band at
+the bottom, then a clear band above those controls. Hovering the stationary
+dismiss button also no longer holds the cast offscreen. Regression checks
+cover full-width bottom navigation at 320 × 568 and 720 × 450, plus dismiss
+hover before entry.
+
+Native Chromium browser zoom was set to 200% through the browser's zoom API
+in a fresh, isolated profile. A 1440 × 900 window becomes a 720 × 450 CSS
+viewport; an 820 × 1180 window becomes 410 × 590. All four mascots, label
+bounds, keyboard access, the static list, and dismissal were checked with no
+horizontal overflow or CSP errors. Closing the static list scrolls its returned
+Appearance focus into view.
+
+Sixteen walking phases were inspected at 300px character height against the
+original PNGs. Cropped shoe outlines in Telly, Facet, and Hitch were corrected,
+front/back part ordering was improved, and Telly/Andrew cadence was shortened
+to better match travel distance. Faces and the microphone remain rigid original
+pixels; the held microphone does not swing or distort.
+
+This remains a cutout gait from front/three-quarter artwork. At enlarged sizes,
+small join changes and some foot sliding remain visible: the soles are not
+locked to world coordinates, and the original overlapping limbs contain no
+independent hidden-heel artwork. It should be judged from the motion proof,
+not represented as a fully drawn walk cycle. Eliminating those limitations
+would require additional approved walking frames or layered limb art.

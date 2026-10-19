@@ -9,6 +9,7 @@ def freeze(page, month=11, day=2):
     now = datetime(2026, month, day, tzinfo=timezone.utc)
     page.clock.install(time=now)
     page.clock.pause_at(now)
+    page.mouse.move(0, 0)
 
 
 def appearance(page):
@@ -232,6 +233,7 @@ def test_live_reduced_motion_and_meet_apps_keyboard_path(clean_page, site_url):
     page.clock.run_for(60000)
     expect(page.locator('.parade-static')).to_be_visible()
     page.get_by_role('button', name='Dismiss mascot parade').click()
+    expect(page.get_by_role('button', name='Appearance', exact=True)).to_be_in_viewport()
     appearance(page)
     page.get_by_role('button', name='Meet the apps', exact=True).focus()
     page.keyboard.press('Enter')
@@ -276,7 +278,7 @@ def test_protected_page_controls_remain_selectable(clean_page, site_url):
     page.goto(site_url + '/')
     page.clock.run_for(4500)
     telly = page.locator('[data-mascot="telly"]')
-    # Put an actual page button in the path; the sprite yields its hit area.
+    # Put an actual page button in the path; the lane moves above it.
     page.evaluate('''() => {
       const button = document.createElement('button'); button.id = 'protected-action';
       button.textContent = 'Page action'; button.style.position = 'fixed';
@@ -285,6 +287,41 @@ def test_protected_page_controls_remain_selectable(clean_page, site_url):
       document.querySelector('main').append(button); dispatchEvent(new Event('resize'));
     }''')
     page.clock.run_for(50)
-    expect(telly).to_be_hidden()
+    expect(telly).to_be_visible()
+    assert telly.bounding_box()['y'] + telly.bounding_box()['height'] < page.locator('#protected-action').bounding_box()['y']
     page.get_by_role('button', name='Page action', exact=True).click()
     expect(page.get_by_role('button', name='Selected', exact=True)).to_be_visible()
+
+
+@pytest.mark.parametrize('width,height', [(320,568),(720,450)])
+def test_full_width_bottom_controls_leave_a_visible_lane(clean_page, site_url, width, height):
+    page=clean_page
+    freeze(page)
+    page.set_viewport_size({'width':width,'height':height})
+    page.goto(site_url+'/')
+    page.evaluate('''() => {
+      const button=document.createElement('button');button.id='bottom-navigation';button.textContent='Bottom navigation';
+      Object.assign(button.style,{position:'fixed',bottom:'0',left:'0',width:'100%',height:'100px'});
+      document.querySelector('main').append(button);
+    }''')
+    page.clock.run_for(2000)
+    seen=set()
+    for _ in range(48):
+        page.clock.run_for(500)
+        for link in page.locator('.parade-mascot[data-visible="true"]').all():
+            if link.evaluate('(e)=>e.inert'):continue
+            seen.add(link.get_attribute('data-mascot'))
+            box=link.bounding_box()
+            assert box['y']+box['height'] < height-100
+    assert seen == {'telly','facet','hitch','andrew'}
+    page.get_by_role('button',name='Bottom navigation',exact=True).click()
+
+
+def test_hovering_stationary_dismiss_does_not_prevent_entry(clean_page, site_url):
+    page=clean_page
+    freeze(page)
+    page.goto(site_url+'/')
+    page.clock.run_for(2000)
+    page.get_by_role('button',name='Dismiss mascot parade').hover()
+    page.clock.run_for(3500)
+    assert page.locator('[data-mascot="telly"]').bounding_box()['x'] > 8

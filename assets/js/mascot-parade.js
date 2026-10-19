@@ -3,6 +3,30 @@ const asset = (name) => new URL(`../parade/${name}`, import.meta.url).href;
 const brand = (name) => new URL(`../brand/${name}`, import.meta.url).href;
 export const START_DELAY = 2000;
 export const PREFERENCE_KEY = "schweg-mascot-parade:v1";
+export function chooseLane(bottom, height, rects, maxLift) {
+  const clear = (floor, size) =>
+    rects.every(
+      (rect) => floor <= rect.top - 6 || floor - size - 2 >= rect.bottom + 6,
+    );
+  const floors = [...new Set([bottom, ...rects.map((rect) => rect.top - 8)])]
+    .filter((floor) => floor <= bottom && floor >= bottom - maxLift)
+    .sort((a, b) => b - a);
+  for (const floor of floors) {
+    if (clear(floor, height)) return { bottom: floor, height };
+    const nearby = rects.filter(
+      (rect) => rect.top < floor && rect.bottom > floor - height - 10,
+    );
+    const size = nearby.length
+      ? Math.min(
+          height,
+          floor - Math.max(...nearby.map((rect) => rect.bottom)) - 10,
+        )
+      : height;
+    if (size >= 44 && clear(floor, size))
+      return { bottom: floor, height: size };
+  }
+  return { bottom, height };
+}
 export const mascots = [
   {
     id: "telly",
@@ -13,19 +37,23 @@ export const mascots = [
     logo: asset("tacobout-logo.png"),
     width: 508,
     height: 599,
-    body: "polygon(0 0,100% 0,100% 84%,0 84%)",
+    body: "polygon(0 0,100% 0,100% 82.5%,0 82.5%)",
     legs: [
       {
-        hip: "38% 83%",
+        hip: "38% 82.4%",
         knee: "38% 88%",
-        upper: "polygon(33% 83%,44% 83%,44% 89%,33% 89%)",
-        lower: "polygon(29% 88%,47% 88%,50% 100%,29% 100%)",
+        upper:
+          "polygon(33.661% 81.970%,43.898% 81.970%,43.898% 86.144%,45.669% 86.477%,45.669% 89.149%,32.480% 89.149%)",
+        lower:
+          "polygon(30.315% 87.646%,45.669% 87.646%,49.213% 90.484%,50.984% 92.654%,50.984% 95.326%,50.000% 96.828%,48.622% 98.497%,28.543% 98.497%)",
       },
       {
-        hip: "55% 83%",
+        hip: "55% 82.4%",
         knee: "55% 87%",
-        upper: "polygon(50% 83%,61% 83%,61% 88%,50% 88%)",
-        lower: "polygon(49% 87%,62% 87%,72% 100%,48% 100%)",
+        upper:
+          "polygon(50.787% 81.970%,60.236% 81.970%,60.236% 85.643%,62.598% 86.311%,62.598% 88.147%,50.000% 88.147%)",
+        lower:
+          "polygon(49.803% 86.477%,70.866% 86.477%,70.866% 97.329%,50.787% 97.329%,50.787% 92.154%,48.819% 90.150%)",
       },
     ],
   },
@@ -41,16 +69,16 @@ export const mascots = [
     body: "polygon(0 0,100% 0,100% 84%,0 84%)",
     legs: [
       {
-        hip: "36% 83%",
-        knee: "36% 89%",
-        upper: "polygon(31% 83%,43% 83%,43% 90%,31% 90%)",
-        lower: "polygon(14% 89%,45% 89%,47% 100%,14% 100%)",
+        hip: "40% 84%",
+        knee: "40% 89%",
+        upper: "polygon(33% 83%,47% 83%,47% 90%,31% 90%)",
+        lower: "polygon(20% 89%,49% 89%,49% 100%,20% 100%)",
       },
       {
         hip: "60% 83%",
         knee: "62% 89%",
-        upper: "polygon(55% 83%,67% 83%,68% 90%,55% 90%)",
-        lower: "polygon(52% 89%,70% 89%,78% 100%,52% 100%)",
+        upper: "polygon(53% 83%,68% 83%,68% 90%,53% 90%)",
+        lower: "polygon(51% 89%,78% 89%,78% 100%,51% 100%)",
       },
     ],
   },
@@ -73,13 +101,14 @@ export const mascots = [
         hip: "47% 82%",
         knee: "46% 88%",
         upper: "polygon(43% 81%,54% 81%,52% 89%,41% 89%)",
-        lower: "polygon(39% 87%,51% 87%,51% 100%,26% 100%,28% 94%)",
+        lower:
+          "polygon(41.295% 86.879%,54.018% 86.879%,54.018% 100.000%,25.000% 100.000%,25.000% 93.042%,36.384% 89.463%)",
       },
       {
         hip: "63% 82%",
         knee: "65% 88%",
         upper: "polygon(58% 81%,69% 81%,71% 89%,60% 89%)",
-        lower: "polygon(59% 87%,71% 87%,87% 100%,56% 100%)",
+        lower: "polygon(56% 87%,90% 87%,90% 100%,56% 100%)",
       },
     ],
   },
@@ -147,7 +176,7 @@ export function createRig(mascot) {
     const lower = part("parade-shin", leg.lower);
     lower.style.transformOrigin = leg.knee;
     upper.append(lower);
-    rig.append(upper);
+    rig.prepend(upper);
   });
   rig.append(part("parade-body", mascot.body));
   if (mascot.arm) {
@@ -263,7 +292,9 @@ export function mountParade() {
   const dismiss = () => {
     dismissed = true;
     if (region.contains(document.activeElement)) {
-      window.SchwegAppearance?.disclosure.focus({ preventScroll: true });
+      window.SchwegAppearance?.disclosure.focus({
+        preventScroll: !region.classList.contains("parade-static"),
+      });
     }
     stop();
   };
@@ -274,10 +305,10 @@ export function mountParade() {
       dismiss();
     }
   });
-  region.addEventListener("pointerenter", (event) => {
+  list.addEventListener("pointerenter", (event) => {
     if (event.pointerType !== "touch") pause("hover", true);
   });
-  region.addEventListener("pointerleave", () => pause("hover", false));
+  list.addEventListener("pointerleave", () => pause("hover", false));
   region.addEventListener("focusin", () => pause("focus", true));
   region.addEventListener("focusout", (event) => {
     if (!region.contains(event.relatedTarget)) pause("focus", false);
@@ -331,6 +362,9 @@ export function mountParade() {
       parseFloat(style.getPropertyValue("--parade-safe-left")) || 0;
     const safeRight =
       parseFloat(style.getPropertyValue("--parade-safe-right")) || 0;
+    const safeBottom =
+      parseFloat(style.getPropertyValue("--parade-safe-bottom")) || 0;
+    const lift = parseFloat(style.getPropertyValue("--parade-lane-lift")) || 0;
     const size = width <= 600 ? 88 : 116;
     const gap = width <= 600 ? 160 : 198;
     return {
@@ -339,12 +373,23 @@ export function mountParade() {
       gap,
       safeLeft,
       safeRight,
+      baseBottom: innerHeight - 10 - safeBottom,
+      bottom: innerHeight - 10 - safeBottom - lift,
       speed: width <= 600 ? 42 : 60,
     };
   };
   const tick = (now) => {
-    const { width, size, gap, safeLeft, safeRight, speed } = layout();
-    const bottom = links[0].getBoundingClientRect().bottom;
+    const {
+      width,
+      size,
+      gap,
+      safeLeft,
+      safeRight,
+      speed,
+      baseBottom,
+      bottom: oldBottom,
+    } = layout();
+    let bottom = oldBottom;
     if (layoutDirty) {
       protectedRects = [
         ...document.querySelectorAll(
@@ -362,19 +407,25 @@ export function mountParade() {
           (rect) =>
             rect.width &&
             rect.height &&
+            rect.right > 0 &&
+            rect.left < width &&
             rect.bottom > 0 &&
             rect.top < innerHeight,
         );
       const defaultHeight = width <= 600 ? 78 : 108;
-      // A compact lane below low page links keeps every character visible on phones.
-      const lowLinks = protectedRects.filter(
-        (rect) =>
-          rect.bottom > bottom - defaultHeight && rect.bottom < bottom - 52,
+      // Try a compact bottom lane, then a clear band just above low controls.
+      const lane = chooseLane(
+        baseBottom,
+        defaultHeight,
+        protectedRects,
+        Math.min(140, innerHeight * 0.3),
       );
-      const available = lowLinks.length
-        ? bottom - Math.max(...lowLinks.map((rect) => rect.bottom)) - 8
-        : defaultHeight;
-      const rigHeight = Math.max(44, Math.min(defaultHeight, available));
+      const rigHeight = lane.height;
+      bottom = lane.bottom;
+      region.style.setProperty(
+        "--parade-lane-lift",
+        `${baseBottom - bottom}px`,
+      );
       region.style.setProperty("--mascot-height", `${rigHeight}px`);
       region.style.setProperty("--mascot-link-height", `${rigHeight + 2}px`);
       region.style.setProperty(
@@ -431,6 +482,7 @@ export function mountParade() {
       "--mascot-height",
       "--mascot-link-height",
       "--gait-scale",
+      "--parade-lane-lift",
     ])
       region.style.removeProperty(property);
     links.forEach((link) => {

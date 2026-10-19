@@ -3,10 +3,13 @@
   --mascot-height: 108px;
   --parade-safe-left: env(safe-area-inset-left, 0px);
   --parade-safe-right: env(safe-area-inset-right, 0px);
+  --parade-safe-bottom: env(safe-area-inset-bottom, 0px);
   position: fixed;
   z-index: 80;
   inset: auto 0 0;
-  height: calc(190px + env(safe-area-inset-bottom, 0px));
+  height: calc(
+    190px + var(--parade-lane-lift, 0px) + env(safe-area-inset-bottom, 0px)
+  );
   overflow: clip;
   pointer-events: none;
   color: var(--ink);
@@ -20,7 +23,9 @@
 .parade-mascot {
   position: absolute;
   left: 0;
-  bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(
+    10px + var(--parade-lane-lift, 0px) + env(safe-area-inset-bottom, 0px)
+  );
   width: 116px;
   height: var(--mascot-link-height, 124px);
   display: flex;
@@ -38,7 +43,7 @@
   visibility: hidden;
 }
 .parade-rig {
-  --gait: calc(600ms * var(--gait-scale, 1));
+  --gait: calc(470ms * var(--gait-scale, 1));
   position: relative;
   display: block;
   height: var(--mascot-height);
@@ -73,7 +78,7 @@
   --gait: calc(550ms * var(--gait-scale, 1));
 }
 .parade-rig--andrew {
-  --gait: calc(860ms * var(--gait-scale, 1));
+  --gait: calc(810ms * var(--gait-scale, 1));
 }
 .parade-rig--andrew .parade-leg {
   animation-name: parade-long-stride;
@@ -308,7 +313,9 @@ html[data-mascot-parade="walking"] .seasonal-overlay {
   .mascot-parade {
     --mascot-height: 78px;
     --gait-scale: 1.2;
-    height: calc(156px + env(safe-area-inset-bottom, 0px));
+    height: calc(
+      156px + var(--parade-lane-lift, 0px) + env(safe-area-inset-bottom, 0px)
+    );
   }
   .parade-mascot {
     width: 88px;
