@@ -39,6 +39,7 @@
   };
   const mount = () => {
     if (
+      !window.SchwegAppearance ||
       document.querySelector("[data-seasonal-controls]") ||
       !document.querySelector("main")
     )
@@ -147,16 +148,12 @@
       image.style.objectFit = fit;
       image.classList.remove("seasonal-light-mark");
     };
-    const controls = el("div", "seasonal-controls");
+    const shared = window.SchwegAppearance;
+    const { controls, panel, disclosure, close: closeMenu } = shared;
     controls.dataset.seasonalControls = "";
-    const disclosure = button("Appearance", "seasonal-appearance-toggle");
-    disclosure.setAttribute("aria-expanded", "false");
-    disclosure.setAttribute("aria-controls", "seasonal-appearance-panel");
-    const panel = el("div", "seasonal-appearance-panel");
-    panel.id = "seasonal-appearance-panel";
-    panel.hidden = true;
-    panel.setAttribute("role", "group");
-    panel.setAttribute("aria-label", "Appearance settings");
+    const seasonalControls = el("div", "seasonal-options");
+    seasonalControls.setAttribute("role", "group");
+    seasonalControls.setAttribute("aria-label", "Seasonal appearance");
     const toggle = button(`${season.label} appearance`),
       motion = button("Pause seasonal animations"),
       effects = button("Hide atmosphere"),
@@ -165,17 +162,7 @@
     const status = el("span", "seasonal-status");
     status.setAttribute("role", "status");
     status.setAttribute("aria-label", "Seasonal appearance status");
-    const existingMode = document.querySelector(".tacobout-theme-control");
-    if (existingMode) {
-      existingMode.before(controls);
-      panel.append(existingMode);
-    } else {
-      (
-        document.querySelector("header .header-right") ||
-        document.querySelector("header")
-      ).append(controls);
-    }
-    panel.append(
+    seasonalControls.append(
       toggle,
       undo,
       motion,
@@ -185,36 +172,7 @@
       notice,
       status,
     );
-    controls.append(disclosure, panel);
-    const closeMenu = () => {
-      panel.hidden = true;
-      disclosure.setAttribute("aria-expanded", "false");
-    };
-    const placeMenu = () => {
-      controls.style.setProperty(
-        "--appearance-top",
-        `${Math.max(8, Math.min(disclosure.getBoundingClientRect().bottom + 8, innerHeight - 260))}px`,
-      );
-    };
-    listen(window, "resize", placeMenu, { passive: true });
-    disclosure.addEventListener("click", () => {
-      placeMenu();
-      panel.hidden = !panel.hidden;
-      disclosure.setAttribute("aria-expanded", String(!panel.hidden));
-    });
-    listen(document, "click", (event) => {
-      if (!controls.contains(event.target)) closeMenu();
-    });
-    listen(document, "keydown", (event) => {
-      if (event.key === "Escape" && controls.contains(document.activeElement)) {
-        closeMenu();
-        disclosure.focus();
-        event.preventDefault();
-      }
-    });
-    listen(document, "focusin", (event) => {
-      if (!controls.contains(event.target)) closeMenu();
-    });
+    panel.append(seasonalControls);
     const active = () => choice === season.theme;
     // Layout reads happen only in response to page events. Keep a safe current position when possible.
     const position = () => {
@@ -528,11 +486,15 @@
       portraits.forEach(restore);
       marks.forEach(restore);
       Object.keys(snapshot).forEach(restoreAttribute);
-      if (overlay.contains(document.activeElement)) focusContent();
+      if (
+        overlay.contains(document.activeElement) ||
+        seasonalControls.contains(document.activeElement)
+      )
+        disclosure.focus({ preventScroll: true });
       overlay.remove();
       atmosphere.remove();
-      if (existingMode) controls.before(existingMode);
-      controls.remove();
+      seasonalControls.remove();
+      delete controls.dataset.seasonalControls;
       window.dispatchEvent(
         new CustomEvent("schweg:seasonal-change", {
           detail: {
@@ -559,7 +521,7 @@
     schedule();
     if (Number.isFinite(boundary)) armBoundary();
   };
-  if (document.readyState === "loading")
+  if (!window.SchwegAppearance)
     document.addEventListener("DOMContentLoaded", mount, { once: true });
   else mount();
 })();

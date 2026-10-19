@@ -615,6 +615,27 @@ html[data-season="halloween"][data-seasonal-profile="moots"] .error-notice {
   text-align: left;
   margin: 0;
 }
+.color-mode-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+}
+.color-mode-options button {
+  padding: 8px 4px;
+  text-align: center;
+}
+.color-mode-options button[aria-pressed="true"] {
+  background: var(--light);
+  border-color: var(--violet);
+  font-weight: 700;
+}
+.seasonal-options {
+  display: grid;
+  gap: 6px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  margin-top: 4px;
+}
 .seasonal-appearance-panel .seasonal-notice {
   grid-column: auto;
   color: inherit;
