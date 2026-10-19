@@ -1,0 +1,36 @@
+{
+  "treatment": "Original PNGs copied byte-for-byte; DOM clip layers use joint rotations. No generated frames, recoloring, resampling or body deformation. Moots SVG copies the live header circle geometry and brand color.",
+  "assets": [
+    {
+      "file": "facet.png",
+      "bytes": 310300,
+      "sha256": "9b2f3d588819a54ef87703ac42d3fa9baddc2f0bdb1d4c8deb8666dc26ca1d74"
+    },
+    {
+      "file": "hitch.png",
+      "bytes": 185906,
+      "sha256": "4b97b3026cd6f88c5d82009951a0b61078b5afe3d35c26038ba3e21e8d485447"
+    },
+    {
+      "file": "moots-logo.svg",
+      "bytes": 194,
+      "sha256": "008597638a3b0b0cc07a67986879390e188d1cdd7cfbcb8db726e275de9c8479"
+    },
+    {
+      "file": "tacobout-logo.png",
+      "bytes": 73996,
+      "sha256": "c9b0036953e2ce3b57bd0e45adb16eb7390087940515c3dd1225880a71fe8bfc"
+    },
+    {
+      "file": "telly.png",
+      "bytes": 323198,
+      "sha256": "0eae8ddda75ed7103f8b345d563e2b97c7644899222c346a9c2c241f4ba2362a"
+    },
+    {
+      "file": "trove-logo.png",
+      "bytes": 60910,
+      "sha256": "d347be56a1beaf0d51d8d88acd02e0d82c1a06603c5baa637f01da01513331a6"
+    }
+  ],
+  "reusedAndrewSha256": "8001899a5e7d3f18e614a289df492034712c9730451e5c69443ac405b6d6704b"
+}

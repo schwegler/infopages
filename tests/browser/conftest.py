@@ -28,7 +28,11 @@ def site_url():
                     self.send_header(key,value)
             super().end_headers()
     handler=functools.partial(Handler,directory=str(ROOT))
-    server=http.server.ThreadingHTTPServer(('127.0.0.1',0),handler)
+    class Server(http.server.ThreadingHTTPServer):
+        # Serve the full parallel asset burst without the default five-socket queue
+        # dropping module/image requests during headless multi-viewport QA.
+        request_queue_size = 64
+    server=Server(('127.0.0.1',0),handler)
     thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
     yield f'http://127.0.0.1:{server.server_address[1]}'
     server.shutdown();server.server_close();thread.join()
