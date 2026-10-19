@@ -83,6 +83,7 @@
     const button = (text, className) => {
       const n = el("button", className, text);
       n.type = "button";
+      n.tabIndex = 0;
       return n;
     };
     const overlay = el("div", "seasonal-overlay");

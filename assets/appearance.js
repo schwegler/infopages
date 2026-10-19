@@ -67,6 +67,7 @@
     controls.dataset.appearanceControls = "";
     const disclosure = document.createElement("button");
     disclosure.type = "button";
+    disclosure.tabIndex = 0;
     disclosure.className = "seasonal-appearance-toggle";
     disclosure.textContent = "Appearance";
     disclosure.setAttribute("aria-expanded", "false");
@@ -84,6 +85,7 @@
     for (const value of ["system", "light", "dark"]) {
       const button = document.createElement("button");
       button.type = "button";
+      button.tabIndex = 0;
       button.textContent = value[0].toUpperCase() + value.slice(1);
       button.dataset.colorMode = value;
       button.addEventListener("click", () => {

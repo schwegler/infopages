@@ -116,6 +116,7 @@ def test_base_menu_remains_after_season_expires(clean_page, site_url):
     open_appearance(page)
     page.get_by_role('button', name='Dark', exact=True).click()
     page.get_by_role('button', name='Halloween appearance', exact=True).click()
+    page.get_by_role('button', name='Halloween appearance', exact=True).focus()
     page.clock.run_for(5000)
     expect(page.locator('[data-seasonal-controls]')).to_have_count(0)
     expect(page.get_by_role('group', name='Color mode', exact=True)).to_be_visible()
