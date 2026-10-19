@@ -1,5 +1,22 @@
 # Seasonal appearance · floating overlay contract v2
 
+## Base color mode
+
+The year-round header Appearance menu offers **System**, **Light**, and **Dark**
+on every route, independently of the Halloween date window. System is the default
+and follows live device changes. An explicit Light/Dark selection is saved under
+`schweg-color-mode:v1`; System removes that override. Storage events synchronize
+tabs, and blocked storage leaves usable in-page choices. The early local script
+sets the palette before stylesheet paint. Approved ink/light PNG logos follow
+the effective palette; experiment mains retain their individually scoped tokens,
+and print retains the existing light résumé styling.
+
+Halloween controls occupy a separate **Seasonal appearance** group. Seasonal
+Undo/reset preserves the base color selection. Expiry removes only the seasonal
+group, leaving System/Light/Dark available. Keyboard Tab reaches each mode;
+Escape closes the panel and returns focus to Appearance. Buttons retain 44px
+minimum touch targets and the panel scrolls within short/mobile viewports.
+
 After about one second, the small costumed PNG itself arrives and hovers above the existing page. There is no hero, explanatory panel, reserved space or insertion into main content. Hover tooltip: **make it weird**. Accessible character label: **Turn on Halloween mode**. The discreet X has a 44px hit area and label **Dismiss Halloween character**.
 
 Clicking the character applies dark plum/charcoal colours, orange accents and optional animated atmosphere. A collapsed **Appearance** disclosure in the header contains Halloween on/off, Undo, motion, atmosphere, Show Halloween character and reset. The blog’s existing light/dark control remains inside this menu and retains its original saved preference. The other two sites keep their supported standard appearance. No footer settings or floating action panel remains. Dismissing the character hides the entire overlay and preserves the selected theme; Undo remains available in Appearance. Escape closes the menu and returns focus to its disclosure; clicking outside or tabbing away closes it too.

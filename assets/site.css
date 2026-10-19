@@ -1,4 +1,5 @@
 :root {
+  color-scheme: light;
   --paper: #f7f7f2;
   --ink: #242330;
   --muted: #62616b;
@@ -7,6 +8,34 @@
   --light: #edecf2;
   --serif: Georgia, "Times New Roman", serif;
   --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* The shared site palette follows Appearance; experiment mains keep local tokens. */
+@media screen {
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #19171f;
+    --ink: #f2eef7;
+    --muted: #bbb4c6;
+    --violet: #c6adff;
+    --line: #57515f;
+    --light: #28232f;
+  }
+  html[data-theme="dark"] .skip,
+  html[data-theme="dark"]
+    body:not(.experiment-page)
+    :is(.button, .filters button[aria-pressed="true"]) {
+    color: var(--paper);
+  }
+}
+
+@media print {
+  :root {
+    color-scheme: light;
+  }
+  img[src*="schweg-signature-light.png"] {
+    filter: brightness(0);
+  }
 }
 * {
   box-sizing: border-box;
