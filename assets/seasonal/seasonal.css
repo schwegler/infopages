@@ -514,3 +514,144 @@ html[data-season="halloween"][data-seasonal-profile="andrew"]
   background: #a24b20;
   color: #fff3e6;
 }
+
+.seasonal-overlay .seasonal-dismiss {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ink, #33213b);
+  opacity: 0.8;
+}
+.seasonal-overlay .seasonal-dismiss:hover,
+.seasonal-overlay .seasonal-dismiss:focus-visible {
+  background: #211728d9;
+  border-color: #bca9bd66;
+  color: #eee0f2;
+  opacity: 1;
+}
+
+.seasonal-overlay[data-season-motion="paused"] .seasonal-character img,
+.seasonal-atmosphere[data-season-motion="paused"] > span {
+  animation-play-state: paused !important;
+}
+.seasonal-overlay[data-season-motion="paused"] .seasonal-flight {
+  animation: none !important;
+}
+
+html[data-season="halloween"] .skip,
+html[data-season="halloween"] .skip:focus-visible {
+  background: #8f401c;
+  color: #fff3e6;
+}
+html[data-season="halloween"][data-seasonal-profile="moots"]
+  :is(input, select, textarea, .suggestions) {
+  background: #251b2b;
+  color: #f4e8db;
+  border-color: #846170;
+}
+html[data-season="halloween"][data-seasonal-profile="moots"]
+  input::placeholder {
+  color: #bfaab4;
+}
+html[data-season="halloween"][data-seasonal-profile="moots"]
+  :is(.record-body, .record summary:hover, button.secondary:hover) {
+  background: #302230;
+  color: #f4e8db;
+}
+html[data-season="halloween"][data-seasonal-profile="moots"] .primary:hover {
+  background: #ffbf7f;
+  color: #24151b;
+}
+html[data-season="halloween"][data-seasonal-profile="moots"] .error-text {
+  color: #ffb0a2;
+}
+html[data-season="halloween"][data-seasonal-profile="moots"] .error-notice {
+  background: #3a2028;
+  color: #ffcfcd;
+  border-color: #a7656c;
+}
+
+/* Appearance stays at the header; only the PNG and its dismiss hitbox float. */
+.seasonal-controls {
+  position: relative;
+  display: inline-flex;
+  padding: 0;
+  border: 0;
+  margin-left: 8px;
+  flex: none;
+  z-index: 110;
+  color: inherit;
+}
+.seasonal-controls > .seasonal-appearance-toggle {
+  min-height: 44px;
+  font:
+    600 12px/1.4 system-ui,
+    sans-serif;
+  padding: 8px 10px;
+}
+.seasonal-appearance-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 250px;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100dvh - 100px);
+  overflow: auto;
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  background: #fffaf4;
+  color: #211b26;
+  border: 1px solid #8c809866;
+  border-radius: 12px;
+  box-shadow: 0 12px 36px #0003;
+  text-align: left;
+}
+.seasonal-appearance-panel[hidden],
+.seasonal-appearance-panel [hidden] {
+  display: none !important;
+}
+.seasonal-appearance-panel button {
+  width: 100%;
+  text-align: left;
+  margin: 0;
+}
+.seasonal-appearance-panel .seasonal-notice {
+  grid-column: auto;
+  color: inherit;
+  padding: 4px;
+}
+.seasonal-appearance-panel .seasonal-status {
+  padding: 4px;
+}
+html[data-season="halloween"] .seasonal-appearance-panel,
+html[data-theme="dark"] .seasonal-appearance-panel {
+  background: #241d29;
+  color: #fff0df;
+}
+@media (max-width: 600px) {
+  .seasonal-controls {
+    padding: 0;
+    margin-left: 4px;
+  }
+  .seasonal-controls > .seasonal-appearance-toggle {
+    padding: 8px 6px;
+    font-size: 11px;
+  }
+}
+@media print {
+  .seasonal-controls {
+    display: none !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .seasonal-appearance-panel {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: var(--appearance-top, 80px);
+    width: auto;
+    max-width: none;
+    max-height: calc(100dvh - var(--appearance-top, 80px) - 12px);
+  }
+}
