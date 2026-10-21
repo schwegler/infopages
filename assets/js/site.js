@@ -1,3 +1,4 @@
+import "./analytics.js";
 import { q, qa, setPressed } from "./dom.js";
 import { mountParade } from "./mascot-parade.js";
 if (document.readyState !== "complete") {
