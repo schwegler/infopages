@@ -12,6 +12,8 @@ def site_url():
         # Cloudflare Pages serves extensionless HTML and the legacy Notes redirects.
         def do_GET(self):
             path=self.path.split('?',1)[0]
+            if path in ('/about','/about/','/about.html'):
+                self.send_response(301);self.send_header('Location','/me');self.end_headers();return
             if path in ('/notes','/notes.html'):
                 self.send_response(301);self.send_header('Location','/work');self.end_headers();return
             super().do_GET()
