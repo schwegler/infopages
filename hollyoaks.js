@@ -31,19 +31,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, observerOptions);
 
-    function buildFamilyTreeHTML(nodes) {
-        if (!nodes || nodes.length === 0) return '';
-        let html = '<ul>';
+    function buildFamilyTreeDOM(nodes) {
+        if (!nodes || nodes.length === 0) return null;
+        const ul = document.createElement('ul');
         nodes.forEach(node => {
+            const li = document.createElement('li');
             const character = appData.characters[node.id] || { name: node.name };
-            html += `<li><button type="button" data-id="${node.id}" class="character-node text-left rounded-md px-3 py-1.5 inline-block text-sm md:text-base">${character.name} ${node.note ? `<em class="text-xs text-gray-500 font-normal">(${node.note})</em>` : ''}</button>`;
-            if (node.children) {
-                html += buildFamilyTreeHTML(node.children);
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.dataset.id = node.id;
+            button.className = 'character-node text-left rounded-md px-3 py-1.5 inline-block text-sm md:text-base';
+            button.textContent = character.name;
+            if (node.note) {
+                const em = document.createElement('em');
+                em.className = 'text-xs text-gray-500 font-normal';
+                em.textContent = ` (${node.note})`;
+                button.appendChild(em);
             }
-            html += '</li>';
+            li.appendChild(button);
+            if (node.children) {
+                const childrenUL = buildFamilyTreeDOM(node.children);
+                if (childrenUL) {
+                    li.appendChild(childrenUL);
+                }
+            }
+            ul.appendChild(li);
         });
-        html += '</ul>';
-        return html;
+        return ul;
     }
 
     function displayAllFamilies() {
@@ -55,12 +69,22 @@ document.addEventListener('DOMContentLoaded', () => {
             const familyData = appData.familyStructures[familyKey];
             const familySection = document.createElement('div');
             familySection.className = 'bg-blue-50 p-6 rounded-lg shadow-inner mb-6 section-reveal';
-            familySection.innerHTML = `
-                <h3 class="text-2xl font-bold text-blue-800 mb-4">${familyData.name}</h3>
-                <div class="family-tree" id="tree-${familyKey}">
-                    ${buildFamilyTreeHTML(familyData.tree)}
-                </div>
-            `;
+
+            const title = document.createElement('h3');
+            title.className = 'text-2xl font-bold text-blue-800 mb-4';
+            title.textContent = familyData.name;
+
+            const treeContainer = document.createElement('div');
+            treeContainer.className = 'family-tree';
+            treeContainer.id = `tree-${familyKey}`;
+
+            const treeDOM = buildFamilyTreeDOM(familyData.tree);
+            if (treeDOM) {
+                treeContainer.appendChild(treeDOM);
+            }
+
+            familySection.appendChild(title);
+            familySection.appendChild(treeContainer);
             allFamilyTreesContainer.appendChild(familySection);
             sectionObserver.observe(familySection);
         }
@@ -83,37 +107,57 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        let eventsHtml = '';
+        // Filter timeline events relevant to this character and sort by year
         const relevantEvents = appData.timelineEvents.filter(event =>
             event.title.includes(char.name) || (event.description && event.description.includes(char.name))
         ).sort((a,b) => a.year - b.year);
 
+        modalContent.innerHTML = '';
+
+        const charName = document.createElement('h3');
+        charName.className = 'text-3xl font-bold text-fuchsia-800 mb-2';
+        charName.textContent = char.name;
+        modalContent.appendChild(charName);
+
+        const charSummary = document.createElement('p');
+        charSummary.className = 'leading-relaxed text-gray-700';
+        charSummary.textContent = char.summary || 'No summary available.';
+        modalContent.appendChild(charSummary);
+
         if (relevantEvents.length > 0) {
-            eventsHtml = '<h4 class="font-semibold mt-4 mb-2 text-fuchsia-700">Key Storylines:</h4><ul class="list-disc list-inside space-y-1 text-gray-700">';
+            const storylinesHeader = document.createElement('h4');
+            storylinesHeader.className = 'font-semibold mt-4 mb-2 text-fuchsia-700';
+            storylinesHeader.textContent = 'Key Storylines:';
+            modalContent.appendChild(storylinesHeader);
+
+            const storylinesList = document.createElement('ul');
+            storylinesList.className = 'list-disc list-inside space-y-1 text-gray-700';
+
             relevantEvents.forEach(event => {
-                eventsHtml += `<li><a href="#" data-year="${event.year}" class="event-link hover:underline text-blue-600">${event.title} (${event.year})</a></li>`;
+                const li = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = '#';
+                link.dataset.year = event.year;
+                link.className = 'event-link hover:underline text-blue-600';
+                link.textContent = `${event.title} (${event.year})`;
+
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const year = e.target.dataset.year;
+                    hideCharacterModal();
+                    if (yearSelect) yearSelect.value = year;
+                    displayTimeline(year);
+                    const timelineSec = document.getElementById('timeline-section');
+                    if (timelineSec) timelineSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+
+                li.appendChild(link);
+                storylinesList.appendChild(li);
             });
-            eventsHtml += '</ul>';
+            modalContent.appendChild(storylinesList);
         }
 
-        modalContent.innerHTML = `
-            <h3 class="text-3xl font-bold text-fuchsia-800 mb-2">${char.name}</h3>
-            <p class="leading-relaxed text-gray-700">${char.summary || 'No summary available.'}</p>
-            ${eventsHtml}
-        `;
         characterModal.classList.add('is-visible');
-
-        modalContent.querySelectorAll('.event-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const year = e.target.dataset.year;
-                hideCharacterModal();
-                if (yearSelect) yearSelect.value = year;
-                displayTimeline(year);
-                const timelineSec = document.getElementById('timeline-section');
-                if (timelineSec) timelineSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-        });
     }
 
     function hideCharacterModal() {

@@ -89,6 +89,7 @@ function renderFamilies() {
   q("#families").replaceChildren();
   Object.values(historyData.familyStructures).forEach((family) => {
     const details = element("details");
+    // Use textContent via element() to prevent XSS from unsafe family names
     details.append(element("summary", family.name), familyTree(family.tree));
     q("#families").append(details);
   });
