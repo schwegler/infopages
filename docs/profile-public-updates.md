@@ -41,3 +41,7 @@ Screenshots committed under `docs/screenshots/me/` show only the first card. Liv
 ## Confirmed packaging and audit repair
 
 Authenticated Cloudflare build logs for `0d09aa1` showed the bare `fast-xml-parser` import could not resolve because the project has no build command. The checked-in relative vendor module fixes packaging without changing account build settings. A bundle test verifies zero external npm imports. A deterministic check compares the vendor bundle with its pinned source package. Development-only Miniflare transitive dependencies are pinned to patched `sharp 0.35.5` and `undici 7.30.1`; the audit gate remains enabled. The owner’s free-only authorization was satisfied by authenticated confirmation of Workers Free ($0), not by assuming a paid allowance is free. No plan or billing changes are part of this work.
+
+## Cover content-negotiation regression
+
+The live cover failure was reproduced against the same anonymous public cover endpoint: malformed `Accept: image/` returned HTTP 406; the standards-compliant `Accept: image/*` returned the permitted same-origin redirect and then HTTP 200 WebP. The fetch helper now distinguishes its response MIME prefix from the request media range. Runtime tests assert the wildcard at both cover hops. No source host, redirect family, allowed image MIME types, privacy revalidation, no-store behavior, identity headers or security policy were relaxed.
