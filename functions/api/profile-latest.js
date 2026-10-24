@@ -24,7 +24,11 @@ async function upstream(url, type, limit = 768000, coverRedirect = false) {
     credentials: "omit",
     redirect: "manual",
     cache: "no-store",
-    headers: { Accept: type, "Cache-Control": "no-cache" },
+    // `image/` is a response-type prefix, not a valid HTTP Accept media range.
+    headers: {
+      Accept: type === "image/" ? "image/*" : type,
+      "Cache-Control": "no-cache",
+    },
     signal: AbortSignal.timeout(5000),
   });
   if (coverRedirect && [301, 302, 303, 307, 308].includes(response.status)) {
