@@ -59,6 +59,9 @@ function runtime(t, state = {}) {
             "set-cookie": "upstream-session=never-forward",
           },
         });
+      // Rails content negotiation returns 406 for malformed `Accept: image/`.
+      // The valid wildcard must survive both the cover route and blob hop.
+      assert.equal(request.headers.get("accept"), "image/*");
       if (url.pathname === "/media/covers/book/12") {
         assert.equal(url.search, "?width=360");
         return new Response(null, {
