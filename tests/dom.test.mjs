@@ -70,3 +70,16 @@ test("element preserves text containing HTML markup safely as textContent", () =
   assert.equal(node.textContent, "<script>alert('xss')</script>");
   assert.equal(node.className, "safe-content");
 });
+
+test("element safely handles timeline event title and description XSS payloads", () => {
+  const xssTitle = "<img src=x onerror=alert('xss-title')>";
+  const xssDesc = "<script>alert('xss-desc')</script>";
+
+  const titleNode = element("h3", xssTitle);
+  assert.equal(titleNode.tagName, "H3");
+  assert.equal(titleNode.textContent, xssTitle);
+
+  const descNode = element("p", xssDesc);
+  assert.equal(descNode.tagName, "P");
+  assert.equal(descNode.textContent, xssDesc);
+});
