@@ -1,0 +1,43 @@
+# Profile public updates and release contract
+
+The `/me` page keeps a native, scrollable business card first, followed by **Lately**. There is no wheel/touch interception. CSS uses proximity scroll snapping, disabled for reduced motion. Anchors, keyboard navigation, PageDown and normal overflow remain available. The first mobile panel follows the accepted icon-and-label design, with social icons immediately after Trove and gaming last in DOM order. Gaming and secondary links use native, labelled disclosures on phones; they remain available without JavaScript. The exact approved signature PNG is unchanged.
+
+## Fixed anonymous sources
+
+- Blog: `https://tacobout.online/wp-json/wp/v2/posts?per_page=2&orderby=date&order=desc&_fields=id,status,date_gmt,link,title,excerpt`. Project only the newest available published, unprotected public article. No account credentials or incoming cookies/authorization are forwarded.
+- Bluesky: `https://bsky.app/profile/did:plc:djguxreovfe4bkm7sizg2kxk/rss`. This exact RSS URL was discovered in the public `schwegler.lol` profile's `rel=alternate` link and verified by anonymous GET. It currently returns RSS XML with `application/xml`. The feed puts an older pinned entry first, so newest means greatest valid `pubDate`, not first XML position. No original/reply/repost/author filter selects an older entry. Text, timestamp and actual feed post link come from the newest entry. No AppView replacement, hard-coded post or static feed snapshot is used. The current feed supplies text rather than a media enclosure; no unrelated media is invented.
+- Trove: `https://trove.schweg.xyz/@schwegler`. Project only the first `.profile-recent .profile-media-entry` from this anonymous public owner profile: title, title link, type, year and cover path. This is **latest collected**, not latest watched or the globally latest title. Activity, progress, reviews, account details and other owner fields are never projected. Missing/private/unavailable/changed markup yields no item.
+
+Provider publication and feed caching can delay what their public endpoints expose. The UI checks on panel entry, return to a visible tab, history restoration and manual refresh. It does not promise push updates or continuously poll.
+
+## Freshness, covers and privacy
+
+`functions/api/profile-latest.js` fetches each fixed source anonymously with a timeout, response-size limit, manual redirect handling and `cache: no-store`. JSON and image responses use private/no-store browser and CDN headers. There is no KV, database, persistent cache, saved Trove snapshot or stale-on-error response.
+
+The browser also uses `cache: no-store`, aborts pending work and removes the projected DOM when the panel leaves view or the document becomes hidden. A later use fetches again. Failed sources are omitted; source links remain usable. A cover failure removes its Trove item rather than preserving a potentially retracted title. No live Trove title/cover snapshot is committed to the static page or its screenshots.
+
+Cover requests accept only a type/ID matching the **freshly revalidated first public profile entry**. The server retrieves that fixed `/media/covers/{type}/{id}?width=360` path. The verified current endpoint redirects once to a same-origin `/rails/active_storage/blobs/proxy/…` path; only that exact host/path family is permitted, with no query, credentials, external redirect or second hop. Arbitrary URL proxying and older collection covers are rejected. Only JPEG/PNG/WebP/AVIF responses are served. The browser uses a same-origin URL, descriptive alt text, natural aspect ratio and a graceful unavailable state. The site's CSP and CORS policy are not expanded.
+
+## Hosting gate
+
+This repository previously had no Pages Functions. A static-only build snapshot cannot satisfy fresh Trove privacy/retraction checks without relaxing browser cross-origin policy. This change therefore adds one Pages Function, not a new backend service or credentials.
+
+Cloudflare Pages Git builds / Wrangler recognize the root `functions/` directory. The reviewed `wrangler.jsonc` sets the existing `infopages` project name, repository-root output and tested compatibility date `2026-08-01`. `_routes.json` invokes Functions only for `/api/profile-latest`; the rest of the site stays static. The XML parser is a reproducible checked-in ESM bundle imported by relative path, with its licenses retained under `vendor/`. Cloudflare’s existing no-build-command deployment can compile it without npm installation. All npm packages, including parser tooling and Miniflare/esbuild, are development/test dependencies and are not browser scripts.
+
+Before release, confirm the existing Pages deployment path compiles Functions and serves this endpoint rather than an HTML fallback. Static-only dashboard uploads are insufficient. Requests to this one endpoint consume the project's Functions allowance; no plan/account settings have been changed. No bindings, secrets, cron, DNS, CORS or security-header expansion are required. Cloudflare configuration and a deployed endpoint check remain release gates; no merge or deployment was performed here.
+
+References: [Pages Functions](https://developers.cloudflare.com/pages/functions/), [routing and invocation rules](https://developers.cloudflare.com/pages/functions/routing/), [HTMLRewriter](https://developers.cloudflare.com/workers/runtime-apis/html-rewriter/).
+
+## Verification and visual evidence
+
+The negative screenshot supplied later (`libfile_74b48068e6348191803e2261955dafba`) was materialized and inspected: it is Trove's Lupin detail page, not `/me`. No profile change was based on that unrelated negative reference. The positive reference (`libfile_5ff855d57ebc81918dfde3abad1a040e`) was materialized and inspected: the accepted Lately panel, with an italic heading, strong sans content, blog and RSS on the left, actual Trove cover on the right. The rendered panel was compared for typography, source hierarchy, spacing, palette, cover scale and aspect ratio. Actual live feed text may be longer than the concept and flows naturally rather than being clipped.
+
+The earlier cramped 390×844 profile screenshot was also materialized and inspected. Mobile now uses readable stacked project rows, an eight-link icon-and-label grid, discoverable disclosures and gaming last. The 390×844 first panel fits; 360×740, 320×568 and short landscape scroll rather than squeeze the design. Native zoom and reduced motion preserve access.
+
+Browser/IAB tools are unavailable, so QA uses Playwright Chromium over local HTTP with the repository CSP. No certificate warning or TLS validation is bypassed. This sandbox's native local Worker egress could not reach upstream sites directly; a local Miniflare QA harness used ordinary TLS-verified anonymous public HTTP reads to supply the same runtime, with no credentials or production code change. Actual public RSS, blog and cover rendering were verified through that harness. Worker-runtime tests separately use synthetic fixtures to verify privacy retraction, RSS changes, malformed XML/DTD rejection, forbidden proxy requests and credential isolation. A deployed Cloudflare check is still required.
+
+Screenshots committed under `docs/screenshots/me/` show only the first card. Live second-panel captures stay in ignored QA artifacts so the deployed static site does not permanently retain Trove data after privacy changes.
+
+## Confirmed packaging and audit repair
+
+Authenticated Cloudflare build logs for `0d09aa1` showed the bare `fast-xml-parser` import could not resolve because the project has no build command. The checked-in relative vendor module fixes packaging without changing account build settings. A bundle test verifies zero external npm imports. A deterministic check compares the vendor bundle with its pinned source package. Development-only Miniflare transitive dependencies are pinned to patched `sharp 0.35.5` and `undici 7.30.1`; the audit gate remains enabled. The owner’s free-only authorization was satisfied by authenticated confirmation of Workers Free ($0), not by assuming a paid allowance is free. No plan or billing changes are part of this work.

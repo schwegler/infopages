@@ -7,3 +7,4 @@ node_modules/
 .venv/
 artifacts/
 .DS_Store
+.wrangler/
