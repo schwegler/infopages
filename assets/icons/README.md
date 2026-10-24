@@ -1,0 +1,1 @@
+The eight social glyphs embedded in `me.html` are unmodified path geometry from Simple Icons (CC0). Each SVG is decorative within a text-labelled native link. They are not replacements for the approved schweg.xyz signature. Source: https://simpleicons.org / https://github.com/simple-icons/simple-icons.

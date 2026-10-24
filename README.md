@@ -10,9 +10,11 @@ Serve the repository root:
 python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
-Open <http://127.0.0.1:8000/>. Use a server: ES modules and the history JSON require HTTP. There is no application bundle, runtime package dependency, external font, icon service or chart CDN.
+Open <http://127.0.0.1:8000/>. Use a server: ES modules and the history JSON require HTTP. There is no application bundle, browser runtime package dependency, external font, icon service or chart CDN.
 
 ## Routes
+
+- `me.html`: standalone profile card and a scroll-through panel of freshly checked public blog/RSS/Trove updates; see [public source and hosting notes](docs/profile-public-updates.md).
 
 - `index.html`: professional introduction, selected work, background, skills, education and contact.
 - `work.html`: unified, ranked projects and experiments showcase; three genuine screenshots followed by compact links.
@@ -44,11 +46,11 @@ python3 -m venv .venv
 .venv/bin/python -m pytest tests/browser -q
 ```
 
-`npm run build` checks formatting, JavaScript syntax, routes, local references, metadata, sitemap and unit tests. It does not generate or deploy a bundle. `npm run format` applies the formatter. Browser tests cover all pages at desktop and mobile widths, navigation with and without JavaScript, interactions, failure states and print output. Tests run sequentially; screenshots and a print PDF are written to ignored `artifacts/` and uploaded by CI.
+`npm run build` checks formatting, JavaScript syntax, routes, local references, metadata, sitemap and unit tests, including the public projection in the Workers runtime. It does not generate or deploy a bundle. `npm run format` applies the formatter. Browser tests cover all pages at desktop and mobile widths, navigation with and without JavaScript, interactions, failure states and print output. Tests run sequentially; screenshots and a print PDF are written to ignored `artifacts/` and uploaded by CI.
 
 ## Hosting
 
-Publish the repository root as before. The site remains ordinary HTML, CSS, JS and JSON. `_headers` supplies a same-origin Content Security Policy and standard response protections on Cloudflare Pages. There is no deployment workflow in this repository; hosting-account settings remain separate. No merge or deployment is part of this change.
+Publish the repository root as before. The pages remain ordinary HTML, CSS, JS and JSON. The profile now adds one bounded Pages Function at `/api/profile-latest`; `_routes.json` keeps all other routes static. See [the hosting and privacy contract](docs/profile-public-updates.md) before releasing this addition. `_headers` supplies a same-origin Content Security Policy and standard response protections on Cloudflare Pages. There is no deployment workflow in this repository; hosting-account settings remain separate. No merge or deployment is part of this change.
 
 ## License
 

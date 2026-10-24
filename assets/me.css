@@ -1,4 +1,4 @@
-/* Personal profile: deliberately independent of the résumé UI. */
+/* Standalone editorial profile; no shared site chrome. */
 :root {
   color-scheme: light dark;
   --paper: #f7f7f2;
@@ -9,6 +9,9 @@
 }
 * {
   box-sizing: border-box;
+}
+html {
+  scroll-snap-type: y proximity;
 }
 body {
   margin: 0;
@@ -25,12 +28,25 @@ a:hover {
   text-decoration: underline;
   text-underline-offset: 5px;
 }
-a:focus-visible {
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
   outline: 3px solid var(--blue);
-  outline-offset: 6px;
+  outline-offset: 5px;
+}
+svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .skip {
   position: absolute;
+  z-index: 2;
   top: 12px;
   left: 20px;
   padding: 12px;
@@ -40,17 +56,32 @@ a:focus-visible {
 .skip:focus {
   transform: none;
 }
-main,
-footer {
+.card-panel,
+.latest-panel {
+  min-height: 100svh;
+  min-height: 100dvh;
+  scroll-snap-align: start;
+}
+.card-panel {
+  display: flex;
+  flex-direction: column;
+  padding: max(0px, env(safe-area-inset-top))
+    max(0px, env(safe-area-inset-right)) max(0px, env(safe-area-inset-bottom))
+    max(0px, env(safe-area-inset-left));
+}
+.card-content,
+.card-footer,
+.latest-panel {
   width: min(1240px, calc(100% - 112px));
   margin-inline: auto;
 }
-main {
+.card-content {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 72px;
-  padding-block: 138px 120px;
-  min-height: calc(100svh - 120px);
+  padding-block: 64px;
+  flex: 1;
+  align-content: center;
 }
 h1 {
   font-size: clamp(60px, 7.3vw, 106px);
@@ -59,7 +90,8 @@ h1 {
   margin: 0;
   font-weight: 800;
 }
-h1 span {
+h1 span,
+.latest-heading h2 span {
   color: var(--blue);
 }
 .dek {
@@ -74,7 +106,7 @@ h1 span {
   padding-top: 24px;
   max-width: 330px;
 }
-h2 {
+.contact h2 {
   font-size: 18px;
   margin: 0 0 8px;
 }
@@ -85,15 +117,8 @@ h2 {
   min-height: 44px;
   font-size: 20px;
 }
-svg {
-  width: 20px;
-  height: 20px;
-  flex: none;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.contact-short {
+  display: none;
 }
 .features > a {
   display: block;
@@ -107,6 +132,7 @@ svg {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   font-size: clamp(32px, 3.3vw, 46px);
   font-weight: 700;
   letter-spacing: -0.055em;
@@ -124,7 +150,7 @@ svg {
 }
 .socials {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: 30px;
   margin-top: 22px;
 }
@@ -140,12 +166,36 @@ svg {
   width: 14px;
   height: 14px;
 }
+.socials .social-icon {
+  display: none;
+  fill: currentColor;
+  stroke: none;
+}
+summary {
+  list-style: none;
+  cursor: pointer;
+}
+summary::-webkit-details-marker {
+  display: none;
+}
+summary > svg {
+  margin-left: auto;
+  transition: transform 0.15s ease;
+}
+details[open] > summary > svg {
+  transform: rotate(180deg);
+}
+.more-links {
+  margin-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.more-links > summary {
+  display: none;
+}
 .secondary {
   display: flex;
   flex-wrap: wrap;
   gap: 0 24px;
-  border-top: 1px solid var(--line);
-  margin-top: 20px;
   padding-top: 14px;
 }
 .secondary a {
@@ -155,189 +205,26 @@ svg {
   font-size: 14px;
   color: var(--muted);
 }
-footer {
-  border-top: 1px solid var(--line);
-  min-height: 120px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 30px;
-  color: var(--muted);
-  font:
-    16px Georgia,
-    serif;
-}
-.signature {
-  display: flex;
-  align-items: center;
-  min-height: 60px;
-}
-.signature img {
-  display: block;
-  width: 132px;
-  height: auto;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #181918;
-    --ink: #f7f7f2;
-    --muted: #b7b9b2;
-    --line: #50544e;
-    --blue: #a8bbff;
-  }
-}
-@media (max-width: 760px) {
-  main,
-  footer {
-    width: calc(100% - 48px);
-  }
-  main {
-    grid-template-columns: 1fr;
-    gap: 48px;
-    padding-block: 64px 48px;
-    min-height: auto;
-  }
-  h1 {
-    font-size: clamp(54px, 12vw, 86px);
-  }
-  .dek {
-    font-size: 30px;
-    margin: 26px 0 32px;
-  }
-  .contact {
-    max-width: none;
-    padding-top: 20px;
-  }
-  .contact a {
-    font-size: 18px;
-  }
-  .features > a {
-    padding: 24px 0 28px;
-  }
-  .feature-title {
-    font-size: 36px;
-  }
-  .domain {
-    font-size: 17px;
-  }
-  footer {
-    min-height: 110px;
-  }
-  footer > span {
-    font-size: 14px;
-    max-width: 130px;
-    text-align: right;
-  }
-}
-@media (prefers-reduced-motion: no-preference) {
-  a {
-    transition: color 0.15s ease;
-  }
-}
-/* Viewport composition; overflow remains available for zoom and short screens. */
-body {
-  min-height: 100svh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  padding: max(0px, env(safe-area-inset-top))
-    max(0px, env(safe-area-inset-right)) max(0px, env(safe-area-inset-bottom))
-    max(0px, env(safe-area-inset-left));
-}
-main {
-  flex: 1;
-  min-height: 0;
-  align-content: center;
-  padding-block: 64px;
-}
-footer {
-  min-height: 90px;
-}
-@media (max-width: 760px) {
-  main {
-    padding-block: 30px 24px;
-    gap: 24px;
-  }
-  h1 {
-    font-size: clamp(48px, 12vw, 78px);
-  }
-  .dek {
-    font-size: 25px;
-    margin: 18px 0 20px;
-  }
-  .contact {
-    padding-top: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0 12px;
-  }
-  .contact h2 {
-    margin: 0;
-    font-size: 16px;
-  }
-  .contact a {
-    font-size: 16px;
-  }
-  .features > a {
-    padding: 16px 0 18px;
-  }
-  .feature-title {
-    font-size: 30px;
-  }
-  .domain {
-    font-size: 16px;
-    margin-top: 6px;
-  }
-  .socials {
-    margin-top: 12px;
-  }
-  .socials a {
-    min-height: 44px;
-    font-size: 16px;
-  }
-  .secondary {
-    margin-top: 12px;
-    padding-top: 6px;
-    gap: 0 22px;
-  }
-  footer {
-    min-height: 70px;
-  }
-  footer > span {
-    display: none;
-  }
-}
-@media (min-width: 761px) and (max-height: 700px) {
-  main {
-    padding-block: 36px;
-  }
-}
-@media (prefers-reduced-motion: no-preference) {
-  h1 span {
-    display: inline-block;
-    animation: arrive 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  }
-  @keyframes arrive {
-    from {
-      transform: translateY(-16px);
-      opacity: 0;
-    }
-    to {
-      transform: none;
-      opacity: 1;
-    }
-  }
-}
 .gaming {
-  margin-top: 36px;
-  max-width: 480px;
+  margin-top: 24px;
   border-top: 1px solid var(--line);
-  padding-top: 20px;
 }
-.gaming h2 {
-  margin-bottom: 10px;
+.gaming > summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  min-height: 52px;
+  font-size: 17px;
+  font-weight: 700;
+}
+.gaming-hint {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 400;
+}
+.gaming-content {
+  padding: 4px 0 12px;
 }
 .gaming-row {
   display: flex;
@@ -355,57 +242,42 @@ footer {
   font-size: 15px;
   user-select: all;
 }
-.copy-code {
+.player-tag {
+  font-size: 15px;
+  user-select: all;
+}
+.copy-code,
+.refresh-updates {
   appearance: none;
   border: 0;
-  border-bottom: 1px solid currentColor;
   background: none;
   color: var(--blue);
   min-height: 44px;
+  min-width: 44px;
   padding: 0 4px;
   font:
     14px Arial,
     Helvetica,
     sans-serif;
   cursor: pointer;
-  min-width: 44px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
-.copy-code[hidden] {
-  display: none;
+[hidden] {
+  display: none !important;
 }
-.copy-code:hover {
+.copy-code:hover,
+.refresh-updates:hover {
   color: var(--ink);
 }
-.copy-code:focus-visible {
-  outline: 3px solid var(--blue);
-  outline-offset: 4px;
-}
 .copy-status {
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.4;
   color: var(--muted);
   margin: 0;
 }
 .copy-status:not(:empty) {
   margin-top: 8px;
-}
-@media (max-width: 760px) {
-  .gaming {
-    margin-top: 16px;
-    padding-top: 12px;
-    max-width: none;
-  }
-  .gaming h2 {
-    font-size: 16px;
-    margin-bottom: 4px;
-  }
-  .gaming-row {
-    gap: 0 12px;
-  }
-}
-.player-tag {
-  font-size: 15px;
-  user-select: all;
 }
 .steam-link {
   display: inline-flex;
@@ -419,73 +291,465 @@ footer {
   width: 14px;
   height: 14px;
 }
+.card-footer {
+  border-top: 1px solid var(--line);
+  min-height: 90px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.signature {
+  display: flex;
+  align-items: center;
+  min-height: 60px;
+}
+.signature img {
+  display: block;
+  width: 132px;
+  height: auto;
+}
+.lately-cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 16px;
+}
+.latest-panel {
+  padding-block: 64px 36px;
+  display: flex;
+  flex-direction: column;
+}
+.latest-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 64px;
+}
+.latest-heading h2 {
+  font-size: 80px;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  margin: 0;
+}
+.latest-heading > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 16px;
+}
+.latest-columns {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 72px;
+  flex: 1;
+}
+.latest-source h3 {
+  font:
+    italic 32px/1.2 Georgia,
+    serif;
+  margin: 0 0 24px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 20px;
+}
+.latest-source h3 a {
+  display: block;
+  color: var(--ink);
+  min-height: 44px;
+}
+.latest-writing > .latest-source + section {
+  margin-top: 40px;
+}
+.latest-entry h4 {
+  margin: 12px 0 14px;
+  font:
+    28px/1.2 Georgia,
+    serif;
+}
+.latest-entry h4 a {
+  display: block;
+  min-height: 44px;
+}
+.latest-entry time,
+.latest-entry .media-meta {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.latest-entry p {
+  font:
+    18px/1.5 Georgia,
+    serif;
+  margin: 12px 0 20px;
+}
+.latest-entry .feed-text {
+  white-space: pre-line;
+  font-size: 22px;
+}
+.latest-entry .feed-text a {
+  overflow-wrap: anywhere;
+}
+.source-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  gap: 10px;
+  font-size: 16px;
+}
+.trove-cover-link {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 22px 0;
+}
+.trove-cover {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(100%, 260px);
+  max-height: 340px;
+  object-fit: contain;
+}
+.latest-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+  margin-top: 48px;
+}
+.latest-status {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #181918;
+    --ink: #f7f7f2;
+    --muted: #b7b9b2;
+    --line: #50544e;
+    --blue: #a8bbff;
+  }
+}
 @media (max-width: 760px) {
-  main {
-    padding-block: 20px;
-    gap: 16px;
+  .card-content,
+  .card-footer,
+  .latest-panel {
+    width: calc(100% - 48px);
+  }
+  .card-content {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding-block: 36px 20px;
+  }
+  h1 {
+    font-size: clamp(48px, 12vw, 78px);
   }
   .dek {
-    font-size: 23px;
-    margin: 12px 0;
+    font-size: 25px;
+    margin: 18px 0 14px;
   }
-  .gaming {
-    margin-top: 12px;
+  .contact {
+    border: 0;
+    padding: 0;
+    max-width: none;
   }
-  .features {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
+  .contact h2,
+  .contact-address {
+    display: none;
+  }
+  .contact-short {
+    display: inline;
+  }
+  .contact a {
+    font-size: 19px;
+    font-weight: 600;
   }
   .features > a {
-    border-bottom: 1px solid var(--line);
-    padding: 14px 0 18px;
+    padding: 20px 0 24px;
   }
   .feature-title {
-    font-size: 24px;
-  }
-  .feature-title svg {
-    width: 18px;
-    height: 18px;
+    font-size: 32px;
   }
   .domain {
+    font-size: 17px;
+    margin-top: 6px;
+    color: var(--muted);
+  }
+  .socials {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 4px;
+    row-gap: 10px;
+    margin-top: 22px;
+  }
+  .socials a {
+    flex-direction: column;
+    justify-content: center;
+    gap: 7px;
+    min-height: 62px;
+    font-size: 15px;
+    color: var(--ink);
+  }
+  .socials .social-icon {
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+  .socials a > svg:not(.social-icon) {
+    display: none;
+  }
+  .more-links {
+    margin-top: 20px;
+  }
+  .more-links > summary {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    font-size: 16px;
+  }
+  .secondary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0 20px;
+    padding: 4px 0 12px;
+  }
+  .secondary a {
+    font-size: 16px;
+  }
+  .gaming {
+    margin-top: 0;
+  }
+  .gaming > summary {
+    min-height: 54px;
+    font-size: 16px;
+  }
+  .gaming-hint {
     font-size: 14px;
   }
-  footer {
+  .gaming-row {
+    gap: 0 12px;
+  }
+  .card-footer {
+    min-height: 76px;
+  }
+  .signature {
     min-height: 60px;
+  }
+  .latest-panel {
+    padding-block: 40px;
+  }
+  .latest-heading {
+    align-items: flex-start;
+    margin-bottom: 40px;
+    gap: 12px;
+  }
+  .latest-heading h2 {
+    font-size: 54px;
+  }
+  .latest-heading > a {
+    font-size: 15px;
+  }
+  .latest-columns {
+    grid-template-columns: 1fr;
+    gap: 42px;
+  }
+  .latest-source h3 {
+    font-size: 27px;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+  }
+  .latest-entry h4 {
+    font-size: 26px;
+  }
+  .latest-entry .feed-text {
+    font-size: 20px;
+  }
+  .latest-source p {
+    font-size: 18px;
+  }
+  .latest-bottom {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 36px;
   }
 }
 @media (max-width: 350px) {
-  .features {
-    gap: 16px;
+  .socials a {
+    font-size: 14px;
   }
-  .domain {
-    font-size: 13px;
-  }
-  .feature-title {
-    font-size: 23px;
+  .gaming-hint {
+    display: none;
   }
   .gaming-row {
     gap: 0 8px;
   }
 }
-.copy-code {
-  border: 0;
-  text-decoration: underline;
-  text-underline-offset: 4px;
+@media (min-width: 761px) and (max-height: 700px) {
+  .card-content {
+    padding-block: 36px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+  a {
+    transition: color 0.15s ease;
+  }
+  h1 span {
+    display: inline-block;
+    animation: arrive 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  @keyframes arrive {
+    from {
+      transform: translateY(-16px);
+      opacity: 0;
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-snap-type: none;
+  }
+  summary > svg {
+    transition: none;
+  }
+}
+/* Accepted Lately composition: serif section voice, strong sans content. */
+.latest-panel {
+  width: min(1320px, calc(100% - 112px));
+  padding-top: 32px;
+}
+.latest-heading {
+  flex-direction: column-reverse;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 44px;
+}
+.latest-heading h2 {
+  font:
+    italic 700 96px/1.1 Georgia,
+    serif;
+  letter-spacing: -0.055em;
+}
+.latest-heading h2 span {
+  display: none;
+}
+.latest-heading > a {
+  font-size: 20px;
+  font-weight: 600;
+}
+.latest-columns {
+  grid-template-columns: 1.2fr 1fr;
+  gap: 80px;
+}
+.latest-source h3 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  padding-bottom: 8px;
+}
+.latest-entry h4 {
+  font:
+    700 42px/1.08 Arial,
+    Helvetica,
+    sans-serif;
+  letter-spacing: -0.045em;
+  margin: 12px 0 18px;
+}
+.latest-entry h4 a {
+  color: var(--ink);
+}
+.latest-entry p {
+  font:
+    26px/1.35 Arial,
+    Helvetica,
+    sans-serif;
+  margin: 16px 0;
+}
+.latest-entry .feed-text {
+  font:
+    26px/1.35 Arial,
+    Helvetica,
+    sans-serif;
+}
+.latest-entry time,
+.latest-entry .media-meta {
+  font-size: 18px;
+}
+.latest-entry .media-meta {
+  margin: 12px 0 18px;
+}
+.latest-writing > .latest-source + section {
+  margin-top: 52px;
+}
+.source-link {
+  font-size: 22px;
+  font-weight: 600;
+}
+.trove-cover {
+  max-width: min(100%, 400px);
+  max-height: 520px;
+}
+.trove-cover-link {
+  margin: 18px 0 0;
 }
 @media (max-width: 760px) {
-  main {
-    padding-block: 16px;
-    gap: 12px;
+  .latest-panel {
+    width: calc(100% - 48px);
+    padding-top: 32px;
   }
-  .socials {
-    margin-top: 8px;
+  .latest-heading {
+    margin-bottom: 36px;
   }
-  .secondary {
-    margin-top: 8px;
+  .latest-heading h2 {
+    font-size: 64px;
   }
-  footer,
-  .signature {
-    min-height: 44px;
+  .latest-heading > a {
+    font-size: 17px;
   }
+  .latest-columns {
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+  .latest-source h3 {
+    font-size: 28px;
+  }
+  .latest-entry h4 {
+    font-size: 30px;
+  }
+  .latest-entry p,
+  .latest-entry .feed-text {
+    font-size: 20px;
+    line-height: 1.4;
+  }
+  .latest-entry time,
+  .latest-entry .media-meta {
+    font-size: 16px;
+  }
+  .source-link {
+    font-size: 18px;
+  }
+  .trove-cover {
+    max-height: 420px;
+    max-width: 100%;
+  }
+  .latest-writing > .latest-source + section {
+    margin-top: 36px;
+  }
+}
+.feed-text a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }

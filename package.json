@@ -2,12 +2,12 @@
   "name": "infopages",
   "version": "2.0.0",
   "private": true,
-  "description": "Andrew Schwegler’s digital résumé and interactive public projects",
+  "description": "Andrew Schwegler\u2019s digital r\u00e9sum\u00e9 and interactive public projects",
   "type": "module",
   "scripts": {
     "test": "node --test tests/*.test.mjs",
-    "check": "prettier --check '*.html' 'assets/**/*.{js,css}' 'tests/*.mjs' '*.json' 'docs/*.md' README.md .github/workflows/test.yml && python3 scripts/validate_site.py && node scripts/check_syntax.mjs",
-    "format": "prettier --write '*.html' 'assets/**/*.{js,css}' 'tests/*.mjs' '*.json' 'docs/*.md' README.md .github/workflows/test.yml",
+    "check": "prettier --check '*.html' 'assets/**/*.{js,css}' 'functions/**/*.js' 'tests/*.mjs' '*.json' 'docs/*.md' README.md wrangler.jsonc .github/workflows/test.yml && python3 scripts/validate_site.py && node scripts/check_syntax.mjs",
+    "format": "prettier --write '*.html' 'assets/**/*.{js,css}' 'functions/**/*.js' 'tests/*.mjs' '*.json' 'docs/*.md' README.md wrangler.jsonc .github/workflows/test.yml",
     "test:browser": "python3 -m pytest tests/browser -q",
     "build": "npm run check && npm test"
   },
@@ -17,6 +17,11 @@
   },
   "license": "ISC",
   "devDependencies": {
+    "esbuild": "0.28.2",
+    "miniflare": "4.20260730.0",
     "prettier": "3.9.10"
+  },
+  "dependencies": {
+    "fast-xml-parser": "5.11.2"
   }
 }
