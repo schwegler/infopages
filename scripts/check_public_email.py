@@ -1,8 +1,7 @@
 """Guard the public contact surface without dependencies."""
 from pathlib import Path
 from html.parser import HTMLParser
-from html import unescape
-import re
+
 ROOT = Path(__file__).resolve().parent.parent
 ADDRESS = "andrew" + "@" + "schweg.xyz"
 class Links(HTMLParser):
