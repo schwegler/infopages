@@ -73,6 +73,7 @@ def test_hosting_support_touch_and_keyboard_without_javascript(browser,site_url,
         assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
         artifacts=Path(__file__).resolve().parents[2]/'artifacts'
         artifacts.mkdir(exist_ok=True)
+        support.scroll_into_view_if_needed()
         page.screenshot(path=str(artifacts/f'hosting-support-{width}.png'))
     finally:
         context.close()
