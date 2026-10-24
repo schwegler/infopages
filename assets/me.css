@@ -330,3 +330,162 @@ footer {
     }
   }
 }
+.gaming {
+  margin-top: 36px;
+  max-width: 480px;
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+}
+.gaming h2 {
+  margin-bottom: 10px;
+}
+.gaming-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  min-height: 44px;
+}
+.gaming-platform {
+  font-size: 14px;
+  color: var(--muted);
+}
+.friend-code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 15px;
+  user-select: all;
+}
+.copy-code {
+  appearance: none;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  background: none;
+  color: var(--blue);
+  min-height: 44px;
+  padding: 0 4px;
+  font:
+    14px Arial,
+    Helvetica,
+    sans-serif;
+  cursor: pointer;
+  min-width: 44px;
+}
+.copy-code[hidden] {
+  display: none;
+}
+.copy-code:hover {
+  color: var(--ink);
+}
+.copy-code:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 4px;
+}
+.copy-status {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
+  margin: 0;
+}
+.copy-status:not(:empty) {
+  margin-top: 8px;
+}
+@media (max-width: 760px) {
+  .gaming {
+    margin-top: 16px;
+    padding-top: 12px;
+    max-width: none;
+  }
+  .gaming h2 {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+  .gaming-row {
+    gap: 0 12px;
+  }
+}
+.player-tag {
+  font-size: 15px;
+  user-select: all;
+}
+.steam-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 14px;
+  margin-left: auto;
+}
+.steam-link svg {
+  width: 14px;
+  height: 14px;
+}
+@media (max-width: 760px) {
+  main {
+    padding-block: 20px;
+    gap: 16px;
+  }
+  .dek {
+    font-size: 23px;
+    margin: 12px 0;
+  }
+  .gaming {
+    margin-top: 12px;
+  }
+  .features {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .features > a {
+    border-bottom: 1px solid var(--line);
+    padding: 14px 0 18px;
+  }
+  .feature-title {
+    font-size: 24px;
+  }
+  .feature-title svg {
+    width: 18px;
+    height: 18px;
+  }
+  .domain {
+    font-size: 14px;
+  }
+  footer {
+    min-height: 60px;
+  }
+}
+@media (max-width: 350px) {
+  .features {
+    gap: 16px;
+  }
+  .domain {
+    font-size: 13px;
+  }
+  .feature-title {
+    font-size: 23px;
+  }
+  .gaming-row {
+    gap: 0 8px;
+  }
+}
+.copy-code {
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+@media (max-width: 760px) {
+  main {
+    padding-block: 16px;
+    gap: 12px;
+  }
+  .socials {
+    margin-top: 8px;
+  }
+  .secondary {
+    margin-top: 8px;
+  }
+  footer,
+  .signature {
+    min-height: 44px;
+  }
+}

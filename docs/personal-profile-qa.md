@@ -1,15 +1,15 @@
 # Personal profile review
 
-The standalone `/me` digital business card uses **Schwegler** only. The résumé and other pages retain their existing content and UI. No framework, JavaScript, remote fonts, analytics, or backend is added. The small blue punctuation mark has a one-time entrance; reduced motion disables it.
+The standalone `/me` digital business card uses **Schwegler** only. The résumé and other pages retain their existing content and UI. No framework, remote fonts, analytics, or backend is added. A small local script progressively enhances the gaming text with clipboard buttons; all details remain readable and selectable without JavaScript. The small blue punctuation mark has a one-time entrance; reduced motion disables it.
 
 ## Routes and release checks
 
 - Canonical: `https://schweg.xyz/me`, served by Cloudflare Pages from `me.html`.
 - `/about`, `/about/`, and `/about.html`: explicit 301 to `/me`; no existing files collide.
 - Existing Notes redirects and security headers are preserved.
-- The route inventory and sitemap include the new page. The Bluesky validator exception permits only the verified exact destination on `me.html`; other profile destinations remain rejected.
+- The route inventory and sitemap include the new page. The Bluesky validator exception remains unchanged and permits only the verified exact destination on `me.html`.
 - Public mail destination and visible address use numeric character references. No email in metadata, ARIA, or data attributes.
-- GitHub/LinkedIn, six verified personal social accounts, the two featured destinations, résumé, projects, and the signature home link are native anchors. Some social providers block automated public fetches; identity evidence is separate from live availability.
+- GitHub/LinkedIn, six verified personal social accounts, Spotify, Discord, the Steam profile, the two featured destinations, résumé, projects, and the signature home link are native anchors. Some social providers block automated public fetches; identity evidence is separate from live availability.
 - Production routing must be checked after an authorized release. Local route tests emulate Pages behavior; they do not prove a deployment. No merge, deployment, account, DNS, or security changes are part of this change.
 
 ## Visual review
@@ -37,3 +37,16 @@ Intentional concept deviations: exact approved signature replaces generated artw
 ![Phone](screenshots/me/mobile.png)
 
 ![Dark appearance](screenshots/me/dark.png)
+
+## Gaming, music and Discord follow-up
+
+PR #150 was already merged when these additions were requested. The follow-up starts from merge commit `6bc96078f77ad25abed2d87e5fe3e67a729b477b` on a fresh branch.
+
+- Switch friend code: `SW-8401-9041-4251`; Xbox gamertag: `ajschwegler`. Both were explicitly supplied by the user. Separate accessible Copy buttons report success in a live status region. Clipboard failure selects the corresponding text and explains the manual-copy fallback. No Xbox deep link is invented.
+- Steam uses the exact supplied numeric profile URL. The public page was inaccessible to the browsing tool, so the visible label is **Steam profile**, with no guessed display name.
+- Spotify and Discord use the exact supplied public profile URLs and join the existing compact social navigation.
+- This is a small extension within the existing visual system, not a new concept or generated artwork. Desktop retains the left contact/gaming area and right feature/social area. Phone feature links sit side by side to make space for the additional native links.
+- Latest renders inspected with `view_image`: desktop 1440×1000, phone 390×844, narrow 320×568; dark and 360×740 captures also checked. Both 390×844 and 360×740 fit their viewport. Narrow 320×568 and short 844×390 scroll gracefully with no horizontal overflow. Existing signature artwork, typography character, palette, fine rules and open spacing are preserved.
+- All 13 focused browser checks pass, including keyboard copying, exact clipboard values for both codes, clipboard denial fallback, no-JavaScript details, routing and at least 44px link/button targets. Local axe WCAG A/AA scans pass at six viewport/appearance combinations. Native browser zoom at 200% and 400% preserves heading/home reachability with no horizontal overflow.
+
+Screenshots above show this latest implementation. The historical Image Gen concept does not contain the subsequently requested gaming/music/Discord content. These additions are intentional user-directed changes to the earlier concept, not a claim of pixel-identical fidelity.

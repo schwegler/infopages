@@ -31,6 +31,7 @@
     <meta name="theme-color" content="#f7f7f2" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="assets/me.css" />
+    <script src="assets/me.js" defer></script>
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
@@ -49,6 +50,44 @@
               <path d="M5 19 19 5M5 5h14v14" /></svg
           ></a>
         </div>
+        <section class="gaming" aria-labelledby="gaming-title">
+          <h2 id="gaming-title">Play together</h2>
+          <div class="gaming-row switch-row">
+            <span class="gaming-platform">Switch</span>
+            <span class="friend-code" id="switch-code">SW-8401-9041-4251</span>
+            <button
+              type="button"
+              class="copy-code"
+              data-copy-code="switch-code"
+              data-copy-label="Switch code"
+              aria-label="Copy Switch friend code"
+              hidden
+            >
+              Copy
+            </button>
+          </div>
+          <div class="gaming-row">
+            <span class="gaming-platform">Xbox</span>
+            <span class="player-tag" id="xbox-tag">ajschwegler</span>
+            <button
+              type="button"
+              class="copy-code"
+              data-copy-code="xbox-tag"
+              data-copy-label="Xbox gamertag"
+              aria-label="Copy Xbox gamertag"
+              hidden
+            >
+              Copy
+            </button>
+            <a
+              class="steam-link"
+              href="https://steamcommunity.com/profiles/76561198012788300"
+              >Steam profile<svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 19 19 5M5 5h14v14" /></svg
+            ></a>
+          </div>
+          <p class="copy-status" role="status" aria-live="polite"></p>
+        </section>
       </section>
       <div class="links">
         <nav class="features" aria-label="Featured links">
@@ -84,6 +123,14 @@
               <path d="M5 19 19 5M5 5h14v14" /></svg></a
           ><a href="https://www.facebook.com/schwglr" rel="me"
             >Facebook<svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 19 19 5M5 5h14v14" /></svg
+          ></a>
+          <a href="https://open.spotify.com/user/schwegler" rel="me"
+            >Spotify<svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 19 19 5M5 5h14v14" /></svg
+          ></a>
+          <a href="https://discord.com/users/611902242840117249" rel="me"
+            >Discord<svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M5 19 19 5M5 5h14v14" /></svg
           ></a>
         </nav>
