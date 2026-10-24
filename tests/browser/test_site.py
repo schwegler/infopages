@@ -48,6 +48,34 @@ def test_navigation_without_javascript(browser,site_url):
     expect(page.get_by_role('navigation')).to_be_visible()
     page.get_by_role('navigation').get_by_role('link',name='Projects & experiments',exact=True).click()
     expect(page.locator('h1')).to_contain_text('Projects &')
+
+
+@pytest.mark.parametrize('width',[1440,390,320])
+def test_hosting_support_touch_and_keyboard_without_javascript(browser,site_url,width):
+    context=browser.new_context(java_script_enabled=False,viewport={'width':width,'height':900})
+    try:
+        page=context.new_page();page.goto(f'{site_url}/index.html')
+        support=page.locator('footer .support-links')
+        summary=support.locator('summary')
+        expect(support.get_by_role('link',name='PayPal',exact=True)).not_to_be_visible()
+        assert not support.evaluate('(el)=>el.open')
+        box=summary.bounding_box()
+        assert box['height'] >= 44
+        # The extra hit area must activate the native disclosure, not just the text.
+        summary.click(position={'x':box['width']/2,'y':box['height']-2})
+        assert support.evaluate('(el)=>el.open')
+        summary.focus();page.keyboard.press('Enter')
+        assert not support.evaluate('(el)=>el.open')
+        page.keyboard.press('Enter');page.keyboard.press('Tab')
+        expect(support.get_by_role('link',name='PayPal',exact=True)).to_be_focused()
+        assert support.locator('a').evaluate_all('(els)=>els.map(a=>a.getAttribute("href"))') == [
+            'https://paypal.me/schwegler','https://venmo.com/u/Schwegler','https://cash.app/$schwg']
+        assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
+        artifacts=Path(__file__).resolve().parents[2]/'artifacts'
+        artifacts.mkdir(exist_ok=True)
+        page.screenshot(path=str(artifacts/f'hosting-support-{width}.png'))
+    finally:
+        context.close()
     context.close()
 
 

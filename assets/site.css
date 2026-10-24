@@ -2082,6 +2082,8 @@ footer .support-links {
   margin: 0;
 }
 footer .support-links summary {
+  min-height: 44px;
+  align-content: center;
   font-family: inherit;
   font-size: 12px;
   line-height: 1.6;
