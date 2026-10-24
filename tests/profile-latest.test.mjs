@@ -7,8 +7,7 @@ import { Miniflare } from "miniflare";
 const bundle = await build({
   stdin: {
     contents:
-      readFileSync("functions/api/profile-latest.js", "utf8") +
-      "\nexport default {fetch(request){return onRequest({request});}}",
+      'import {onRequest} from "./functions/api/profile-latest.js"; export default {fetch(request){return onRequest({request});}}',
     resolveDir: process.cwd(),
   },
   bundle: true,
@@ -222,4 +221,22 @@ test("only the single public endpoint invokes a Pages Function", () => {
     include: ["/api/profile-latest"],
     exclude: [],
   });
+});
+
+test("Pages can bundle the Function without installing any npm runtime package", async () => {
+  const result = await build({
+    entryPoints: ["functions/api/profile-latest.js"],
+    bundle: true,
+    write: false,
+    format: "esm",
+    platform: "browser",
+    packages: "external",
+    metafile: true,
+  });
+  assert(
+    Object.values(result.metafile.outputs).every(
+      (output) => output.imports.length === 0,
+    ),
+  );
+  assert(!result.outputFiles[0].text.includes('from "fast-xml-parser"'));
 });

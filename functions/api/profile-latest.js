@@ -1,4 +1,4 @@
-import { XMLParser, XMLValidator } from "fast-xml-parser";
+import { XMLParser, XMLValidator } from "../../vendor/profile-xml.mjs";
 // Public, anonymous, fixed-source projection. No cookies, storage or stale fallback.
 const BLOG =
   "https://tacobout.online/wp-json/wp/v2/posts?per_page=2&orderby=date&order=desc&_fields=id,status,date_gmt,link,title,excerpt";
