@@ -83,3 +83,12 @@ test("element safely handles timeline event title and description XSS payloads",
   assert.equal(descNode.tagName, "P");
   assert.equal(descNode.textContent, xssDesc);
 });
+
+test("element prevents DOM XSS when rendering dynamic link text and HTML entities", () => {
+  const xssPayload = "<img src=x onerror=alert(1)> Link Title";
+  const node = element("a", xssPayload, "nav-link");
+  assert.equal(node.tagName, "A");
+  assert.equal(node.textContent, xssPayload);
+  assert.equal(node.innerHTML, undefined);
+  assert.equal(node.className, "nav-link");
+});
