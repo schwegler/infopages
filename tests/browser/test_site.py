@@ -171,6 +171,7 @@ def test_history_dataset_is_rendered_as_text(clean_page,site_url):
     payload='<img src=x onerror="window.injected=true">'
     data['characters']['gordon_c']['name']=payload
     data['timelineEvents'][0]['title']=payload
+    data['timelineEvents'][0]['description']=payload
     page.route('**/hollyoaks_data.json',lambda route:route.fulfill(json=data))
     page.goto(f'{site_url}/hollyoaks_history.html')
     expect(page.locator('#timeline-count')).to_have_text('25 events shown')

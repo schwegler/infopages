@@ -16,6 +16,7 @@ function renderTimeline() {
     );
   events.forEach((event) => {
     const article = element("article", undefined, "timeline-event");
+    // Render title and description via textContent to prevent XSS from unsafe event content
     article.append(
       element("small", `${event.year} / ${event.family || "Village"}`),
       element("h3", event.title),
