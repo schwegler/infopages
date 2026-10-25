@@ -26,6 +26,39 @@ export function chooseLane(bottom, height, rects, maxLift) {
   }
   return { bottom, height };
 }
+
+export function buildObstructingIntervals(rects, bottom, linkHeight, size) {
+  const raw = [];
+  for (let i = 0; i < rects.length; i++) {
+    const rect = rects[i];
+    if (bottom > rect.top - 4 && bottom - linkHeight < rect.bottom + 4) {
+      raw.push([rect.left - 4 - size, rect.right + 4]);
+    }
+  }
+  if (!raw.length) return [];
+  raw.sort((a, b) => a[0] - b[0]);
+  const merged = [raw[0]];
+  for (let i = 1; i < raw.length; i++) {
+    const current = raw[i];
+    const last = merged[merged.length - 1];
+    if (current[0] < last[1]) {
+      last[1] = Math.max(last[1], current[1]);
+    } else {
+      merged.push(current);
+    }
+  }
+  return merged;
+}
+
+export function isPositionObstructed(x, intervals) {
+  for (let i = 0; i < intervals.length; i++) {
+    const interval = intervals[i];
+    if (x >= interval[1]) continue;
+    if (x <= interval[0]) return false;
+    return true;
+  }
+  return false;
+}
 export const mascots = [
   {
     id: "telly",
@@ -201,6 +234,7 @@ export function mountParade() {
   let distance = 0,
     activeIndex = 0;
   let protectedRects = [],
+    obstructingIntervals = [],
     layoutDirty = true;
   const pauses = new Set();
   const region = el("aside", "mascot-parade");
@@ -425,6 +459,13 @@ export function mountParade() {
         "--gait-scale",
         String(((rigHeight / 108) * 60) / speed),
       );
+      const linkHeight = links[0].offsetHeight;
+      obstructingIntervals = buildObstructingIntervals(
+        protectedRects,
+        bottom,
+        linkHeight,
+        size,
+      );
       layoutDirty = false;
     }
     const linkHeight = links[0].offsetHeight;
@@ -447,13 +488,7 @@ export function mountParade() {
       if (link === document.activeElement)
         x = Math.max(safeLeft + 8, Math.min(x, width - size - safeRight - 8));
       link.style.setProperty("--parade-x", `${x}px`);
-      const obstructs = protectedRects.some(
-        (rect) =>
-          x < rect.right + 4 &&
-          x + size > rect.left - 4 &&
-          bottom > rect.top - 4 &&
-          bottom - linkHeight < rect.bottom + 4,
-      );
+      const obstructs = isPositionObstructed(x, obstructingIntervals);
       // Only fully visible links enter the keyboard order.
       const ready = active && link.dataset.artReady === "true";
       const visible =
