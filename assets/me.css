@@ -11,7 +11,7 @@
   box-sizing: border-box;
 }
 html {
-  scroll-snap-type: y proximity;
+  scroll-snap-type: y mandatory;
 }
 body {
   margin: 0;
@@ -58,6 +58,7 @@ svg {
 }
 .card-panel,
 .latest-panel {
+  min-height: 100vh;
   min-height: 100svh;
   min-height: 100dvh;
   scroll-snap-align: start;
@@ -317,7 +318,8 @@ details[open] > summary > svg {
   font-size: 16px;
 }
 .latest-panel {
-  padding-block: 64px 36px;
+  padding-block: max(64px, env(safe-area-inset-top))
+    max(36px, env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
 }
@@ -752,4 +754,107 @@ details[open] > summary > svg {
 .feed-text a {
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+/* Short phones use the same hierarchy with less whitespace. Minimum heights,
+   rather than fixed heights, let disclosures, zoom and landscape overflow. */
+@media (max-width: 760px) and (max-height: 860px) {
+  .card-content {
+    width: calc(100% - 40px);
+    padding-block: 16px 4px;
+    gap: 12px;
+  }
+  .intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 8px;
+  }
+  h1 {
+    grid-column: 1 / -1;
+    font-size: clamp(42px, 12vw, 64px);
+  }
+  .dek {
+    font-size: 20px;
+    margin: 12px 0 0;
+  }
+  .contact {
+    align-self: end;
+  }
+  .contact a {
+    font-size: 16px;
+    gap: 6px;
+  }
+  .features > a {
+    padding: 10px 0;
+  }
+  .feature-title {
+    font-size: 28px;
+  }
+  .domain {
+    font-size: 15px;
+    margin-top: 2px;
+  }
+  .socials {
+    margin-top: 8px;
+    row-gap: 0;
+  }
+  .socials a {
+    min-height: 48px;
+    gap: 3px;
+    font-size: 14px;
+  }
+  .socials .social-icon {
+    width: 20px;
+    height: 20px;
+  }
+  .more-links {
+    margin-top: 8px;
+  }
+  .more-links > summary,
+  .gaming > summary {
+    min-height: 44px;
+  }
+  .card-footer {
+    width: calc(100% - 40px);
+    min-height: 52px;
+  }
+  .signature {
+    min-height: 48px;
+  }
+  .signature img {
+    width: 110px;
+  }
+}
+.card-content > *,
+.latest-columns > * {
+  min-width: 0;
+}
+.card-panel,
+.latest-panel {
+  overflow-wrap: anywhere;
+}
+.latest-panel {
+  padding-top: max(32px, env(safe-area-inset-top));
+  padding-bottom: max(36px, env(safe-area-inset-bottom));
+  /* The panel is inset already; leave room for landscape display cutouts. */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+@media (min-width: 761px) and (max-height: 1000px) {
+  .card-content {
+    padding-block: 24px;
+  }
+  .features > a {
+    padding-block: 18px;
+  }
+  .socials {
+    margin-top: 12px;
+  }
+  .socials a {
+    min-height: 44px;
+  }
+  .gaming {
+    margin-top: 12px;
+  }
 }
