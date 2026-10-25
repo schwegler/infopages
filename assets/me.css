@@ -11,7 +11,7 @@
   box-sizing: border-box;
 }
 html {
-  scroll-snap-type: y proximity;
+  scroll-snap-type: none;
 }
 html.panel-snap {
   scroll-snap-type: y mandatory;
