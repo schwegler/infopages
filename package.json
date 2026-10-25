@@ -10,7 +10,8 @@
     "format": "prettier --write '*.html' 'assets/**/*.{js,css}' 'functions/**/*.js' 'tests/*.mjs' '*.json' 'docs/*.md' README.md wrangler.jsonc .github/workflows/test.yml",
     "test:browser": "python3 -m pytest tests/browser -q",
     "build": "npm run check && npm test",
-    "vendor:profile": "node scripts/build_profile_xml.mjs"
+    "vendor:profile": "node scripts/build_profile_xml.mjs",
+    "postinstall": "mkdir -p node_modules/chokidar node_modules/is-binary-path node_modules/binary-extensions && cp -r vendor/chokidar/* node_modules/chokidar/ && cp -r vendor/is-binary-path/* node_modules/is-binary-path/ && cp -r vendor/binary-extensions/* node_modules/binary-extensions/"
   },
   "repository": {
     "type": "git",
