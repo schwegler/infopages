@@ -1,6 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { chooseLane } from "../assets/js/mascot-parade.js";
+import {
+  chooseLane,
+  buildObstructingIntervals,
+  isPositionObstructed,
+} from "../assets/js/mascot-parade.js";
 
 test("chooseLane returns default bottom and height when rects array is empty", () => {
   const result = chooseLane(600, 108, [], 140);
@@ -69,4 +73,37 @@ test("chooseLane evaluates candidate floors in descending order (minimal lift fi
   ];
   const result = chooseLane(600, 108, rects, 200);
   assert.deepEqual(result, { bottom: 472, height: 108 });
+});
+
+test("buildObstructingIntervals merges overlapping horizontal ranges correctly", () => {
+  const bottom = 800;
+  const linkHeight = 100;
+  const size = 116;
+  const rects = [
+    { top: 750, bottom: 820, left: 100, right: 200 },
+    { top: 760, bottom: 810, left: 180, right: 300 },
+    { top: 500, bottom: 600, left: 400, right: 500 }, // Non-obstructing vertically
+  ];
+
+  // For rect 1: left - 4 - size = 100 - 4 - 116 = -20, right + 4 = 204
+  // For rect 2: left - 4 - size = 180 - 4 - 116 = 60, right + 4 = 304
+  // Merged interval: [-20, 304]
+  const intervals = buildObstructingIntervals(rects, bottom, linkHeight, size);
+  assert.deepEqual(intervals, [[-20, 304]]);
+});
+
+test("isPositionObstructed accurately detects x position collisions against intervals", () => {
+  const intervals = [
+    [10, 50],
+    [100, 150],
+  ];
+
+  assert.equal(isPositionObstructed(5, intervals), false);
+  assert.equal(isPositionObstructed(10, intervals), false);
+  assert.equal(isPositionObstructed(25, intervals), true);
+  assert.equal(isPositionObstructed(50, intervals), false);
+  assert.equal(isPositionObstructed(75, intervals), false);
+  assert.equal(isPositionObstructed(120, intervals), true);
+  assert.equal(isPositionObstructed(150, intervals), false);
+  assert.equal(isPositionObstructed(200, intervals), false);
 });
