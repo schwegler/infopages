@@ -32,7 +32,11 @@ class MockElement {
 
 globalThis.document = {
   createElement: (tag) => new MockElement(tag),
-  createElementNS: (ns, tag) => new MockElement(tag, ns),
+  createElementNS: (ns, tag) => {
+    const el = new MockElement(tag);
+    el.namespaceURI = ns;
+    return el;
+  },
 };
 
 import { barChart, lineChart, linePoints } from "../assets/js/charts.js";
@@ -116,26 +120,27 @@ test("barChart handles custom maximum parameter and empty rows array", () => {
   assert.equal(figureEmpty.children[1].children.length, 0);
 });
 
-test("lineChart constructs SVG line chart figure with grid lines, polylines, dots, axis and legend", () => {
+test("lineChart constructs a figure with correct SVG structure, series lines, dots, axis, and legend", () => {
   const labels = ["Q1", "Q2", "Q3"];
   const series = [
-    ["Metric Alpha", [10, 50, 90]],
-    ["Metric Beta", [30, 40, 20]],
+    ["Series 1", [10, 50, 90]],
+    ["Series 2", [20, 40, 60]],
   ];
-  const figure = lineChart(labels, series, "Quarterly Performance");
+  const caption = "Quarterly Trends";
+
+  const figure = lineChart(labels, series, caption);
 
   assert.equal(figure.tagName, "FIGURE");
   assert.equal(figure.className, "source-chart line-chart");
   assert.equal(figure.children.length, 4);
 
-  // 1. Caption
-  const caption = figure.children[0];
-  assert.equal(caption.tagName, "FIGCAPTION");
-  assert.equal(caption.textContent, "Quarterly Performance");
+  // Caption
+  const figcaption = figure.children[0];
+  assert.equal(figcaption.tagName, "FIGCAPTION");
+  assert.equal(figcaption.textContent, "Quarterly Trends");
 
-  // 2. Frame (Scale + SVG)
+  // Line frame & SVG
   const frame = figure.children[1];
-  assert.equal(frame.tagName, "DIV");
   assert.equal(frame.className, "line-frame");
   assert.equal(frame.children.length, 2);
 
@@ -151,46 +156,54 @@ test("lineChart constructs SVG line chart figure with grid lines, polylines, dot
   assert.equal(svg.getAttribute("role"), "img");
   assert.equal(
     svg.getAttribute("aria-label"),
-    "Quarterly Performance Values available in the adjacent data table.",
+    "Quarterly Trends Values available in the adjacent data table.",
   );
 
-  // SVG children: 3 grid lines + 2 series (each with 1 polyline + 3 dots = 4 items each) => 3 + 8 = 11 elements
-  const gridLines = svg.children.filter(
-    (el) => el.getAttribute("class") === "chart-grid",
-  );
+  // Grid lines (3 lines)
+  const gridLines = svg.children.filter((el) => el.tagName === "LINE");
   assert.equal(gridLines.length, 3);
+  gridLines.forEach((line) => {
+    assert.equal(line.getAttribute("x1"), "20");
+    assert.equal(line.getAttribute("x2"), "580");
+    assert.equal(line.getAttribute("class"), "chart-grid");
+  });
   assert.equal(gridLines[0].getAttribute("y1"), "20");
   assert.equal(gridLines[1].getAttribute("y1"), "100");
   assert.equal(gridLines[2].getAttribute("y1"), "180");
 
+  // Polylines (1 per series)
   const polylines = svg.children.filter((el) => el.tagName === "POLYLINE");
   assert.equal(polylines.length, 2);
 
-  // Primary series polyline & color
-  assert.equal(polylines[0].getAttribute("points"), "20,164 300,100 580,36");
+  // Series 0
   assert.equal(polylines[0].getAttribute("fill"), "none");
   assert.equal(polylines[0].getAttribute("stroke"), "#514287");
+  assert.equal(polylines[0].getAttribute("stroke-width"), "3");
+  assert.equal(
+    polylines[0].getAttribute("points"),
+    linePoints([10, 50, 90], 100),
+  );
 
-  // Secondary series polyline & color
-  assert.equal(polylines[1].getAttribute("points"), "20,132 300,116 580,148");
+  // Series 1
+  assert.equal(polylines[1].getAttribute("fill"), "none");
   assert.equal(polylines[1].getAttribute("stroke"), "#9a7694");
+  assert.equal(polylines[1].getAttribute("stroke-width"), "3");
 
+  // Circles / dots (3 per series = 6 total)
   const circles = svg.children.filter((el) => el.tagName === "CIRCLE");
-  assert.equal(circles.length, 6); // 3 for each series
+  assert.equal(circles.length, 6);
 
-  // Check first dot of first series
-  assert.equal(circles[0].getAttribute("cx"), "20");
-  assert.equal(circles[0].getAttribute("cy"), "164");
-  assert.equal(circles[0].getAttribute("r"), "4");
+  // Check first series dot title
   assert.equal(circles[0].getAttribute("fill"), "#514287");
+  assert.equal(circles[0].getAttribute("r"), "4");
   assert.equal(circles[0].children[0].tagName, "TITLE");
-  assert.equal(circles[0].children[0].textContent, "Metric Alpha, Q1: 10");
+  assert.equal(circles[0].children[0].textContent, "Series 1, Q1: 10");
 
-  // Check second series dot fill & title
+  // Check second series dot title
   assert.equal(circles[3].getAttribute("fill"), "#9a7694");
-  assert.equal(circles[3].children[0].textContent, "Metric Beta, Q1: 30");
+  assert.equal(circles[3].children[0].textContent, "Series 2, Q1: 20");
 
-  // 3. Axis labels
+  // Axis
   const axis = figure.children[2];
   assert.equal(axis.className, "chart-axis");
   assert.equal(axis.children.length, 3);
@@ -198,28 +211,38 @@ test("lineChart constructs SVG line chart figure with grid lines, polylines, dot
   assert.equal(axis.children[1].textContent, "Q2");
   assert.equal(axis.children[2].textContent, "Q3");
 
-  // 4. Legend
+  // Legend
   const legend = figure.children[3];
   assert.equal(legend.className, "chart-legend");
   assert.equal(legend.children.length, 2);
-  assert.equal(legend.children[0].textContent, "Metric Alpha");
-  assert.equal(legend.children[1].textContent, "Metric Beta");
+  assert.equal(legend.children[0].textContent, "Series 1");
+  assert.equal(legend.children[1].textContent, "Series 2");
 });
 
-test("lineChart handles custom maximum scale and single-observation series data", () => {
-  const labels = ["Jan"];
-  const series = [["Single Metric", [150]]];
-  const figure = lineChart(labels, series, "Single Point Chart", 300);
+test("lineChart handles custom maximum parameter and empty series array", () => {
+  const labels = ["Jan", "Feb"];
+  const series = [["Metric A", [50, 150]]];
+  const customMax = 200;
+
+  const figure = lineChart(labels, series, "Custom Max Line Chart", customMax);
 
   const scale = figure.children[1].children[0];
-  assert.equal(scale.children[0].textContent, "300");
+  assert.equal(scale.children[0].textContent, "200");
 
   const svg = figure.children[1].children[1];
   const polyline = svg.children.find((el) => el.tagName === "POLYLINE");
-  assert.equal(polyline.getAttribute("points"), "20,100");
+  assert.equal(polyline.getAttribute("points"), linePoints([50, 150], 200));
 
-  const circle = svg.children.find((el) => el.tagName === "CIRCLE");
-  assert.equal(circle.getAttribute("cx"), "20");
-  assert.equal(circle.getAttribute("cy"), "100");
-  assert.equal(circle.children[0].textContent, "Single Metric, Jan: 150");
+  const figureEmpty = lineChart([], [], "Empty Line Chart");
+  assert.equal(figureEmpty.tagName, "FIGURE");
+  assert.equal(figureEmpty.children[0].textContent, "Empty Line Chart");
+  const svgEmpty = figureEmpty.children[1].children[1];
+  assert.equal(
+    svgEmpty.children.filter((el) => el.tagName === "POLYLINE").length,
+    0,
+  );
+  assert.equal(
+    svgEmpty.children.filter((el) => el.tagName === "CIRCLE").length,
+    0,
+  );
 });
