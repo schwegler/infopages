@@ -284,3 +284,33 @@ if (latestPanel) {
     if (event.persisted && inView) load();
   });
 }
+
+// Let the browser animate complete panels, then release snapping while reading
+// overflow. WebKit can pin wheel input at the start of an oversized snap area.
+// Native scrolling remains the only input path: no touch/wheel cancellation.
+const cardPanel = document.getElementById("card");
+if (cardPanel && latestPanel) {
+  let snapFrame;
+  const updatePanelSnap = () => {
+    snapFrame = undefined;
+    const viewport = document.documentElement.clientHeight;
+    const card = cardPanel.getBoundingClientRect();
+    const latest = latestPanel.getBoundingClientRect();
+    const overflowingLatest = latest.height > viewport + 1 && latest.top <= 2;
+    document.documentElement.classList.toggle(
+      "panel-snap",
+      card.height <= viewport + 1 && !overflowingLatest,
+    );
+  };
+  const schedulePanelSnap = () => {
+    if (snapFrame === undefined)
+      snapFrame = requestAnimationFrame(updatePanelSnap);
+  };
+  const panelSizes = new ResizeObserver(schedulePanelSnap);
+  panelSizes.observe(cardPanel);
+  panelSizes.observe(latestPanel);
+  addEventListener("scroll", schedulePanelSnap, { passive: true });
+  addEventListener("resize", schedulePanelSnap);
+  visualViewport?.addEventListener("resize", schedulePanelSnap);
+  updatePanelSnap();
+}

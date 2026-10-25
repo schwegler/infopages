@@ -11,6 +11,9 @@
   box-sizing: border-box;
 }
 html {
+  scroll-snap-type: y proximity;
+}
+html.panel-snap {
   scroll-snap-type: y mandatory;
 }
 body {
@@ -621,7 +624,8 @@ details[open] > summary > svg {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  html {
+  html,
+  html.panel-snap {
     scroll-snap-type: none;
   }
   summary > svg {
@@ -761,8 +765,8 @@ details[open] > summary > svg {
 @media (max-width: 760px) and (max-height: 860px) {
   .card-content {
     width: calc(100% - 40px);
-    padding-block: 16px 4px;
-    gap: 12px;
+    padding-block: 12px 0;
+    gap: 8px;
   }
   .intro {
     display: grid;

@@ -144,6 +144,7 @@ def test_card_fits_usable_viewport(clean_page, site_url, width, height):
     page.set_viewport_size({'width':width,'height':height})
     page.goto(site_url+'/me')
     assert abs(page.locator('#card').bounding_box()['height']-height)<=1
+    assert page.locator('html').evaluate('(e)=>e.classList.contains("panel-snap")')
     for selector in ('.socials','.gaming summary','.lately-cue'):
         box=page.locator(selector).bounding_box()
         assert box['y']>=0 and box['y']+box['height']<=height
@@ -241,6 +242,7 @@ def test_oversized_latest_panel_keeps_middle_and_bottom_reachable(clean_page, si
     page.locator('.lately-cue').click()
     page.get_by_text('Latest article',exact=True).wait_for()
     wait_for_panel(page,'#lately')
+    page.wait_for_function('()=>!document.documentElement.classList.contains("panel-snap")')
     top=page.evaluate('scrollY')
     page.mouse.move(160,280)
     page.mouse.wheel(0,400)
