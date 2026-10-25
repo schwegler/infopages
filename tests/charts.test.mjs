@@ -2,8 +2,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 class MockElement {
-  constructor(tag) {
+  constructor(tag, namespaceURI) {
     this.tagName = tag.toUpperCase();
+    this.namespaceURI = namespaceURI;
     this.textContent = "";
     this.className = "";
     this.attributes = new Map();
