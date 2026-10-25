@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 venv/
 node_modules/
+!node_modules/chokidar/lib/nodefs-handler.js
 .pytest_cache/
 
 .venv/
