@@ -19,9 +19,9 @@
   "license": "ISC",
   "devDependencies": {
     "esbuild": "0.28.2",
+    "fast-xml-parser": "5.11.2",
     "miniflare": "4.20260730.0",
-    "prettier": "3.9.10",
-    "fast-xml-parser": "5.11.2"
+    "prettier": "3.9.10"
   },
   "overrides": {
     "miniflare": {
