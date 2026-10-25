@@ -10,7 +10,8 @@
     "format": "prettier --write '*.html' 'assets/**/*.{js,css}' 'functions/**/*.js' 'tests/*.mjs' '*.json' 'docs/*.md' README.md wrangler.jsonc .github/workflows/test.yml",
     "test:browser": "python3 -m pytest tests/browser -q",
     "build": "npm run check && npm test",
-    "vendor:profile": "node scripts/build_profile_xml.mjs"
+    "vendor:profile": "node scripts/build_profile_xml.mjs",
+    "postinstall": "node scripts/patch_chokidar.mjs"
   },
   "repository": {
     "type": "git",
