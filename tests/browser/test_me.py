@@ -71,7 +71,7 @@ def test_mobile_disclosures_and_order(clean_page,site_url):
     gaming=page.locator('.gaming')
     assert gaming.get_attribute('open') is None
     assert page.locator('.gaming').evaluate('(e)=>!!(document.querySelector(".socials").compareDocumentPosition(e)&Node.DOCUMENT_POSITION_FOLLOWING)')
-    assert page.locator('.socials a').count()==8
+    assert page.locator('.socials a').count()==9
     for link in page.locator('.socials a').all():
         box=link.bounding_box();assert box['height']>=44 and box['width']>=44
     summary=gaming.locator('summary');summary.focus();page.keyboard.press('Enter')
@@ -278,3 +278,47 @@ def test_safe_area_layout(clean_page,site_url,width,height,top,right,bottom,left
     wait_for_panel(page,'#lately')
     box=page.locator('.latest-heading').bounding_box()
     assert box['y']>=top and box['x']>=left
+
+
+@pytest.mark.parametrize('width,height',[(320,568),(390,664),(430,932),(1024,900),(1440,900)])
+@pytest.mark.parametrize('scheme',['light','dark'])
+def test_social_grid_balances_nine_real_links(clean_page,site_url,width,height,scheme):
+    page=clean_page
+    page.set_viewport_size({'width':width,'height':height})
+    page.emulate_media(color_scheme=scheme)
+    page.goto(site_url+'/me')
+    links=page.locator('.socials a')
+    assert links.evaluate_all('(links)=>links.map(a=>a.getAttribute("href"))')==[
+        'https://bsky.app/profile/schwegler.lol','https://instagram.com/schwglr',
+        'https://mastodon.social/@schwegler','https://www.threads.com/@schwglr',
+        'https://schwegler.tumblr.com','https://www.facebook.com/schwglr',
+        'https://open.spotify.com/user/schwegler','https://discord.com/users/611902242840117249',
+        'https://www.last.fm/user/schwegler']
+    boxes=[link.bounding_box() for link in links.all()]
+    assert len({round(box['x']) for box in boxes})==3
+    assert len({round(box['y']) for box in boxes})==3
+    assert max(box['width'] for box in boxes)-min(box['width'] for box in boxes)<1
+    for link in links.all():
+        assert link.bounding_box()['height']>=44
+        assert link.evaluate('(a)=>{const box=a.getBoundingClientRect(),label=a.querySelector("span").getBoundingClientRect();return label.left>=box.left-1 && label.right<=box.right+1}')
+    lastfm=page.get_by_role('link',name='Last.fm',exact=True)
+    assert lastfm.get_attribute('rel')=='me'
+    assert lastfm.locator('.social-icon').get_attribute('aria-hidden')=='true'
+    assert lastfm.locator('.social-icon').is_visible()
+    lastfm.focus()
+    assert lastfm.evaluate('(a)=>a===document.activeElement')
+    if width<761:
+        page.keyboard.press('Tab')
+        assert page.locator('.more-links summary').evaluate('(e)=>e===document.activeElement')
+
+
+def test_lastfm_preview_screenshots(page,site_url,browser_name):
+    from pathlib import Path
+    destination=Path('artifacts/lastfm');destination.mkdir(parents=True,exist_ok=True)
+    page.emulate_media(reduced_motion='reduce')
+    for width,height,scheme in [(320,568,'light'),(390,664,'light'),(430,932,'dark'),(1440,900,'light'),(1440,900,'dark')]:
+        page.set_viewport_size({'width':width,'height':height})
+        page.emulate_media(color_scheme=scheme)
+        page.goto(site_url+'/me')
+        page.get_by_role('link',name='Last.fm',exact=True).wait_for()
+        page.screenshot(path=str(destination/f'{browser_name}-{width}x{height}-{scheme}.png'))

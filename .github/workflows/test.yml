@@ -33,7 +33,7 @@ jobs:
         run: |
           export INFO_PAGES_BROWSER_EXECUTABLE="$(node -e "console.log(require('/tmp/infopages-webkit/node_modules/playwright').webkit.executablePath())")"
           python -m pytest tests/browser/test_appearance.py tests/browser/test_mascot_parade.py tests/browser/test_sudoku_layout.py -q --browser webkit
-          python -m pytest tests/browser/test_me.py -q --browser webkit -k "card_fits or wheel_transition or resize_disclosures or reduced_motion or oversized_latest or safe_area"
+          python -m pytest tests/browser/test_me.py -q --browser webkit -k "card_fits or wheel_transition or resize_disclosures or reduced_motion or oversized_latest or safe_area or social_grid or lastfm_preview"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
