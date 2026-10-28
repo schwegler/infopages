@@ -12,16 +12,19 @@ try {
 }
 
 if (fsevents) {
-  // TODO: real check
-  const mtch = process.version.match(/v(\d+)\.(\d+)/);
-  if (mtch && mtch[1] && mtch[2]) {
-    const maj = Number.parseInt(mtch[1], 10);
-    const min = Number.parseInt(mtch[2], 10);
+  if (typeof fsevents.canBeUsed === 'function') {
+    if (!fsevents.canBeUsed()) {
+      fsevents = undefined;
+    }
+  } else if (process.versions && process.versions.node) {
+    const [maj, min] = process.versions.node.split('.').map((n) => Number.parseInt(n, 10));
     if (maj === 8 && min < 16) {
       fsevents = undefined;
     }
   }
 }
+
+const isMacos = process.platform === 'darwin' && typeof fsevents !== 'undefined';
 
 const {
   EV_ADD,
@@ -194,7 +197,7 @@ const couldConsolidate = (path) => {
 };
 
 // returns boolean indicating whether fsevents can be used
-const canUse = () => fsevents && FSEventsWatchers.size < 128;
+const canUse = () => Boolean(isMacos && fsevents && FSEventsWatchers.size < 128);
 
 // determines subdirectory traversal levels from root to path
 const calcDepth = (path, root) => {
