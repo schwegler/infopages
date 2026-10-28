@@ -100,9 +100,11 @@ test("sqlmovebuffy server nodes use textContent for name and type preventing XSS
     innerHeight: 1000,
   };
 
-  const { initPage } = await import("../sqlmovebuffy.js");
+  await import("../sqlmovebuffy.js");
 
-  initPage();
+  if (doc.listeners["DOMContentLoaded"]) {
+    doc.listeners["DOMContentLoaded"].forEach((fn) => fn());
+  }
 
   assert.equal(mapContainer.children.length, 3);
 
