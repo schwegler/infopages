@@ -233,7 +233,8 @@ export function mountParade() {
     previous;
   let distance = 0,
     activeIndex = 0;
-  let protectedRects = [],
+  let protectedNodes = null,
+    protectedRects = [],
     obstructingIntervals = [],
     layoutDirty = true;
   const pauses = new Set();
@@ -379,11 +380,15 @@ export function mountParade() {
   const invalidate = () => {
     layoutDirty = true;
   };
-  addEventListener("resize", invalidate, { passive: true });
+  const invalidateDOM = () => {
+    protectedNodes = null;
+    layoutDirty = true;
+  };
+  addEventListener("resize", invalidateDOM, { passive: true });
   addEventListener("scroll", invalidate, { passive: true });
-  document.addEventListener("click", invalidate);
-  document.addEventListener("toggle", invalidate, true);
-  document.addEventListener("focusin", invalidate);
+  document.addEventListener("click", invalidateDOM);
+  document.addEventListener("toggle", invalidateDOM, true);
+  document.addEventListener("focusin", invalidateDOM);
 
   const layout = () => {
     const width = document.documentElement.clientWidth;
@@ -418,13 +423,17 @@ export function mountParade() {
     } = layout();
     let bottom = oldBottom;
     if (layoutDirty) {
-      protectedRects = [
-        ...document.querySelectorAll(
-          'header, nav, button, a, input, select, textarea, summary, dialog[open], [role="dialog"]',
-        ),
-      ]
+      if (!protectedNodes) {
+        protectedNodes = [
+          ...document.querySelectorAll(
+            'header, nav, button, a, input, select, textarea, summary, dialog[open], [role="dialog"]',
+          ),
+        ];
+      }
+      protectedRects = protectedNodes
         .filter(
           (node) =>
+            node.isConnected &&
             !region.contains(node) &&
             !node.closest(".seasonal-overlay") &&
             getComputedStyle(node).visibility !== "hidden",
