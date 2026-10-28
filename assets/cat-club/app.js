@@ -59,7 +59,8 @@ function tick() {
     " · 5 PM Cat Club";
 }
 tick();
-setInterval(tick, 1000);
+const tickTimer = setInterval(tick, 1000);
+if (tickTimer && typeof tickTimer.unref === "function") tickTimer.unref();
 const tabs = [...document.querySelectorAll(".game-tab")],
   panels = {
     blocks: $("#blocks-panel"),
@@ -283,8 +284,18 @@ function dropBlock() {
     spawn();
   }
 }
-function rotate(m) {
-  return m[0].map((_, i) => m.map((r) => r[i]).reverse());
+export function rotate(m) {
+  const R = m.length;
+  const C = m[0].length;
+  const res = new Array(C);
+  for (let i = 0; i < C; i++) {
+    const row = new Array(R);
+    for (let j = 0; j < R; j++) {
+      row[j] = m[R - 1 - j][i];
+    }
+    res[i] = row;
+  }
+  return res;
 }
 function blocksKey(key) {
   if (!blockRunning) return;
