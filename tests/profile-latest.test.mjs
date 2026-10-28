@@ -218,6 +218,17 @@ test("malformed/DTD feeds and non-public profile shapes fail closed rather than 
   assert.equal(data.posts.length, 1);
 });
 
+test("invalid or path-traversing coverPath shapes are rejected and yield null cover property", async (t) => {
+  const malformedProfile = `<section class="profile-recent"><article class="profile-media-entry"><a class="profile-cover" href="/books/12-public-title" aria-label="Public &amp; recent"><img src="/media/covers/../../etc/passwd"></a><p class="profile-entry-type">Book</p><p class="profile-entry-year">2026</p></article></section>`;
+  const state = { profile: malformedProfile };
+  const { mf } = runtime(t, state);
+  const data = await (
+    await mf.dispatchFetch("https://schweg.xyz/api/profile-latest")
+  ).json();
+  assert(data.trove);
+  assert.equal(data.trove.cover, null);
+});
+
 test("only the single public endpoint invokes a Pages Function", () => {
   assert.deepEqual(JSON.parse(readFileSync("_routes.json", "utf8")), {
     version: 1,
