@@ -54,7 +54,9 @@
     let lastPosition = null,
       expired = false,
       deadlineTimer,
-      sizeObserver;
+      sizeObserver,
+      cachedProtectedNodes = null,
+      protectedObserver;
     const events = new AbortController();
     const listen = (target, name, handler, options = {}) =>
       target?.addEventListener(name, handler, {
@@ -175,6 +177,34 @@
     );
     panel.append(seasonalControls);
     const active = () => choice === season.theme;
+    const getProtectedNodes = () => {
+      if (!cachedProtectedNodes) {
+        cachedProtectedNodes = [
+          ...document.querySelectorAll(
+            'header,nav,[role="alert"],[role="status"],[role="dialog"],dialog[open],button,a,input,select,textarea,summary,[role="button"],.notice,[data-seasonal-avoid]',
+          ),
+        ].filter((node) => !overlay.contains(node));
+      }
+      return cachedProtectedNodes;
+    };
+    if (typeof MutationObserver !== "undefined") {
+      protectedObserver = new MutationObserver(() => {
+        cachedProtectedNodes = null;
+      });
+      protectedObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: [
+          "open",
+          "hidden",
+          "class",
+          "style",
+          "aria-modal",
+          "disabled",
+        ],
+      });
+    }
     // Layout reads happen only in response to page events. Keep a safe current position when possible.
     const position = () => {
       frame = null;
@@ -212,12 +242,8 @@
           (width <= 600 ? 64 : 16) -
           safe("bottom") -
           box.height;
-      const protectedRects = [
-        ...document.querySelectorAll(
-          'header,nav,[role="alert"],[role="status"],[role="dialog"],dialog[open],button,a,input,select,textarea,summary,[role="button"],.notice,[data-seasonal-avoid]',
-        ),
-      ]
-        .filter((node) => !overlay.contains(node))
+      const protectedNodes = getProtectedNodes();
+      const protectedRects = protectedNodes
         .map((node) => node.getBoundingClientRect())
         .filter(
           (r) =>
@@ -244,7 +270,8 @@
       if (!point) {
         const headerBottom = Math.max(
           top,
-          ...[...document.querySelectorAll("header,nav")]
+          ...protectedNodes
+            .filter((n) => n.matches("header,nav"))
             .map((n) => n.getBoundingClientRect())
             .filter(
               (r) => r.width && r.height && r.top < offsetY + height * 0.25,
@@ -484,6 +511,8 @@
       if (frame) cancelAnimationFrame(frame);
       events.abort();
       sizeObserver?.disconnect();
+      protectedObserver?.disconnect();
+      cachedProtectedNodes = null;
       portraits.forEach(restore);
       marks.forEach(restore);
       Object.keys(snapshot).forEach(restoreAttribute);
