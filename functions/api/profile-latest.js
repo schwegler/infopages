@@ -264,7 +264,11 @@ export async function onRequest({ request }) {
     try {
       // Every cover use revalidates the current anonymous owner-profile entry.
       const item = await recent();
-      if (item?.coverPath !== "/media/covers/" + key)
+      if (
+        !item?.coverPath ||
+        !item.coverPath.startsWith("/media/covers/") ||
+        item.coverPath !== "/media/covers/" + key
+      )
         return reply({ error: "Cover unavailable" }, 404);
       const image = await upstream(
         "https://trove.schweg.xyz" + item.coverPath + "?width=360",
@@ -290,11 +294,19 @@ export async function onRequest({ request }) {
   let item = trove.status === "fulfilled" ? trove.value : null;
   if (item) {
     const { coverPath, ...fields } = item;
+    const key =
+      coverPath && coverPath.startsWith("/media/covers/")
+        ? coverPath.slice("/media/covers/".length)
+        : null;
+    const isValidKey =
+      key &&
+      /^(movie|album|comic|tv_show|tv_episode|video_game|book)\/[1-9]\d*$/.test(
+        key,
+      );
     item = {
       ...fields,
-      cover: coverPath
-        ? "/api/profile-latest?cover=" +
-          encodeURIComponent(coverPath.slice("/media/covers/".length))
+      cover: isValidKey
+        ? "/api/profile-latest?cover=" + encodeURIComponent(key)
         : null,
     };
   }
