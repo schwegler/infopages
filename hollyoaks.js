@@ -102,7 +102,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!characterModal || !modalContent) return;
         const char = appData.characters[charId];
         if (!char) {
-            modalContent.innerHTML = `<p class="text-red-600">Details not available for this character.</p>`;
+            modalContent.innerHTML = '';
+            const errorMsg = document.createElement('p');
+            errorMsg.className = 'text-red-600';
+            errorMsg.textContent = 'Details not available for this character.';
+            modalContent.appendChild(errorMsg);
             characterModal.classList.add('is-visible');
             return;
         }
