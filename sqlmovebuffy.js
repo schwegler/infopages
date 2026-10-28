@@ -17,7 +17,7 @@ export function createDeaChart(containerId, data) {
     `;
 }
 
-export function initPage() {
+function initPage() {
     // --- Scroll Animations ---
     const headerBg = document.getElementById('header-bg');
     if (headerBg) {
