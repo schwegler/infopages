@@ -111,8 +111,8 @@ if (latestPanel) {
           a.rel = "noreferrer";
           p.append(a);
           continue;
-        } catch {
-          /* show malformed URL as text */
+        } catch (error) {
+          console.debug("Malformed URL in feed text:", part, error);
         }
       }
       p.append(document.createTextNode(part));
