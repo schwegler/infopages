@@ -3,7 +3,7 @@ import pytest
 
 
 @pytest.fixture(autouse=True)
-def isolate_seasonal_flow(page):
+def isolate_seasonal_flow(page, enabled_season_pack):
     # Seasonal controls get an isolated visit; parade coexistence has its own test.
     page.add_init_script("try { localStorage.setItem('schweg-mascot-parade:v1', 'off') } catch {}")
 

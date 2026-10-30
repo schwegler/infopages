@@ -47,7 +47,7 @@ def test_device_changes_saved_override_and_system_reset(clean_page, site_url):
     expect(page.locator('html')).to_have_attribute('data-theme', 'dark')
 
 
-def test_color_mode_syncs_tabs_and_survives_seasonal_reset(clean_page, site_url):
+def test_color_mode_syncs_tabs_and_survives_seasonal_reset(clean_page, site_url, enabled_season_pack):
     page = clean_page
     page.goto(site_url + '/')
     other = page.context.new_page()
@@ -108,7 +108,7 @@ def test_blocked_storage_and_print_keep_readable_content(clean_page, site_url):
     assert page.locator('body').evaluate('n=>getComputedStyle(n).color') == 'rgb(0, 0, 0)'
 
 
-def test_base_menu_remains_after_season_expires(clean_page, site_url):
+def test_base_menu_remains_after_season_expires(clean_page, site_url, enabled_season_pack):
     page = clean_page
     page.clock.install(time=datetime(2026, 10, 31, 23, 59, 55, tzinfo=timezone.utc))
     page.clock.pause_at(datetime(2026, 10, 31, 23, 59, 56, tzinfo=timezone.utc))
@@ -133,3 +133,14 @@ def test_native_dropdowns_keep_working_in_both_palettes(clean_page, site_url, ro
     control = page.get_by_role('combobox')
     control.select_option('audit' if 'sqlmovebuffy' in route else '2008')
     expect(control).to_have_value('audit' if 'sqlmovebuffy' in route else '2008')
+
+
+def test_retired_pack_ignores_saved_halloween(clean_page, site_url):
+    page = clean_page
+    page.clock.install(time=datetime(2026, 10, 30, tzinfo=timezone.utc))
+    page.add_init_script("localStorage.setItem('seasonal-theme:v1', 'halloween')")
+    page.goto(site_url + '/')
+    expect(page.locator('.seasonal-overlay')).to_have_count(0)
+    assert page.locator('html').get_attribute('data-season') is None
+    open_appearance(page)
+    expect(page.get_by_role('group', name='Seasonal appearance', exact=True)).to_have_count(0)
