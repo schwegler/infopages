@@ -59,3 +59,11 @@ The costume PNGs are unchanged. Reference: `assets/brand/andrew-pencil-mascot.pn
 Videos show a real browser’s arrival, activation, moving background, pause and undo; the GIF is converted from that recording, not fabricated from design mockups. Stills are 1440 × 1050 and 390 × 844; the harness also checks 320px, zero main-layout movement, actual animated movement, keyboard activation, dismissal, persistence, motion pause, reduced motion, print hiding and protected controls. The Browser plugin was unavailable; installed Playwright/Chromium was used.
 
 Blog previews render captured current WordPress HTML with local theme assets, excluding remote WordPress scripts. Fonts/assets are warmed before recording to avoid measuring unrelated network/font layout shifts. PHP regression tests cover integration; the preview is not a complete local WordPress installation. No production theme was activated.
+
+## Halloween retirement release notes
+
+Halloween 2026 is disabled in the shipped season configuration. Existing saved Halloween choices cannot reactivate a disabled pack. The normal appearance preference remains in effect; the controller, styles, artwork and pack metadata remain available for a reviewed Christmas pack. No Christmas season is enabled.
+
+Rollout: merge the cleanup PR to main after review; the hosting integration deploys main automatically. Branch pushes may publish a preview. Verify the normal appearance with a saved Halloween choice and in a fresh browser session.
+
+Rollback: revert the cleanup commit to restore the previous dated Halloween configuration. Its November 1 UTC expiry still applies. Add a separate reviewed, dated Christmas pack to reuse the framework.

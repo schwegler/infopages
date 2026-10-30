@@ -11,7 +11,7 @@ window.SchwegSeasonalConfig = {
       id: "halloween-2026",
       theme: "halloween",
       label: "Halloween",
-      enabled: true,
+      enabled: false,
       window: {
         from: "2026-10-18",
         until: "2026-11-01",
