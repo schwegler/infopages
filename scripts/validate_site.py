@@ -6,7 +6,7 @@ import json
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parent.parent
-ROUTES = {'me.html','five_pm_cat_club.html','index.html','work.html','notes.html','resume.html','bsky_mutual_blocks.html','sqlhttp.html','sqlmovebuffy.html','hollyoaks_history.html','tna_history.html','gay_bar_closures.html','tos.html'}
+ROUTES = {'dress-up.html','me.html','five_pm_cat_club.html','index.html','work.html','notes.html','resume.html','bsky_mutual_blocks.html','sqlhttp.html','sqlmovebuffy.html','hollyoaks_history.html','tna_history.html','gay_bar_closures.html','tos.html'}
 PROFILE_URLS = {'https://github.com/schwegler','https://www.linkedin.com/in/schwegler','https://tacobout.online'}
 
 class Page(HTMLParser):
@@ -68,7 +68,7 @@ def validate():
             references+=1
     tree=ET.parse(ROOT/'sitemap.xml')
     sitemap={node.text.rsplit('/',1)[-1] or 'index.html' for node in tree.findall('.//{*}loc')}
-    sitemap = {'me.html' if route == 'me' else route for route in sitemap}
+    sitemap = {{'me':'me.html','dress-up':'dress-up.html'}.get(route,route) for route in sitemap}
     assert sitemap==ROUTES, 'Sitemap does not cover every intended route'
     print(f'Validated {len(ROUTES)} routes and {references} local references; metadata, CSP-compatible handlers and sitemap passed.')
 

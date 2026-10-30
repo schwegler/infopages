@@ -1,0 +1,505 @@
+{
+  "version": 1,
+  "size": 1024,
+  "reviewed": true,
+  "characters": [
+    {
+      "id": "telly",
+      "label": "Telly",
+      "description": "The host with the most.",
+      "pose": "telly-neutral-v1",
+      "sourceCanvas": {
+        "width": 1254,
+        "height": 1254
+      },
+      "base": [
+        {
+          "src": "assets/dress-up/telly/body-undies-v3.png",
+          "role": "body",
+          "order": 20,
+          "pose": "telly-neutral-v1",
+          "reviewed": true
+        }
+      ],
+      "groups": [
+        {
+          "id": "outfit",
+          "label": "Outfit",
+          "default": "normal",
+          "options": [
+            {
+              "id": "base",
+              "label": "Underwear",
+              "layers": [],
+              "reviewed": true
+            },
+            {
+              "id": "normal",
+              "label": "Everyday",
+              "layers": [
+                {
+                  "src": "assets/dress-up/telly/outfit-normal-v3.png",
+                  "role": "outfit",
+                  "order": 30,
+                  "pose": "telly-neutral-v1",
+                  "reviewed": true
+                }
+              ],
+              "reviewed": true
+            },
+            {
+              "id": "plum",
+              "label": "Plum zip hoodie",
+              "layers": [
+                {
+                  "src": "assets/dress-up/telly/outfit-plum-zip-v1.png",
+                  "role": "outfit",
+                  "order": 30,
+                  "pose": "telly-neutral-v1",
+                  "reviewed": true
+                }
+              ],
+              "reviewed": true
+            }
+          ]
+        },
+        {
+          "id": "accessory",
+          "label": "Accessory",
+          "default": "none",
+          "options": [
+            {
+              "id": "none",
+              "label": "None",
+              "layers": [],
+              "reviewed": true
+            },
+            {
+              "id": "mic",
+              "label": "Microphone",
+              "layers": [],
+              "attachmentBundle": {
+                "id": "telly-mic-arm",
+                "region": "prop-arm",
+                "body": {
+                  "src": "assets/dress-up/telly/body-grip-v1.png",
+                  "role": "body",
+                  "order": 20,
+                  "pose": "telly-neutral-v1",
+                  "reviewed": true
+                },
+                "parts": [
+                  {
+                    "src": "assets/dress-up/telly/microphone-rear-v1.png",
+                    "role": "accessory",
+                    "order": 15,
+                    "pose": "telly-neutral-v1",
+                    "reviewed": true
+                  }
+                ]
+              },
+              "reviewed": true
+            }
+          ]
+        },
+        {
+          "id": "screen",
+          "label": "Screen",
+          "default": "happy",
+          "options": [
+            {
+              "id": "happy",
+              "label": "Happy",
+              "layers": [
+                {
+                  "src": "assets/dress-up/telly/screen-panel-happy-v1.png",
+                  "role": "expression",
+                  "order": 60,
+                  "pose": "telly-neutral-v1",
+                  "reviewed": true
+                }
+              ],
+              "reviewed": true
+            },
+            {
+              "id": "wink",
+              "label": "Wink",
+              "layers": [
+                {
+                  "src": "assets/dress-up/telly/screen-panel-wink-v1.png",
+                  "role": "expression",
+                  "order": 60,
+                  "pose": "telly-neutral-v1",
+                  "reviewed": true
+                }
+              ],
+              "reviewed": true
+            }
+          ]
+        }
+      ],
+      "attachmentRegion": {
+        "id": "prop-arm",
+        "pose": "telly-neutral-v1",
+        "rect": [780, 710, 1150, 970]
+      },
+      "reference": "assets/dress-up/reference-telly.png",
+      "reviewed": true
+    },
+    {
+      "id": "facet",
+      "label": "Facet",
+      "description": "A bright little discovery.",
+      "pose": "facet-neutral-v1",
+      "sourceCanvas": {
+        "width": 1254,
+        "height": 1254
+      },
+      "base": [
+        {
+          "src": "assets/dress-up/facet/facet-body-20-v2.png",
+          "role": "body",
+          "order": 20,
+          "pose": "facet-neutral-v1",
+          "reviewed": true
+        }
+      ],
+      "groups": [
+        {
+          "id": "outfit",
+          "label": "Outfit",
+          "default": "normal",
+          "options": [
+            {
+              "id": "base",
+              "label": "Underwear",
+              "layers": [],
+              "reviewed": true
+            },
+            {
+              "id": "normal",
+              "label": "Everyday",
+              "layers": [
+                {
+                  "src": "assets/dress-up/facet/facet-outfit-normal-30-candidate-v4.png",
+                  "role": "outfit",
+                  "order": 30,
+                  "pose": "facet-neutral-v1",
+                  "reviewed": true
+                }
+              ],
+              "reviewed": true
+            },
+            {
+              "id": "overshirt",
+              "label": "Overshirt",
+              "layers": [
+                {
+                  "src": "assets/dress-up/facet/facet-outfit-overshirt-30-candidate-v4.png",
+                  "role": "outfit",
+                  "order": 30,
+                  "pose": "facet-neutral-v1",
+                  "reviewed": true
+                }
+              ],
+              "reviewed": true
+            }
+          ]
+        },
+        {
+          "id": "accessory",
+          "label": "Accessory",
+          "default": "none",
+          "options": [
+            {
+              "id": "none",
+              "label": "None",
+              "layers": [],
+              "reviewed": true
+            },
+            {
+              "id": "book",
+              "label": "Book",
+              "layers": [],
+              "attachmentBundle": {
+                "frontPolygon": [
+                  [170, 610],
+                  [385, 610],
+                  [425, 835],
+                  [375, 840],
+                  [380, 895],
+                  [210, 905],
+                  [165, 850]
+                ],
+                "id": "facet-gesture-v1",
+                "region": "integrated-prop-arm",
+                "integrated": {
+                  "src": "assets/dress-up/facet/facet-book-support-gesture.png",
+                  "role": "accessory",
+                  "order": 20,
+                  "pose": "facet-neutral-v1",
+                  "reviewed": true
+                }
+              },
+              "reviewed": true
+            }
+          ]
+        }
+      ],
+      "attachmentRegion": {
+        "id": "integrated-prop-arm",
+        "pose": "facet-neutral-v1",
+        "rect": [160, 590, 520, 935],
+        "polygon": [
+          [160, 640],
+          [405, 590],
+          [450, 755],
+          [475, 735],
+          [505, 710],
+          [520, 730],
+          [518, 760],
+          [500, 800],
+          [490, 835],
+          [480, 925],
+          [300, 935],
+          [160, 900]
+        ]
+      },
+      "reference": "assets/dress-up/reference-facet.png",
+      "reviewed": true
+    },
+    {
+      "id": "hitch",
+      "label": "Hitch",
+      "description": "A little help from a friend.",
+      "pose": "hitch-neutral-v1",
+      "sourceCanvas": {
+        "width": 1254,
+        "height": 1254
+      },
+      "base": [
+        {
+          "src": "assets/dress-up/hitch/hitch-body-v1.png",
+          "role": "body",
+          "order": 20,
+          "pose": "hitch-neutral-v1",
+          "reviewed": true
+        }
+      ],
+      "groups": [
+        {
+          "id": "outfit",
+          "label": "Outfit",
+          "default": "normal",
+          "options": [
+            {
+              "id": "base",
+              "label": "Underwear",
+              "layers": [],
+              "reviewed": true
+            },
+            {
+              "id": "normal",
+              "label": "Everyday",
+              "layers": [
+                {
+                  "src": "assets/dress-up/hitch/hitch-outfit-normal-v1.png",
+                  "role": "outfit",
+                  "order": 30,
+                  "pose": "hitch-neutral-v1",
+                  "reviewed": true
+                }
+              ],
+              "reviewed": true
+            },
+            {
+              "id": "camp",
+              "label": "Camp shirt",
+              "layers": [
+                {
+                  "src": "assets/dress-up/hitch/hitch-outfit-camp-v1.png",
+                  "role": "outfit",
+                  "order": 30,
+                  "pose": "hitch-neutral-v1",
+                  "reviewed": true
+                }
+              ],
+              "reviewed": true
+            }
+          ]
+        },
+        {
+          "id": "accessory",
+          "label": "Accessory",
+          "default": "none",
+          "options": [
+            {
+              "id": "none",
+              "label": "None",
+              "layers": [],
+              "reviewed": true
+            },
+            {
+              "id": "cup",
+              "label": "Cup",
+              "layers": [],
+              "attachmentBundle": {
+                "id": "hitch-cup-arm",
+                "region": "prop-arm",
+                "body": {
+                  "src": "assets/dress-up/hitch/hitch-body-grip-v2.png",
+                  "role": "body",
+                  "order": 20,
+                  "pose": "hitch-neutral-v1",
+                  "reviewed": true
+                },
+                "parts": [
+                  {
+                    "src": "assets/dress-up/hitch/hitch-accessory-cup-v1.png",
+                    "role": "accessory",
+                    "order": 15,
+                    "pose": "hitch-neutral-v1",
+                    "reviewed": true
+                  }
+                ]
+              },
+              "reviewed": true
+            }
+          ]
+        }
+      ],
+      "attachmentRegion": {
+        "id": "prop-arm",
+        "pose": "hitch-neutral-v1",
+        "rect": [825, 590, 1150, 845]
+      },
+      "reference": "assets/parade/hitch.png",
+      "reviewed": true
+    },
+    {
+      "id": "andrew",
+      "label": "Andrew",
+      "description": "The maker, in miniature.",
+      "pose": "andrew-neutral-v1",
+      "sourceCanvas": {
+        "width": 1254,
+        "height": 1254
+      },
+      "base": [
+        {
+          "src": "assets/dress-up/andrew/body-open-20-v1.png",
+          "role": "body",
+          "order": 20,
+          "pose": "andrew-neutral-v1",
+          "reviewed": true
+        }
+      ],
+      "groups": [
+        {
+          "id": "outfit",
+          "label": "Outfit",
+          "default": "normal",
+          "options": [
+            {
+              "id": "base",
+              "label": "Underwear",
+              "layers": [],
+              "reviewed": true
+            },
+            {
+              "id": "normal",
+              "label": "Everyday",
+              "layers": [
+                {
+                  "src": "assets/dress-up/andrew/outfit-normal-30-v3.png",
+                  "role": "outfit",
+                  "order": 30,
+                  "pose": "andrew-neutral-v1",
+                  "reviewed": true
+                }
+              ],
+              "reviewed": true
+            },
+            {
+              "id": "cardigan",
+              "label": "Cardigan",
+              "layers": [
+                {
+                  "src": "assets/dress-up/andrew/outfit-cardigan-30-v2.png",
+                  "role": "outfit",
+                  "order": 30,
+                  "pose": "andrew-neutral-v1",
+                  "reviewed": true
+                }
+              ],
+              "reviewed": true
+            }
+          ]
+        },
+        {
+          "id": "accessory",
+          "label": "Accessory",
+          "default": "none",
+          "options": [
+            {
+              "id": "none",
+              "label": "None",
+              "layers": [],
+              "reviewed": true
+            },
+            {
+              "id": "pencil",
+              "label": "Pencil",
+              "layers": [],
+              "attachmentBundle": {
+                "frontPolygon": [
+                  [1020, 400],
+                  [1080, 400],
+                  [1080, 900],
+                  [895, 900],
+                  [900, 750],
+                  [900, 650],
+                  [920, 625],
+                  [925, 570],
+                  [950, 500],
+                  [980, 420]
+                ],
+                "id": "andrew-gesture-v1",
+                "region": "integrated-prop-arm",
+                "integrated": {
+                  "src": "assets/dress-up/andrew/andrew-pencil-compact-fist.png",
+                  "role": "accessory",
+                  "order": 20,
+                  "pose": "andrew-neutral-v1",
+                  "reviewed": true
+                }
+              },
+              "reviewed": true
+            }
+          ]
+        }
+      ],
+      "attachmentRegion": {
+        "id": "integrated-prop-arm",
+        "pose": "andrew-neutral-v1",
+        "rect": [765, 400, 1080, 900],
+        "polygon": [
+          [1020, 400],
+          [1080, 400],
+          [1080, 900],
+          [850, 900],
+          [770, 790],
+          [765, 675],
+          [850, 675],
+          [890, 625],
+          [915, 625],
+          [925, 570],
+          [950, 500],
+          [980, 420]
+        ]
+      },
+      "reference": "assets/brand/andrew-pencil-mascot.png",
+      "reviewed": true
+    }
+  ]
+}

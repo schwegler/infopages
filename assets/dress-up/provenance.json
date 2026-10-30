@@ -1,0 +1,256 @@
+{
+  "version": 1,
+  "approval": "User accepted displayed revised book/pencil composites and requested implementation on 2026-10-30; accepted mic/cup outputs preserved. Only these exact selected sources/recipes are marked reviewed.",
+  "publication": "Branch push and automatic Cloudflare preview authorized on 2026-10-30. Production merge/deployment remains unauthorized.",
+  "export_cleanup": "Export working copy only: whole isolated alpha1 components farther than 10 native pixels from original alpha>=8 content; original PNG bytes preserved.",
+  "assets": [
+    {
+      "path": "assets/dress-up/andrew/andrew-pencil-compact-fist.png",
+      "sha256": "d6745b7caa18a5096ed36fac9f3918dd868c7ed2238501279d96dc3e21a734d7",
+      "library_file_id": "libfile_17288757df248191b8ddb04a29c420ed",
+      "library_version": 3,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Only pixels consumed by the approved atomic attachment/depth recipe. This review does not approve other pixels from the full-canvas reference for independent use.",
+      "approved_ownership_region": {
+        "id": "integrated-prop-arm",
+        "pose": "andrew-neutral-v1",
+        "rect": [765, 400, 1080, 900],
+        "polygon": [
+          [1020, 400],
+          [1080, 400],
+          [1080, 900],
+          [850, 900],
+          [770, 790],
+          [765, 675],
+          [850, 675],
+          [890, 625],
+          [915, 625],
+          [925, 570],
+          [950, 500],
+          [980, 420]
+        ]
+      }
+    },
+    {
+      "path": "assets/dress-up/andrew/body-open-20-v1.png",
+      "sha256": "4083f123b278d448350ad6b6943affbe8416e4d49690e6a610f8f9cb48b94751",
+      "library_file_id": "libfile_66274ac3d678819194e476c0da0a4fa9",
+      "library_version": 0,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Unchanged selected source in the approved factory combinations."
+    },
+    {
+      "path": "assets/dress-up/andrew/outfit-cardigan-30-v2.png",
+      "sha256": "4a10c65971a69474d12538bf94a59d8443131b3a3105742acc7c06fafe22fadf",
+      "library_file_id": "libfile_cb474dfc3f6481918795c06ea95d7443",
+      "library_version": 1,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Unchanged selected source in the approved factory combinations."
+    },
+    {
+      "path": "assets/dress-up/andrew/outfit-normal-30-v3.png",
+      "sha256": "fe1794a298e96ede7f87d6306b0f2868f1dcdda6aa5d27dd30f38cc374c3fd39",
+      "library_file_id": "libfile_9cff5268157081919aeb61141d9f7720",
+      "library_version": 1,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Unchanged selected source in the approved factory combinations."
+    },
+    {
+      "path": "assets/dress-up/facet/facet-body-20-v2.png",
+      "sha256": "30b8db48ea269abed3a0aa926bb8b113842e52f462e408089dd870f8b3677b31",
+      "library_file_id": "libfile_2dd770cd66e081919eedf76979a18be8",
+      "library_version": 0,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Unchanged selected source in the approved factory combinations."
+    },
+    {
+      "path": "assets/dress-up/facet/facet-book-support-gesture.png",
+      "sha256": "cb05ed058edace983b6daed543dea6bb21cfb2227cec5b70c455111ffdd02819",
+      "library_file_id": "libfile_59bba81c19048191b88f2ba606db3ec2",
+      "library_version": 1,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Only pixels consumed by the approved atomic attachment/depth recipe. This review does not approve other pixels from the full-canvas reference for independent use.",
+      "approved_ownership_region": {
+        "id": "integrated-prop-arm",
+        "pose": "facet-neutral-v1",
+        "rect": [160, 590, 520, 935],
+        "polygon": [
+          [160, 640],
+          [405, 590],
+          [450, 755],
+          [475, 735],
+          [505, 710],
+          [520, 730],
+          [518, 760],
+          [500, 800],
+          [490, 835],
+          [480, 925],
+          [300, 935],
+          [160, 900]
+        ]
+      }
+    },
+    {
+      "path": "assets/dress-up/facet/facet-outfit-normal-30-candidate-v4.png",
+      "sha256": "dce5d4c7af01eb498db52a5bc25f091861a5e7725667ee52c9ead1dcee7b852d",
+      "library_file_id": "libfile_090da03bd884819192f54598cfe0c2c5",
+      "library_version": 1,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Unchanged selected source in the approved factory combinations."
+    },
+    {
+      "path": "assets/dress-up/facet/facet-outfit-overshirt-30-candidate-v4.png",
+      "sha256": "3323f69c16e9f51ba0ea56d7c71eb1b56221193438f3636630e01430b12fd121",
+      "library_file_id": "libfile_583b3c9d1db881918d8934f70ec53e4c",
+      "library_version": 1,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Unchanged selected source in the approved factory combinations."
+    },
+    {
+      "path": "assets/dress-up/hitch/hitch-accessory-cup-v1.png",
+      "sha256": "2a3ccbd239f341b796ef2b7db98f065b817cf287c8144719987c215d29381df3",
+      "library_file_id": "libfile_6205e63c7ce08191957524c857a6c7d5",
+      "library_version": 0,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Unchanged selected source in the approved factory combinations."
+    },
+    {
+      "path": "assets/dress-up/hitch/hitch-body-grip-v2.png",
+      "sha256": "653ac968384c28b450d28d73c399bbb24b475c060b83e610e4e976c2fafce5c2",
+      "library_file_id": "libfile_6329a00e01988191a12565137d25193e",
+      "library_version": 0,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Only pixels consumed by the approved atomic attachment/depth recipe. This review does not approve other pixels from the full-canvas reference for independent use.",
+      "approved_ownership_region": {
+        "id": "prop-arm",
+        "pose": "hitch-neutral-v1",
+        "rect": [825, 590, 1150, 845]
+      }
+    },
+    {
+      "path": "assets/dress-up/hitch/hitch-body-v1.png",
+      "sha256": "e7f9efc932dcd651c6a5d2d309511a6cb4baba9b834356c53850610ddfb82c03",
+      "library_file_id": "libfile_006dec3ac4188191a4fb856238964136",
+      "library_version": 0,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Unchanged selected source in the approved factory combinations."
+    },
+    {
+      "path": "assets/dress-up/hitch/hitch-outfit-camp-v1.png",
+      "sha256": "685e9e01781d029820b64c885c5abcc96d6983d93965cc06889ac70c77e2b42e",
+      "library_file_id": "libfile_922252221e108191980563bf7d8e0c83",
+      "library_version": 0,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Unchanged selected source in the approved factory combinations."
+    },
+    {
+      "path": "assets/dress-up/hitch/hitch-outfit-normal-v1.png",
+      "sha256": "e0120b56adef1320f26e8b7de0c078d185ea8886b872f9c4b1c7d9d127d5602d",
+      "library_file_id": "libfile_4406032bf0e08191b5218a9e388254ab",
+      "library_version": 0,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Unchanged selected source in the approved factory combinations."
+    },
+    {
+      "path": "assets/dress-up/telly/body-grip-v1.png",
+      "sha256": "7ec3fdf563e82cd716025a96ce9538baa249ca1954d0f4ab9af5630b7218adc6",
+      "library_file_id": "libfile_7b5cba3110088191b9f3d45cf71ae9b6",
+      "library_version": 0,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Only pixels consumed by the approved atomic attachment/depth recipe. This review does not approve other pixels from the full-canvas reference for independent use.",
+      "approved_ownership_region": {
+        "id": "prop-arm",
+        "pose": "telly-neutral-v1",
+        "rect": [780, 710, 1150, 970]
+      }
+    },
+    {
+      "path": "assets/dress-up/telly/body-undies-v3.png",
+      "sha256": "31bf6275530416910df26c150df3484987f90f96fb3524e903b503709fc4bb8c",
+      "library_file_id": "libfile_cba8fbf3a5d8819180660a1c9c17d3fa",
+      "library_version": 0,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Unchanged selected source in the approved factory combinations."
+    },
+    {
+      "path": "assets/dress-up/telly/microphone-rear-v1.png",
+      "sha256": "9d67216c12073fb4211a9fdac8e8a02c3cde8f19379db4692414b6bb64ad0ca1",
+      "library_file_id": "libfile_298e4a23dab88191802df1423df679e4",
+      "library_version": 0,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Unchanged selected source in the approved factory combinations."
+    },
+    {
+      "path": "assets/dress-up/telly/outfit-normal-v3.png",
+      "sha256": "d2f57155913251b0ff03cf6ebfc138549fae3eefb82b03d4f2712621a101b030",
+      "library_file_id": "libfile_4f800c5fc798819197ec4e54137f0be4",
+      "library_version": 0,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Unchanged selected source in the approved factory combinations."
+    },
+    {
+      "path": "assets/dress-up/telly/outfit-plum-zip-v1.png",
+      "sha256": "f5b70ff59750085c5f9f6931e8dce58aa89058f25d41282404ee4167bacb5992",
+      "library_file_id": "libfile_3c1e1a5b4a288191af704d8aa57e0552",
+      "library_version": 0,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Unchanged selected source in the approved factory combinations."
+    },
+    {
+      "path": "assets/dress-up/telly/screen-panel-happy-v1.png",
+      "sha256": "df94372c11cfa670f676d8aa13c5b912f071fc0296ddb60a23a26875deec0f05",
+      "library_file_id": "libfile_9d1beb096e3c8191b92516c3cac2cf45",
+      "library_version": 0,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Unchanged selected source in the approved factory combinations."
+    },
+    {
+      "path": "assets/dress-up/telly/screen-panel-wink-v1.png",
+      "sha256": "8d8132a05027aac0fe2839953304fed48be46949571925c91c45dc9114b2208c",
+      "library_file_id": "libfile_64408c4feed8819186f30860e13892dc",
+      "library_version": 0,
+      "source_canvas": [1254, 1254],
+      "reviewed": true,
+      "approval_scope": "Exact current factory combinations; accepted Telly/Hitch or October 30 reviewed Facet/Andrew gesture sheets.",
+      "source_usage": "Unchanged selected source in the approved factory combinations."
+    }
+  ]
+}
