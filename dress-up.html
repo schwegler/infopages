@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Sticker factory · schweg.xyz</title>
+    <meta
+      name="description"
+      content="Dress up Telly, Facet, Hitch and Andrew and make a transparent character sticker in your browser."
+    />
+    <meta name="robots" content="noindex" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f7f7f2" />
+    <link rel="canonical" href="https://schweg.xyz/dress-up" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="assets/dress-up/studio.css" />
+    <script type="module" src="assets/dress-up/studio.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to editor</a>
+    <header class="site-header">
+      <a href="index.html" aria-label="schweg.xyz home"
+        ><img
+          class="signature signature-light"
+          src="assets/brand/schweg-signature-ink.png"
+          alt="schweg.xyz"
+          width="160" /><img
+          class="signature signature-dark"
+          src="assets/brand/schweg-signature-light.png"
+          alt=""
+          width="160"
+      /></a>
+      <a href="work.html">Back to projects</a>
+    </header>
+    <main id="main">
+      <div class="intro">
+        <h1>Sticker factory</h1>
+        <p>Pick a character, dress them up, and make a sticker.</p>
+      </div>
+      <fieldset class="characters" id="characters">
+        <legend class="sr-only">Character</legend>
+      </fieldset>
+      <div class="studio">
+        <section class="preview-panel" aria-label="Sticker preview">
+          <div class="preview checkerboard" id="preview" aria-busy="true">
+            <canvas
+              id="sticker"
+              width="1024"
+              height="1024"
+              role="img"
+              aria-label="Sticker preview"
+              hidden
+            ></canvas>
+            <img id="reference" alt="" hidden />
+          </div>
+          <div class="preview-tools">
+            <label class="zoom-label" for="zoom">Zoom</label
+            ><select id="zoom">
+              <option value="0.75">75%</option>
+              <option value="1" selected>100%</option>
+              <option value="1.25">125%</option></select
+            ><label class="checker-label"
+              ><input type="checkbox" id="checkerboard" checked /><span
+                >Checkerboard</span
+              ></label
+            >
+          </div>
+        </section>
+        <section class="controls" aria-labelledby="character-name">
+          <h2 id="character-name">Telly</h2>
+          <p class="character-description" id="character-description">
+            The host with the most.
+          </p>
+          <div id="options"></div>
+          <button class="reset" id="reset" type="button" disabled>
+            Reset Telly
+          </button>
+          <button class="download" id="download" type="button" disabled>
+            Download PNG
+          </button>
+          <p class="export-meta">1024 × 1024 · transparent PNG</p>
+          <p class="privacy">Made in your browser. Nothing is uploaded.</p>
+          <p class="status" id="status" role="status" aria-live="polite">
+            Loading artwork…
+          </p>
+        </section>
+      </div>
+      <noscript
+        ><p>
+          This editor needs JavaScript to combine the artwork and download a
+          PNG. Nothing is uploaded.
+        </p></noscript
+      >
+    </main>
+  </body>
+</html>
