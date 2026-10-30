@@ -54,3 +54,12 @@ def clean_page(page):
     assert not errors, f'Uncaught browser errors: {errors}'
     violations=page.evaluate('window.__policyViolations || []')
     assert not violations, f'Content Security Policy violation: {violations}'
+
+
+@pytest.fixture
+def enabled_season_pack(context):
+    """Exercise the retained opt-in framework without enabling the shipped pack."""
+    def enable_pack(route):
+        response = route.fetch()
+        route.fulfill(response=response, body=response.text().replace('enabled: false', 'enabled: true'))
+    context.route('**/assets/seasonal/season-config.js', enable_pack)
