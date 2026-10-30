@@ -266,7 +266,7 @@ def test_touch_first_tap_labels_and_second_tap_navigates(browser, site_url):
     context.close()
 
 
-def test_seasonal_corner_returns_after_parade(clean_page, site_url):
+def test_seasonal_corner_returns_after_parade(clean_page, site_url, enabled_season_pack):
     page = clean_page
     freeze(page, month=10, day=19)
     page.goto(site_url + '/')
