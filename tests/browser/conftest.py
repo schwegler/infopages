@@ -1,4 +1,5 @@
 import functools
+from datetime import datetime, timezone
 import http.server
 import os
 from pathlib import Path
@@ -59,6 +60,9 @@ def clean_page(page):
 @pytest.fixture
 def enabled_season_pack(context):
     """Exercise the retained opt-in framework without enabling the shipped pack."""
+    # Keep every tab inside the retained pack's window while real timers run.
+    # Expiry tests can still install and advance their own boundary clock.
+    context.clock.set_fixed_time(datetime(2026, 10, 30, tzinfo=timezone.utc))
     def enable_pack(route):
         response = route.fetch()
         route.fulfill(response=response, body=response.text().replace('enabled: false', 'enabled: true'))
